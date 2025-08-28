@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,9 +16,11 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Home
+import androidx.compose.material.icons.twotone.Memory
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -84,19 +87,19 @@ fun ActivityMain(flutter: View?) {
 
     val tabs = arrayListOf(
         NavigationItem(
-            label = "0",
+            label = "主页",
             icon = Icons.TwoTone.Home,
         ),
         NavigationItem(
-            label = "1",
+            label = "feOS",
+            icon = Icons.TwoTone.Memory,
+        ),
+        NavigationItem(
+            label = "EKit",
             icon = Icons.TwoTone.Home,
         ),
         NavigationItem(
-            label = "2",
-            icon = Icons.TwoTone.Home,
-        ),
-        NavigationItem(
-            label = "3",
+            label = "EbKit",
             icon = Icons.TwoTone.Home,
         ),
     )
@@ -106,7 +109,9 @@ fun ActivityMain(flutter: View?) {
         initialPage = 0,
     )
 
-    val targetPage = remember { mutableIntStateOf(value = pagerState.currentPage) }
+    val targetPage = remember {
+        mutableIntStateOf(value = pagerState.currentPage)
+    }
 
     LaunchedEffect(key1 = pagerState) {
         snapshotFlow {
@@ -125,15 +130,6 @@ fun ActivityMain(flutter: View?) {
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                modifier = Modifier.fillMaxWidth(),
-                title = {
-                    Text(text = stringResource(id = R.string.app_name))
-                },
-                scrollBehavior = scrollBehavior,
-            )
-        },
         bottomBar = {
             LiquidGlassNavigationBar(
                 modifier = Modifier
@@ -156,37 +152,14 @@ fun ActivityMain(flutter: View?) {
                 .liquidGlassProvider(state = providerState)
                 .background(color = MaterialTheme.colorScheme.background),
             state = pagerState,
-            userScrollEnabled = true,
+            userScrollEnabled = false,
             pageContent = { page ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            color = when (page) {
-                                0 -> Color.Red
-                                1 -> Color.Green
-                                2 -> Color.Blue
-                                3 -> Color.Magenta
-                                else -> Color.Black
-                            }
-                        ),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    when (page) {
-                        0 -> Card(modifier = Modifier.padding(innerPadding).padding(16.dp)) {
-                            AndroidView(
-                                modifier = Modifier.fillMaxSize(),
-                                factory = { context ->
-                                    flutter ?: View(context)
-                                },
-                            )
-                        }
-                        else ->  Text(
-                            modifier = Modifier.padding(paddingValues = innerPadding),
-                            text = page.toString(),
-                        )
-                    }
-
+                when (page) {
+                    0 -> HomePage(innerPadding = innerPadding)
+                    1 -> FEOSPage(innerPadding = innerPadding, flutter = flutter)
+                    2 -> EKitPage(innerPadding = innerPadding)
+                    3 -> EbKitPage(innerPadding = innerPadding)
+                    else -> UnknownPage(innerPadding = innerPadding)
                 }
             },
         )
@@ -200,3 +173,65 @@ private fun ActivityMainPreview() {
         ActivityMain(flutter = null)
     }
 }
+
+
+@Composable
+fun HomePage(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
+
+}
+
+@Composable
+fun FEOSPage(modifier: Modifier = Modifier, innerPadding: PaddingValues, flutter: View?) {
+    OutlinedCard(
+        modifier = modifier
+            .padding(paddingValues = innerPadding)
+            .padding(all = 16.dp),
+    ) {
+        AndroidView(
+            modifier = Modifier.fillMaxSize(),
+            factory = { context ->
+                flutter ?: View(context)
+            },
+        )
+    }
+}
+
+@Composable
+fun EKitPage(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            modifier = Modifier.padding(paddingValues = innerPadding),
+            text = "EKitPage",
+        )
+    }
+}
+
+@Composable
+fun EbKitPage(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            modifier = Modifier.padding(paddingValues = innerPadding),
+            text = "EbKitPage",
+        )
+    }
+}
+
+@Composable
+fun UnknownPage(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            modifier = Modifier.padding(paddingValues = innerPadding),
+            text = "unknown page",
+        )
+    }
+}
+

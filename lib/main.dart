@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mixed/flutter_mixed.dart';
+import 'package:freefeos/freefeos.dart';
+import 'package:multi_builder/multi_builder.dart';
 
 void main() => runApp(const MyApp());
 
@@ -8,9 +11,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'TrebleKit',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      builder: [
+        FreeFEOS.builder,
+        FlutterMixed.builder,
+      ].toBuilder,
+      home: const MyHomePage(title: 'feOS'),
     );
   }
 }

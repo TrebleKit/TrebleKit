@@ -11,6 +11,9 @@ dependencies:
     sdk: flutter
   flutter_mixed:
     path: ../../FlutterProjects/flutter_mixed
+  freefeos:
+    path: ../../FlutterProjects/freefeos
+  multi_builder: ^1.2.0
   cupertino_icons: ^1.0.8
 
 dev_dependencies:

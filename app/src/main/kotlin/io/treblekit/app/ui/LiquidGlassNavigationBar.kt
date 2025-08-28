@@ -20,11 +20,15 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -77,8 +81,6 @@ import com.kyant.liquidglass.sampler.ContinuousLuminanceSampler
 import com.kyant.liquidglass.sampler.ExperimentalLuminanceSamplerApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.collections.forEachIndexed
-import kotlin.collections.lastIndex
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.pow
@@ -141,320 +143,340 @@ fun LiquidGlassNavigationBar(
         Color.Transparent
     }
 
-    NavigationBar(
-        modifier = modifier,
-        containerColor = bottomBarColor,
-    ) {
+//    NavigationBar(
+//        modifier = modifier,
+//        containerColor = bottomBarColor,
+//    ) {
         when {
-            useMaterial -> tabs.forEachIndexed { index, tab ->
-                NavigationBarItem(
-                    selected = selectedIndexState.value == index,
-                    onClick = {
-                        selectedIndexState.value = index
-                        onTabSelected(index)
-                    },
-                    icon = {
-                        Image(
-                            imageVector = tab.icon,
-                            contentDescription = null,
-                        )
-                    },
-                    label = {
-                        Text(text = tab.label)
-                    },
-                    alwaysShowLabel = false
-                )
+            useMaterial -> NavigationBar(
+                modifier = modifier,
+            ) {
+                tabs.forEachIndexed { index, tab ->
+                    NavigationBarItem(
+                        selected = selectedIndexState.value == index,
+                        onClick = {
+                            selectedIndexState.value = index
+                            onTabSelected(index)
+                        },
+                        icon = {
+                            Image(
+                                imageVector = tab.icon,
+                                contentDescription = null,
+                            )
+                        },
+                        label = {
+                            Text(text = tab.label)
+                        },
+                        alwaysShowLabel = false,
+                    )
+                }
             }
 
-            else -> Row(
-                modifier = Modifier
-                    .padding(horizontal = 32.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(space = 4.dp),
-                verticalAlignment = Alignment.CenterVertically
+            else -> Column(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .defaultMinSize(minHeight = 80.dp)
+                    .windowInsetsPadding(insets = NavigationBarDefaults.windowInsets)
+                    .padding(horizontal = 32.dp, vertical =  8.dp)
+                    .selectableGroup(),
+                verticalArrangement = Arrangement.spacedBy(space = 8.dp)
             ) {
-                BoxWithConstraints(
-                    modifier = Modifier
-                        .weight(weight = 1f)
-                        .height(height = 64.dp)
-                        .fillMaxWidth()
-                        .pointerInput(key1 = Unit) {
-                            detectTapGestures {}
-                        },
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(space = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val widthWithoutPaddings =
-                        (constraints.maxWidth.toFloat() - paddingPx * 2f).fastCoerceAtLeast(
-                            minimumValue = 0f
-                        )
-                    val tabWidth = if (tabs.isEmpty()) 0f else widthWithoutPaddings / tabs.size
-                    val maxWidth =
-                        (widthWithoutPaddings - tabWidth).fastCoerceAtLeast(minimumValue = 0f)
-
-                    LaunchedEffect(
-                        key1 = selectedIndexState.value,
-                        key2 = tabWidth,
-                        key3 = isDragging
-                    ) {
-                        if (tabWidth > 0 && !isDragging) {
-                            offset.animateTo(
-                                targetValue = (selectedIndexState.value * tabWidth).fastCoerceIn(
-                                    0f, maxWidth
-                                ),
-                                animationSpec = SpringSpec(
-                                    dampingRatio = 0.8f,
-                                    stiffness = 380f,
-                                ),
-                            )
-                        }
-                    }
-
-                    Row(
+                    BoxWithConstraints(
                         modifier = Modifier
-                            .liquidGlassProvider(
-                                state = bottomTabsLiquidGlassProviderState,
+                            .weight(weight = 1f)
+                            .height(height = 64.dp)
+                            .fillMaxWidth()
+                            .pointerInput(key1 = Unit) {
+                                detectTapGestures {}
+                            },
+                    ) {
+                        val widthWithoutPaddings =
+                            (constraints.maxWidth.toFloat() - paddingPx * 2f).fastCoerceAtLeast(
+                                minimumValue = 0f
                             )
-                            .liquidGlass(
-                                state = liquidGlassProviderState,
-                                luminanceSampler = luminanceSampler,
-                            ) {
-                                val luminance = luminanceSampler.luminance.pow(x = 2f)
-                                GlassStyle(
-                                    shape = RoundedCornerShape(percent = 50),
-                                    innerRefraction = InnerRefraction(
-                                        height = RefractionHeight(value = 12.dp),
-                                        amount = RefractionAmount.Half
+                        val tabWidth = if (tabs.isEmpty()) 0f else widthWithoutPaddings / tabs.size
+                        val maxWidth =
+                            (widthWithoutPaddings - tabWidth).fastCoerceAtLeast(minimumValue = 0f)
+
+                        LaunchedEffect(
+                            key1 = selectedIndexState.value, key2 = tabWidth, key3 = isDragging
+                        ) {
+                            if (tabWidth > 0 && !isDragging) {
+                                offset.animateTo(
+                                    targetValue = (selectedIndexState.value * tabWidth).fastCoerceIn(
+                                        0f, maxWidth
                                     ),
-                                    material = if (luminance > 0.5f) {
-                                        GlassMaterial(
-                                            brush = SolidColor(value = Color.White),
-                                            alpha = (luminance - 0.5f) * 2f * 0.8f
-                                        )
-                                    } else {
-                                        GlassMaterial(
-                                            brush = SolidColor(value = Color.Black),
-                                            alpha = (0.5f - luminance) * 2f * 0.3f
-                                        )
-                                    },
+                                    animationSpec = SpringSpec(
+                                        dampingRatio = 0.8f,
+                                        stiffness = 380f,
+                                    ),
                                 )
                             }
-                            .fillMaxSize()
-                            .padding(all = padding),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        CompositionLocalProvider(
-                            value = localContentColor provides contentColor.value
+                        }
+
+                        Row(
+                            modifier = Modifier
+                                .liquidGlassProvider(
+                                    state = bottomTabsLiquidGlassProviderState,
+                                )
+                                .liquidGlass(
+                                    state = liquidGlassProviderState,
+                                    luminanceSampler = luminanceSampler,
+                                ) {
+                                    val luminance = luminanceSampler.luminance.pow(x = 2f)
+                                    GlassStyle(
+                                        shape = RoundedCornerShape(percent = 50),
+                                        innerRefraction = InnerRefraction(
+                                            height = RefractionHeight(value = 12.dp),
+                                            amount = RefractionAmount.Half
+                                        ),
+                                        material = if (luminance > 0.5f) {
+                                            GlassMaterial(
+                                                brush = SolidColor(value = Color.White),
+                                                alpha = (luminance - 0.5f) * 2f * 0.8f
+                                            )
+                                        } else {
+                                            GlassMaterial(
+                                                brush = SolidColor(value = Color.Black),
+                                                alpha = (0.5f - luminance) * 2f * 0.3f
+                                            )
+                                        },
+                                    )
+                                }
+                                .fillMaxSize()
+                                .padding(all = padding),
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            tabs.forEachIndexed { index, tab ->
-                                key(tab) {
-                                    val itemBackgroundAlpha by animateFloatAsState(
-                                        targetValue = if (selectedIndexState.value == index && !isDragging) {
-                                            0.8f
-                                        } else {
-                                            0f
-                                        },
-                                        animationSpec = spring(
-                                            dampingRatio = 0.8f,
-                                            stiffness = 200f
+                            CompositionLocalProvider(
+                                value = localContentColor provides contentColor.value
+                            ) {
+                                tabs.forEachIndexed { index, tab ->
+                                    key(tab) {
+                                        val itemBackgroundAlpha by animateFloatAsState(
+                                            targetValue = if (selectedIndexState.value == index && !isDragging) {
+                                                0.8f
+                                            } else {
+                                                0f
+                                            }, animationSpec = spring(
+                                                dampingRatio = 0.8f, stiffness = 200f
+                                            )
                                         )
-                                    )
-                                    val itemContentColor by animateColorAsState(
-                                        targetValue = if (selectedIndexState.value == index && !isDragging) {
-                                            MaterialTheme.colorScheme.onPrimaryContainer
-                                        } else {
-                                            contentColor.value
-                                        },
-                                        animationSpec = spring(
-                                            dampingRatio = 0.8f,
-                                            stiffness = 200f
+                                        val itemContentColor by animateColorAsState(
+                                            targetValue = if (selectedIndexState.value == index && !isDragging) {
+                                                MaterialTheme.colorScheme.onPrimaryContainer
+                                            } else {
+                                                contentColor.value
+                                            }, animationSpec = spring(
+                                                dampingRatio = 0.8f, stiffness = 200f
+                                            )
                                         )
-                                    )
-                                    val itemContainerColor =
-                                        MaterialTheme.colorScheme.primaryContainer
-                                    Column(
-                                        modifier = Modifier
-                                            .clip(shape = RoundedCornerShape(percent = 50))
-                                            .drawBehind {
-                                                drawRect(
-                                                    color = itemContainerColor,
-                                                    alpha = itemBackgroundAlpha,
+                                        val itemContainerColor =
+                                            MaterialTheme.colorScheme.primaryContainer
+                                        Column(
+                                            modifier = Modifier
+                                                .clip(
+                                                    shape = RoundedCornerShape(
+                                                        percent = 50
+                                                    )
                                                 )
-                                            }
-                                            .pointerInput(key1 = Unit) {
-                                                detectTapGestures {
-                                                    if (selectedIndexState.value != index) {
-                                                        selectedIndexState.value = index
-                                                        onTabSelected(index)
-                                                        animationScope.launch {
-                                                            launch {
-                                                                offset.animateTo(
-                                                                    targetValue = (index * tabWidth).fastCoerceIn(
-                                                                        0f, maxWidth
-                                                                    ),
-                                                                    animationSpec = spring(
-                                                                        dampingRatio = 0.8f,
-                                                                        stiffness = 200f,
+                                                .drawBehind {
+                                                    drawRect(
+                                                        color = itemContainerColor,
+                                                        alpha = itemBackgroundAlpha,
+                                                    )
+                                                }
+                                                .pointerInput(key1 = Unit) {
+                                                    detectTapGestures {
+                                                        if (selectedIndexState.value != index) {
+                                                            selectedIndexState.value = index
+                                                            onTabSelected(index)
+                                                            animationScope.launch {
+                                                                launch {
+                                                                    offset.animateTo(
+                                                                        targetValue = (index * tabWidth).fastCoerceIn(
+                                                                            0f, maxWidth
+                                                                        ), animationSpec = spring(
+                                                                            dampingRatio = 0.8f,
+                                                                            stiffness = 200f,
+                                                                        )
                                                                     )
-                                                                )
-                                                            }
-                                                            launch {
-                                                                isDragging = true
-                                                                delay(timeMillis = 200)
-                                                                isDragging = false
+                                                                }
+                                                                launch {
+                                                                    isDragging = true
+                                                                    delay(timeMillis = 200)
+                                                                    isDragging = false
+                                                                }
                                                             }
                                                         }
                                                     }
                                                 }
-                                            }
-                                            .weight(weight = 1f)
-                                            .height(height = 56.dp),
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        verticalArrangement = Arrangement.spacedBy(
-                                            space = 2.dp,
-                                            alignment = Alignment.CenterVertically
-                                        ),
-                                    ) {
-                                        Image(
-                                            modifier = Modifier.size(size = 24.dp),
-                                            imageVector = tab.icon,
-                                            contentDescription = null,
-                                            colorFilter = ColorFilter.tint(
-                                                color = itemContentColor
+                                                .weight(weight = 1f)
+                                                .height(height = 56.dp),
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                            verticalArrangement = Arrangement.spacedBy(
+                                                space = 2.dp, alignment = Alignment.CenterVertically
                                             ),
-                                        )
-                                        Text(
-                                            text = tab.label,
-                                            color = itemContentColor
-                                        )
+                                        ) {
+                                            Image(
+                                                modifier = Modifier.size(size = 24.dp),
+                                                imageVector = tab.icon,
+                                                contentDescription = null,
+                                                colorFilter = ColorFilter.tint(
+                                                    color = itemContentColor
+                                                ),
+                                            )
+                                            Text(
+                                                text = tab.label, color = itemContentColor
+                                            )
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    val scaleXFraction: Float by animateFloatAsState(
-                        targetValue = if (!isDragging) 0f else 1f,
-                        animationSpec = spring(
-                            dampingRatio = 0.5f,
-                            stiffness = 300f,
-                        ),
-                    )
-                    val scaleYFraction: Float by animateFloatAsState(
-                        targetValue = if (!isDragging) 0f else 1f,
-                        animationSpec = spring(
-                            dampingRatio = 0.5f,
-                            stiffness = 600f,
-                        ),
-                    )
+                        val scaleXFraction: Float by animateFloatAsState(
+                            targetValue = if (!isDragging) 0f else 1f,
+                            animationSpec = spring(
+                                dampingRatio = 0.5f,
+                                stiffness = 300f,
+                            ),
+                        )
+                        val scaleYFraction: Float by animateFloatAsState(
+                            targetValue = if (!isDragging) 0f else 1f,
+                            animationSpec = spring(
+                                dampingRatio = 0.5f,
+                                stiffness = 600f,
+                            ),
+                        )
 
-                    Spacer(
-                        modifier = Modifier
-                            .layout { measurable, constraints ->
-                                val width = tabWidth.fastRoundToInt()
-                                val height = 56.dp.roundToPx()
-                                val placeable = measurable.measure(
-                                    Constraints.fixed(
-                                        width = (width * lerp(
-                                            start = 1f,
-                                            stop = 1.5f,
-                                            fraction = scaleXFraction,
-                                        )).fastRoundToInt(),
-                                        height = (height * lerp(
-                                            start = 1f,
-                                            stop = 1.5f,
+                        Spacer(
+                            modifier = Modifier
+                                .layout { measurable, constraints ->
+                                    val width = tabWidth.fastRoundToInt()
+                                    val height = 56.dp.roundToPx()
+                                    val placeable = measurable.measure(
+                                        Constraints.fixed(
+                                            width = (width * lerp(
+                                                start = 1f,
+                                                stop = 1.5f,
+                                                fraction = scaleXFraction,
+                                            )).fastRoundToInt(),
+                                            height = (height * lerp(
+                                                start = 1f,
+                                                stop = 1.5f,
+                                                fraction = scaleYFraction,
+                                            )).fastRoundToInt(),
+                                        ),
+                                    )
+                                    layout(width, height) {
+                                        placeable.place(
+                                            x = (width - placeable.width) / 2 + paddingPx,
+                                            y = (height - placeable.height) / 2 + paddingPx
+                                        )
+                                    }
+                                }
+                                .drawWithContent {
+                                    translate(
+                                        left = 0f, top = lerp(
+                                            start = 0f,
+                                            stop = 4f,
                                             fraction = scaleYFraction,
-                                        )).fastRoundToInt(),
-                                    ),
-                                )
-                                layout(width, height) {
-                                    placeable.place(
-                                        x = (width - placeable.width) / 2 + paddingPx,
-                                        y = (height - placeable.height) / 2 + paddingPx
+                                        ).dp.toPx()
+                                    ) {
+                                        this@drawWithContent.drawContent()
+                                    }
+                                }
+                                .graphicsLayer {
+                                    translationX = offset.value
+                                    scaleX = lerp(
+                                        start = 1f,
+                                        stop = 0.9f,
+                                        fraction = scaleXFraction,
+                                    )
+                                    scaleY = lerp(
+                                        start = 1f,
+                                        stop = 0.9f,
+                                        fraction = scaleYFraction,
+                                    )
+                                    transformOrigin = TransformOrigin(
+                                        pivotFractionX = 0f,
+                                        pivotFractionY = 0f,
                                     )
                                 }
-                            }
-                            .drawWithContent {
-                                translate(
-                                    left = 0f,
-                                    top = lerp(
-                                        start = 0f,
-                                        stop = 4f,
-                                        fraction = scaleYFraction,
-                                    ).dp.toPx()
-                                ) {
-                                    this@drawWithContent.drawContent()
-                                }
-                            }
-                            .graphicsLayer {
-                                translationX = offset.value
-                                scaleX = lerp(
-                                    start = 1f,
-                                    stop = 0.9f,
-                                    fraction = scaleXFraction,
+                                .background(
+                                    color = MaterialTheme.colorScheme.surfaceContainer,
+                                    shape = RoundedCornerShape(percent = 50),
                                 )
-                                scaleY = lerp(
-                                    start = 1f,
-                                    stop = 0.9f,
-                                    fraction = scaleYFraction,
+                                .liquidGlass(
+                                    state = bottomTabsLiquidGlassProviderState,
+                                    style = GlassStyle(
+                                        shape = RoundedCornerShape(percent = 50),
+                                        innerRefraction = InnerRefraction(
+                                            height = RefractionHeight(
+                                                value = animateFloatAsState(
+                                                    targetValue = if (!isDragging) {
+                                                        0f
+                                                    } else {
+                                                        10f
+                                                    }
+                                                ).value.dp
+                                            ),
+                                            amount = RefractionAmount.Half,
+                                        ),
+                                        material = GlassMaterial.None,
+                                    ),
                                 )
-                                transformOrigin = TransformOrigin(
-                                    pivotFractionX = 0f,
-                                    pivotFractionY = 0f,
-                                )
-                            }
-                            .background(
-                                color = Color.Transparent,
-                                shape = RoundedCornerShape(percent = 50),
-                            )
-                            .liquidGlass(
-                                bottomTabsLiquidGlassProviderState, GlassStyle(
-                                    RoundedCornerShape(50), innerRefraction = InnerRefraction(
-                                        height = RefractionHeight(
-                                            animateFloatAsState(
-                                                if (!isDragging) 0f else 10f
-                                            ).value.dp
-                                        ), amount = RefractionAmount.Half
-                                    ), material = GlassMaterial.None
-                                )
-                            )
-                            .draggable(
-                                rememberDraggableState { delta ->
-                                    animationScope.launch {
-                                        offset.snapTo(
-                                            targetValue = (offset.value + delta).fastCoerceIn(
-                                                0f,
-                                                maxWidth
+                                .draggable(
+                                    state = rememberDraggableState { delta ->
+                                        animationScope.launch {
+                                            offset.snapTo(
+                                                targetValue = (offset.value + delta).fastCoerceIn(
+                                                    minimumValue = 0f,
+                                                    maximumValue = maxWidth,
+                                                ),
                                             )
-                                        )
-                                    }
-                                },
-                                Orientation.Horizontal,
-                                startDragImmediately = true,
-                                onDragStarted = { isDragging = true },
-                                onDragStopped = { velocity ->
-                                    isDragging = false
-                                    val currentIndex = offset.value / tabWidth
-                                    val targetIndex = when {
-                                        velocity > 0f -> ceil(currentIndex).toInt()
-                                        velocity < 0f -> floor(currentIndex).toInt()
-                                        else -> currentIndex.fastRoundToInt()
-                                    }.fastCoerceIn(0, tabs.lastIndex)
+                                        }
+                                    },
+                                    orientation = Orientation.Horizontal,
+                                    startDragImmediately = true,
+                                    onDragStarted = { isDragging = true },
+                                    onDragStopped = { velocity ->
+                                        isDragging = false
+                                        val currentIndex = offset.value / tabWidth
+                                        val targetIndex = when {
+                                            velocity > 0f -> ceil(currentIndex).toInt()
+                                            velocity < 0f -> floor(currentIndex).toInt()
+                                            else -> currentIndex.fastRoundToInt()
+                                        }.fastCoerceIn(0, tabs.lastIndex)
 
-                                    if (selectedIndexState.value != targetIndex) {
-                                        selectedIndexState.value = targetIndex
-                                        onTabSelected(targetIndex)
-                                    }
+                                        if (selectedIndexState.value != targetIndex) {
+                                            selectedIndexState.value = targetIndex
+                                            onTabSelected(targetIndex)
+                                        }
 
-                                    animationScope.launch {
-                                        offset.animateTo(
-                                            (targetIndex * tabWidth).fastCoerceIn(0f, maxWidth),
-                                            spring(0.8f, 200f)
-                                        )
-                                    }
-                                },
-                            )
-                    )
+                                        animationScope.launch {
+                                            offset.animateTo(
+                                                targetValue = (targetIndex * tabWidth).fastCoerceIn(
+                                                    minimumValue = 0f,
+                                                    maximumValue = maxWidth,
+                                                ),
+                                                animationSpec = spring(
+                                                    dampingRatio = 0.8f,
+                                                    stiffness = 200f,
+                                                ),
+                                            )
+                                        }
+                                    },
+                                )
+                        )
+                    }
                 }
             }
-        }
+//        }
     }
 }
