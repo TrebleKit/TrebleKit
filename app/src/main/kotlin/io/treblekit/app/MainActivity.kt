@@ -1,48 +1,202 @@
 package io.treblekit.app
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import android.view.View
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.Home
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import com.kyant.liquidglass.liquidGlassProvider
+import com.kyant.liquidglass.rememberLiquidGlassProviderState
+import com.wyq0918dev.flutter_mixed.FlutterMixedPlugin
+import io.flutter.embedding.android.FlutterFragment
+import io.treblekit.app.ui.LiquidGlassNavigationBar
+import io.treblekit.app.ui.NavigationItem
 import io.treblekit.app.ui.theme.TrebleKitTheme
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.launch
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
+    private var mFlutterFragment: FlutterFragment? = null
+    private var mFlutterView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        FlutterMixedPlugin.loadFlutter(
+            activity = this@MainActivity
+        ) { fragment, view ->
+            mFlutterFragment = fragment
+            mFlutterView = view
+        }
+
         setContent {
             TrebleKitTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                ActivityMain(flutter = mFlutterView)
             }
         }
     }
 }
 
+
+@OptIn(ExperimentalMaterial3Api::class, FlowPreview::class)
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
+fun ActivityMain(flutter: View?) {
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
+        state = rememberTopAppBarState()
     )
+
+    val coroutineScope = rememberCoroutineScope()
+
+    val tabs = arrayListOf(
+        NavigationItem(
+            label = "0",
+            icon = Icons.TwoTone.Home,
+        ),
+        NavigationItem(
+            label = "1",
+            icon = Icons.TwoTone.Home,
+        ),
+        NavigationItem(
+            label = "2",
+            icon = Icons.TwoTone.Home,
+        ),
+        NavigationItem(
+            label = "3",
+            icon = Icons.TwoTone.Home,
+        ),
+    )
+
+    val pagerState = rememberPagerState(
+        pageCount = { tabs.size },
+        initialPage = 0,
+    )
+
+    val targetPage = remember { mutableIntStateOf(value = pagerState.currentPage) }
+
+    LaunchedEffect(key1 = pagerState) {
+        snapshotFlow {
+            pagerState.currentPage
+        }.debounce(
+            timeoutMillis = 150,
+        ).collectLatest {
+            targetPage.intValue = pagerState.currentPage
+        }
+    }
+
+    val providerState = rememberLiquidGlassProviderState(
+        backgroundColor = MaterialTheme.colorScheme.background
+    )
+
+
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                modifier = Modifier.fillMaxWidth(),
+                title = {
+                    Text(text = stringResource(id = R.string.app_name))
+                },
+                scrollBehavior = scrollBehavior,
+            )
+        },
+        bottomBar = {
+            LiquidGlassNavigationBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                liquidGlassProviderState = providerState,
+                tabs = tabs,
+                selectedIndexState = targetPage,
+                onTabSelected = { index ->
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(page = index)
+                    }
+                },
+//                useMaterial = true,
+            )
+        },
+    ) { innerPadding ->
+        HorizontalPager(
+            modifier = Modifier
+                .liquidGlassProvider(state = providerState)
+                .background(color = MaterialTheme.colorScheme.background),
+            state = pagerState,
+            userScrollEnabled = true,
+            pageContent = { page ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            color = when (page) {
+                                0 -> Color.Red
+                                1 -> Color.Green
+                                2 -> Color.Blue
+                                3 -> Color.Magenta
+                                else -> Color.Black
+                            }
+                        ),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    when (page) {
+                        0 -> Card(modifier = Modifier.padding(innerPadding).padding(16.dp)) {
+                            AndroidView(
+                                modifier = Modifier.fillMaxSize(),
+                                factory = { context ->
+                                    flutter ?: View(context)
+                                },
+                            )
+                        }
+                        else ->  Text(
+                            modifier = Modifier.padding(paddingValues = innerPadding),
+                            text = page.toString(),
+                        )
+                    }
+
+                }
+            },
+        )
+    }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun GreetingPreview() {
+private fun ActivityMainPreview() {
     TrebleKitTheme {
-        Greeting("Android")
+        ActivityMain(flutter = null)
     }
 }

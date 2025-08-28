@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -41,6 +44,9 @@ android {
 
 dependencies {
     implementation(project(":flutter"))
+    implementation("com.github.Kyant0:AndroidLiquidGlass:1.0.0-alpha05")
+    implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("com.google.android.material:material:1.12.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
