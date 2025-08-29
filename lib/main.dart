@@ -14,7 +14,24 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'TrebleKit',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        brightness: Brightness.light,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.light,
+        ),
+        appBarTheme: const AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.light,
+            systemNavigationBarIconBrightness: Brightness.light,
+          ),
+        ),
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.dark,
+        ),
         appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle(
             statusBarIconBrightness: Brightness.light,

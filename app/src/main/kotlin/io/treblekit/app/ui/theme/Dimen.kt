@@ -19,15 +19,21 @@ val capsuleRightPadding: Dp = 16.dp
 // 胶囊圆角半径
 val capsuleRadius: Dp = 20.dp
 
+// 胶囊描边宽度
 val capsuleStrokeWidth: Dp = 1.dp
-val capsuleIndent: Dp = 4.dp
 
+// 胶囊分割线内边距
+val capsuleIndent: Dp = 4.dp
 
 // ActionBar 默认高度
 @OptIn(ExperimentalMaterial3Api::class)
 val actionBarExpandedHeight: Dp = TopAppBarDefaults.TopAppBarExpandedHeight
 
-val bannerWidth = 16.dp // 角标宽度
-val bannerDistanceOriginPointLength = 55.dp // 角标距离原点长度
+// 角标宽度
+val bannerWidth = 16.dp
 
+// 角标距离原点长度
+val bannerDistanceOriginPointLength = 55.dp
+
+// 角标字体大小
 val BannerTextSize: TextUnit = 10.sp

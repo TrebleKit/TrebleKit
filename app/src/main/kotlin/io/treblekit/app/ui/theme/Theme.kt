@@ -2,6 +2,8 @@ package io.treblekit.app.ui.theme
 
 import android.app.Activity
 import android.os.Build
+import android.view.View
+import android.view.Window
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -46,10 +48,10 @@ fun TrebleKitTheme(
         else -> LightColorScheme
     }
 
-    val view = LocalView.current
+    val view: View = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            val window = (view.context as Activity).window
+            val window: Window = (view.context as Activity).window
             WindowCompat.getInsetsController(window, view).apply {
                 // 浅色
                 isAppearanceLightStatusBars = false

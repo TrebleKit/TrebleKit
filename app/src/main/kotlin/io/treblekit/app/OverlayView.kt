@@ -10,7 +10,6 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -221,11 +220,11 @@ class OverlayView @JvmOverloads constructor(
         }
     }
 
-    fun setMenuOnClickListener(listener: OnClickListener) {
+    internal fun setMenuOnClickListener(listener: OnClickListener) {
         mMenuButton.setOnClickListener(listener)
     }
 
-    fun setCloseOnClickListener(listener: OnClickListener) {
+    internal fun setCloseOnClickListener(listener: OnClickListener) {
         mCloseButton.setOnClickListener(listener)
     }
 

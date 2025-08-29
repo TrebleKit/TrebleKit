@@ -84,10 +84,17 @@ import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.pow
 
-data class NavigationItem(
+//data class NavigationItem(
+//    val label: String,
+//    val icon: ImageVector,
+//)
+data class NavigationItem<T>(
+    val page: Int,
+    val route: T,
     val label: String,
     val icon: ImageVector,
 )
+
 
 @OptIn(ExperimentalLuminanceSamplerApi::class, ExperimentalLuminanceSamplerApi::class)
 @Composable
@@ -96,7 +103,7 @@ fun LiquidGlassNavigationBar(
     liquidGlassProviderState: LiquidGlassProviderState,
     background: Color,
     useMaterial: Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU,
-    tabs: List<NavigationItem>,
+    tabs: List<NavigationItem<*>>,
     selectedIndexState: MutableState<Int>,
     onTabSelected: (index: Int) -> Unit,
 ) {
