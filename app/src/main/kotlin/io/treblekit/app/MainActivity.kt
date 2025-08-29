@@ -1,8 +1,11 @@
 package io.treblekit.app
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
-import androidx.activity.compose.setContent
+import android.widget.FrameLayout
+import android.widget.Toast
+import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
@@ -12,11 +15,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Home
 import androidx.compose.material.icons.twotone.Memory
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -33,7 +43,19 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.auto(
+                Color.Transparent.toArgb(),
+                Color.Transparent.toArgb(),
+            ),
+            navigationBarStyle = SystemBarStyle.auto(
+                Color.Transparent.toArgb(),
+                Color.Transparent.toArgb(),
+            ),
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.isNavigationBarContrastEnforced = false
+        }
 
         FlutterMixedPlugin.loadFlutter(
             activity = this@MainActivity
@@ -42,11 +64,36 @@ class MainActivity : AppCompatActivity() {
             mFlutterView = view
         }
 
-        setContent {
+        val frame = FrameLayout(this@MainActivity)
+        val comp = HybridComposeView(this@MainActivity)
+        val overlay = OverlayView(this@MainActivity)
+
+        overlay.setMenuOnClickListener {
+            Toast.makeText(
+                this@MainActivity,
+                "overlay menu",
+                Toast.LENGTH_SHORT,
+            ).show()
+        }
+
+        overlay.setCloseOnClickListener {
+            Toast.makeText(
+                this@MainActivity,
+                "overlay close",
+                Toast.LENGTH_SHORT,
+            ).show()
+        }
+
+        comp.setContent {
             TrebleKitTheme {
                 ActivityMain(flutter = mFlutterView)
             }
         }
+
+        frame.addView(comp)
+        frame.addView(overlay)
+
+        setContentView(frame)
     }
 }
 
@@ -92,9 +139,14 @@ private fun ActivityMainPreview() {
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(modifier: Modifier = Modifier, inner: PaddingValues) {
-
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues = inner)
+    )
 }
 
 @Composable

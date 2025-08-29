@@ -118,7 +118,7 @@ class OverlayView @JvmOverloads constructor(
     /**
      * 真正绘制的文字,如果bannerText过长,可能会被裁剪
      */
-    private var sdkBannerText: String = "ECOSED"
+    private var sdkBannerText: String = "TrebleKit"
     private var debugBannerText: String = "DEBUG"
 
     data class Point(
@@ -133,6 +133,9 @@ class OverlayView @JvmOverloads constructor(
     private val debugBannerPointList by lazy {
         mutableListOf<Point>()
     }
+
+    private lateinit var mMenuButton: AppCompatImageButton
+    private lateinit var mCloseButton: AppCompatImageButton
 
 
     /**
@@ -185,13 +188,14 @@ class OverlayView @JvmOverloads constructor(
                     setColorFilter(
                         CapsuleContent.toArgb(), PorterDuff.Mode.SRC_IN
                     )
-                    setOnClickListener {
-                        Toast.makeText(
-                            child.context,
-                            "mMenuButton",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                    }
+//                    setOnClickListener {
+//                        Toast.makeText(
+//                            child.context,
+//                            "mMenuButton",
+//                            Toast.LENGTH_SHORT,
+//                        ).show()
+//                    }
+                    mMenuButton = this@apply
                 }
 
                 CLOSE_BUTTON_TAG -> (childView as AppCompatImageButton).apply {
@@ -200,13 +204,14 @@ class OverlayView @JvmOverloads constructor(
                     setColorFilter(
                         CapsuleContent.toArgb(), PorterDuff.Mode.SRC_IN
                     )
-                    setOnClickListener {
-                        Toast.makeText(
-                            child.context,
-                            "mCloseButton",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                    }
+//                    setOnClickListener {
+//                        Toast.makeText(
+//                            child.context,
+//                            "mCloseButton",
+//                            Toast.LENGTH_SHORT,
+//                        ).show()
+//                    }
+                    mCloseButton = this@apply
                 }
 
                 else -> error(
@@ -214,6 +219,14 @@ class OverlayView @JvmOverloads constructor(
                 )
             }
         }
+    }
+
+    fun setMenuOnClickListener(listener: OnClickListener) {
+        mMenuButton.setOnClickListener(listener)
+    }
+
+    fun setCloseOnClickListener(listener: OnClickListener) {
+        mCloseButton.setOnClickListener(listener)
     }
 
     /**

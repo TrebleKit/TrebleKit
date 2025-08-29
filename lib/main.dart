@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mixed/flutter_mixed.dart';
 import 'package:freefeos/freefeos.dart';
 import 'package:multi_builder/multi_builder.dart';
@@ -12,11 +13,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'TrebleKit',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      builder: [
-        FreeFEOS.builder,
-        FlutterMixed.builder,
-      ].toBuilder,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        appBarTheme: const AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.light,
+            systemNavigationBarIconBrightness: Brightness.light,
+          ),
+        ),
+      ),
+      builder: [FreeFEOS.builder, FlutterMixed.builder].toBuilder,
       home: const MyHomePage(title: 'feOS'),
     );
   }

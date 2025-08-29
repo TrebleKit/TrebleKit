@@ -94,6 +94,7 @@ data class NavigationItem(
 fun LiquidGlassNavigationBar(
     modifier: Modifier = Modifier,
     liquidGlassProviderState: LiquidGlassProviderState,
+    background: Color,
     useMaterial: Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU,
     tabs: List<NavigationItem>,
     selectedIndexState: MutableState<Int>,
@@ -193,7 +194,9 @@ fun LiquidGlassNavigationBar(
                         (widthWithoutPaddings - tabWidth).fastCoerceAtLeast(minimumValue = 0f)
 
                     LaunchedEffect(
-                        key1 = selectedIndexState.value, key2 = tabWidth, key3 = isDragging
+                        key1 = selectedIndexState.value,
+                        key2 = tabWidth,
+                        key3 = isDragging,
                     ) {
                         if (tabWidth > 0 && !isDragging) {
                             offset.animateTo(
@@ -289,10 +292,11 @@ fun LiquidGlassNavigationBar(
                                                                 offset.animateTo(
                                                                     targetValue = (index * tabWidth).fastCoerceIn(
                                                                         0f, maxWidth
-                                                                    ), animationSpec = spring(
+                                                                    ),
+                                                                    animationSpec = spring(
                                                                         dampingRatio = 0.8f,
                                                                         stiffness = 200f,
-                                                                    )
+                                                                    ),
                                                                 )
                                                             }
                                                             launch {
@@ -398,7 +402,7 @@ fun LiquidGlassNavigationBar(
                                 )
                             }
                             .background(
-                                color = MaterialTheme.colorScheme.surfaceContainer,
+                                color = background,
                                 shape = RoundedCornerShape(percent = 50),
                             )
                             .liquidGlass(
