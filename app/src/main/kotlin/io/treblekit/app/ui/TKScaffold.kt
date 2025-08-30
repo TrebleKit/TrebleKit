@@ -17,6 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.kyant.liquidglass.liquidGlassProvider
 import com.kyant.liquidglass.rememberLiquidGlassProviderState
+import io.treblekit.app.IViewFactory
 import io.treblekit.app.ui.theme.Background
 import kotlinx.coroutines.launch
 
@@ -27,6 +28,7 @@ typealias GotoPage<T> = (route: T) -> Unit
 fun <T> TKScaffold(
     modifier: Modifier = Modifier,
     tabs: ArrayList<NavigationItem<T>>,
+    factory: IViewFactory? = null,
     content: @Composable (
         route: T,
         inner: PaddingValues,
@@ -51,6 +53,7 @@ fun <T> TKScaffold(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
+                factory = factory,
             )
         },
         bottomBar = {

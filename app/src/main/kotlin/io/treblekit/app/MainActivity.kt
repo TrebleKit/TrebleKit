@@ -45,6 +45,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         immersive()
 
+//        val platform = TreblePlatform()
+//
+//        val layout = HybridComposeView(
+//            context = this@MainActivity,
+//            activity = this@MainActivity,
+//            flutter = mFlutterView,
+//        )
+
+        setContentView(mFactory.getContentFrame)
+        setSupportActionBar(mFactory.getToolbarView)
+
         FlutterMixedPlugin.loadFlutter(
             activity = this@MainActivity
         ) { fragment, view ->
@@ -52,11 +63,9 @@ class MainActivity : AppCompatActivity() {
             mFlutterView = view
         }
 
-        val frame = FrameLayout(this@MainActivity)
-        val comp = HybridComposeView(this@MainActivity)
-        val overlay = OverlayView(this@MainActivity)
 
-        overlay.setMenuOnClickListener {
+
+        mFactory.getOverlayView.setMenuOnClickListener {
             Toast.makeText(
                 this@MainActivity,
                 "overlay menu",
@@ -64,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             ).show()
         }
 
-        overlay.setCloseOnClickListener {
+        mFactory.getOverlayView.setCloseOnClickListener {
             Toast.makeText(
                 this@MainActivity,
                 "overlay close",
@@ -72,16 +81,18 @@ class MainActivity : AppCompatActivity() {
             ).show()
         }
 
-        comp.setContent {
+
+
+        mFactory.getContentView.setContent {
             TrebleKitTheme {
-                ActivityMain(flutter = mFlutterView)
+                ActivityMain(factory = mFactory)
             }
         }
 
-        frame.addView(comp)
-        frame.addView(overlay)
+        mFactory.getContentFrame.addView(mFactory.getContentView)
+        mFactory.getContentFrame.addView(mFactory.getOverlayView)
 
-        setContentView(frame)
+
     }
 
     /**

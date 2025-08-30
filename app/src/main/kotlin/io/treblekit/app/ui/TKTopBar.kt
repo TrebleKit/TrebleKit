@@ -3,6 +3,7 @@ package io.treblekit.app.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -33,15 +34,17 @@ import com.kyant.liquidglass.refraction.RefractionAmount
 import com.kyant.liquidglass.refraction.RefractionHeight
 import com.kyant.liquidglass.rememberLiquidGlassProviderState
 import com.kyant.liquidglass.shadow.GlassShadow
+import io.treblekit.app.IViewFactory
 import io.treblekit.app.R
 import io.treblekit.app.ui.theme.capsuleHeight
 import io.treblekit.app.ui.theme.capsuleRadius
 import io.treblekit.app.ui.theme.capsuleWidth
+import io.treblekit.app.ui.utils.rememberCapsulePadding
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TKTopBar(modifier: Modifier = Modifier) {
+fun TKTopBar(modifier: Modifier = Modifier, factory: IViewFactory? = null) {
     val liquidGlassProviderState = rememberLiquidGlassProviderState(
         backgroundColor = Color(color = 0xff434056)
     )
@@ -117,14 +120,14 @@ fun TKTopBar(modifier: Modifier = Modifier) {
             }
         },
         actions = {
-//                    Spacer(
-//                        modifier = Modifier.padding(
-//                            paddingValues = rememberCapsulePadding(
-//                                factory = factory,
-//                                excess = 4.dp, // TopAppBar 自带 4dp 右边距
-//                            ),
-//                        ),
-//                    )
+            Spacer(
+                modifier = Modifier.padding(
+                    paddingValues = rememberCapsulePadding(
+                        factory = factory,
+                        excess = 4.dp, // TopAppBar 自带 4dp 右边距
+                    ),
+                ),
+            )
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.Transparent,

@@ -1,25 +1,29 @@
 package io.treblekit.app.ui
 
-import android.view.View
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.twotone.CompareArrows
 import androidx.compose.material.icons.twotone.Dashboard
 import androidx.compose.material.icons.twotone.KeyboardCommandKey
 import androidx.compose.material.icons.twotone.Memory
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
+import io.treblekit.app.IViewFactory
+import io.treblekit.app.R
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import kotlinx.serialization.Serializable
 
@@ -36,7 +40,7 @@ data object EKitPage
 data object EbKitPage
 
 @Composable
-fun ActivityMain(flutter: View?) {
+fun ActivityMain(factory: IViewFactory? = null) {
     TKScaffold(
         tabs = arrayListOf(
             NavigationItem(
@@ -64,10 +68,11 @@ fun ActivityMain(flutter: View?) {
                 icon = Icons.AutoMirrored.TwoTone.CompareArrows,
             ),
         ),
+        factory = factory,
     ) { route, inner, goto ->
         when (route) {
             HomePage -> HomePage(inner = inner)
-            FEOSPage -> FEOSPage(inner = inner, flutter = flutter)
+            FEOSPage -> FEOSPage(inner = inner, factory = factory)
             EKitPage -> EKitPage(inner = inner)
             EbKitPage -> EbKitPage(inner = inner)
             else -> UnknownPage(inner = inner)
@@ -79,7 +84,7 @@ fun ActivityMain(flutter: View?) {
 @Composable
 private fun ActivityMainPreview() {
     TrebleKitTheme {
-        ActivityMain(flutter = null)
+        ActivityMain()
     }
 }
 
@@ -95,18 +100,59 @@ fun HomePage(modifier: Modifier = Modifier, inner: PaddingValues) {
 }
 
 @Composable
-fun FEOSPage(modifier: Modifier = Modifier, inner: PaddingValues, flutter: View?) {
-    OutlinedCard(
+fun FEOSPage(
+    modifier: Modifier = Modifier,
+    inner: PaddingValues = PaddingValues(),
+    factory: IViewFactory? = null,
+) {
+    Column(
         modifier = modifier
-            .padding(paddingValues = inner)
-            .padding(all = 16.dp),
+            .fillMaxSize()
+            .padding(inner),
     ) {
-        AndroidView(
-            modifier = Modifier.fillMaxSize(),
-            factory = { context ->
-                flutter ?: View(context)
+        ActionBar(
+            modifier = Modifier.padding(
+                start = 16.dp,
+                end = 16.dp,
+                top = 16.dp,
+                bottom = 8.dp,
+            ),
+            factory = factory,
+            title = {
+                Text(
+                    text = stringResource(
+                        id = R.string.app_name,
+                    ),
+                )
+            },
+            navigationIcon = {
+                IconButton(
+                    onClick = {},
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = null,
+                    )
+                }
             },
         )
+        Flutter(
+            modifier = Modifier.padding(
+                start = 16.dp,
+                end = 16.dp,
+                top = 8.dp,
+                bottom = 16.dp,
+            ),
+            factory = factory,
+        )
+    }
+}
+
+@Preview
+@Composable
+fun FEOSPreview() {
+    TrebleKitTheme {
+        FEOSPage()
     }
 }
 
