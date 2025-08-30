@@ -1,4 +1,4 @@
-package io.treblekit.app
+package io.treblekit.app.ui.view
 
 import android.content.Context
 import android.graphics.Canvas
@@ -15,6 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import io.treblekit.app.BuildConfig
+import io.treblekit.app.R
 import io.treblekit.app.ui.theme.BannerContainer
 import io.treblekit.app.ui.theme.BannerContent
 import io.treblekit.app.ui.theme.BannerTextSize

@@ -1,5 +1,7 @@
 package io.treblekit.app.ui
 
+import android.os.Build
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -20,6 +22,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
@@ -34,7 +37,6 @@ import com.kyant.liquidglass.refraction.RefractionAmount
 import com.kyant.liquidglass.refraction.RefractionHeight
 import com.kyant.liquidglass.rememberLiquidGlassProviderState
 import com.kyant.liquidglass.shadow.GlassShadow
-import io.treblekit.app.IViewFactory
 import io.treblekit.app.R
 import io.treblekit.app.ui.theme.capsuleHeight
 import io.treblekit.app.ui.theme.capsuleRadius
@@ -44,7 +46,11 @@ import io.treblekit.app.ui.utils.rememberCapsulePadding
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TKTopBar(modifier: Modifier = Modifier, factory: IViewFactory? = null) {
+fun TKTopBar(
+    modifier: Modifier = Modifier,
+    useMaterial: Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU,
+    factory: IViewFactory? = null,
+) {
     val liquidGlassProviderState = rememberLiquidGlassProviderState(
         backgroundColor = Color(color = 0xff434056)
     )
@@ -85,37 +91,71 @@ fun TKTopBar(modifier: Modifier = Modifier, factory: IViewFactory? = null) {
             )
         },
         navigationIcon = {
-            Box(
-                modifier = Modifier
-                    .padding(start = (16 - 4).dp)
-                    .width(width = capsuleWidth)
-                    .height(height = capsuleHeight)
-                    .liquidGlass(
-                        state = liquidGlassProviderState,
-                        style = iconButtonLiquidGlassStyle,
-                    )
-                    .clickable(onClick = {}),
-                contentAlignment = Alignment.Center,
-            ) {
-                Row(
-                    modifier = Modifier.wrapContentSize(),
-                    verticalAlignment = Alignment.CenterVertically,
+            if (useMaterial) {
+                Box(
+                    modifier = Modifier
+                        .padding(start = (16 - 4).dp) // TopAppBar 自带 4dp 左边距
+                        .width(width = capsuleWidth)
+                        .height(height = capsuleHeight)
+                        .clip(shape = RoundedCornerShape(size = capsuleRadius))
+                        .background(Color(color = 0xff434056))
+                        .clickable(onClick = {}),
+                    contentAlignment = Alignment.Center,
                 ) {
-                    Icon(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = null,
-                        modifier = Modifier.size(size = 20.dp),
-                        tint = Color(color = 0xff8E8E9E),
-                    )
-                    Text(
-                        text = "搜索",
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .padding(start = 6.dp),
-                        fontSize = 13.sp,
-                        color = Color(color = 0xff8E8E9E),
-                        textAlign = TextAlign.Center,
-                    )
+                    Row(
+                        modifier = Modifier.wrapContentSize(),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = null,
+                            modifier = Modifier.size(size = 20.dp),
+                            tint = Color(color = 0xff8E8E9E)
+                        )
+                        Text(
+                            text = "搜索",
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(start = 6.dp),
+                            fontSize = 13.sp,
+                            color = Color(color = 0xff8E8E9E),
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                }
+            } else {
+                Box(
+                    modifier = Modifier
+                        .padding(start = (16 - 4).dp)
+                        .width(width = capsuleWidth)
+                        .height(height = capsuleHeight)
+                        .liquidGlass(
+                            state = liquidGlassProviderState,
+                            style = iconButtonLiquidGlassStyle,
+                        )
+                        .clickable(onClick = {}),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Row(
+                        modifier = Modifier.wrapContentSize(),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = null,
+                            modifier = Modifier.size(size = 20.dp),
+                            tint = Color(color = 0xff8E8E9E),
+                        )
+                        Text(
+                            text = "搜索",
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(start = 6.dp),
+                            fontSize = 13.sp,
+                            color = Color(color = 0xff8E8E9E),
+                            textAlign = TextAlign.Center,
+                        )
+                    }
                 }
             }
         },

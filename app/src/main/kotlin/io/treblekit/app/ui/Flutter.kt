@@ -22,7 +22,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
-import io.treblekit.app.IViewFactory
 import io.treblekit.app.ui.theme.TrebleKitTheme
 
 @Composable

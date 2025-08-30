@@ -14,7 +14,10 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.wyq0918dev.flutter_mixed.FlutterMixedPlugin
 import io.flutter.embedding.android.FlutterFragment
 import io.treblekit.app.ui.ActivityMain
+import io.treblekit.app.ui.IViewFactory
 import io.treblekit.app.ui.theme.TrebleKitTheme
+import io.treblekit.app.ui.view.HybridComposeView
+import io.treblekit.app.ui.view.OverlayView
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,14 +48,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         immersive()
 
-//        val platform = TreblePlatform()
-//
-//        val layout = HybridComposeView(
-//            context = this@MainActivity,
-//            activity = this@MainActivity,
-//            flutter = mFlutterView,
-//        )
-
         setContentView(mFactory.getContentFrame)
         setSupportActionBar(mFactory.getToolbarView)
 
@@ -62,8 +57,6 @@ class MainActivity : AppCompatActivity() {
             mFlutterFragment = fragment
             mFlutterView = view
         }
-
-
 
         mFactory.getOverlayView.setMenuOnClickListener {
             Toast.makeText(

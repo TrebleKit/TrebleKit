@@ -17,7 +17,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.kyant.liquidglass.liquidGlassProvider
 import com.kyant.liquidglass.rememberLiquidGlassProviderState
-import io.treblekit.app.IViewFactory
 import io.treblekit.app.ui.theme.Background
 import kotlinx.coroutines.launch
 
@@ -57,7 +56,7 @@ fun <T> TKScaffold(
             )
         },
         bottomBar = {
-            LiquidGlassNavigationBar(
+            TKNavBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),

@@ -98,7 +98,7 @@ data class NavigationItem<T>(
 
 @OptIn(ExperimentalLuminanceSamplerApi::class, ExperimentalLuminanceSamplerApi::class)
 @Composable
-fun LiquidGlassNavigationBar(
+fun TKNavBar(
     modifier: Modifier = Modifier,
     liquidGlassProviderState: LiquidGlassProviderState,
     background: Color,

@@ -1,4 +1,4 @@
-package io.treblekit.app
+package io.treblekit.app.ui.view
 
 import android.content.Context
 import android.util.AttributeSet
@@ -17,9 +17,6 @@ class HybridComposeView @JvmOverloads constructor(
     defStyleAttr = defStyleAttr,
 ) {
 
-    /**
-     * 初始化
-     */
     init {
         // 必须加此代码否则不符合预期
         // 支持混合开发

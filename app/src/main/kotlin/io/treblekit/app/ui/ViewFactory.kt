@@ -1,6 +1,7 @@
 package io.treblekit.app.ui
 
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -8,9 +9,19 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
-import io.treblekit.app.IViewFactory
+import com.google.android.material.appbar.MaterialToolbar
 import io.treblekit.app.R
 import io.treblekit.app.ui.theme.TrebleKitTheme
+import io.treblekit.app.ui.view.HybridComposeView
+import io.treblekit.app.ui.view.OverlayView
+
+interface IViewFactory {
+    val getContentFrame: FrameLayout
+    val getContentView: HybridComposeView
+    val getOverlayView: OverlayView
+    val getToolbarView: MaterialToolbar
+    val getFlutterView: View
+}
 
 @Composable
 fun ViewFactory(
