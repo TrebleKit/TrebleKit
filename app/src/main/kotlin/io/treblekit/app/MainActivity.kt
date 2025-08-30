@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         mFactory.apply {
-            setContentView(getContentFrame)
+            setContentView(getContentView)
             setSupportActionBar(getToolbarView)
 
             getOverlayView.apply {
@@ -85,8 +85,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            getContentFrame.addView(getContentView)
-            getContentFrame.addView(getOverlayView)
+//            getContentFrame.addView(getContentView)
+//            getContentFrame.addView(getOverlayView)
         }
     }
 

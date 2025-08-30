@@ -39,8 +39,12 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      builder: [FreeFEOS.builder, FlutterMixed.builder].toBuilder,
+      builder: <TransitionBuilder>[
+        FreeFEOS.builder,
+        FlutterMixed.builder,
+      ].toBuilder,
       home: const MyHomePage(title: 'feOS'),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
