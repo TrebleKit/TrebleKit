@@ -21,7 +21,6 @@ import io.treblekit.app.ui.view.OverlayView
 
 class MainActivity : AppCompatActivity() {
 
-
     private var mFlutterFragment: FlutterFragment? = null
     private var mFlutterView: View? = null
 
@@ -30,15 +29,19 @@ class MainActivity : AppCompatActivity() {
         override val getContentFrame: FrameLayout by lazy {
             return@lazy FrameLayout(this@MainActivity)
         }
+
         override val getContentView: HybridComposeView by lazy {
             return@lazy HybridComposeView(this@MainActivity)
         }
+
         override val getOverlayView: OverlayView by lazy {
             return@lazy OverlayView(this@MainActivity)
         }
+
         override val getToolbarView: MaterialToolbar by lazy {
             return@lazy MaterialToolbar(this@MainActivity)
         }
+
         override val getFlutterView: View by lazy {
             return@lazy mFlutterView ?: View(this@MainActivity)
         }
@@ -48,9 +51,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         immersive()
 
-        setContentView(mFactory.getContentFrame)
-        setSupportActionBar(mFactory.getToolbarView)
-
         FlutterMixedPlugin.loadFlutter(
             activity = this@MainActivity
         ) { fragment, view ->
@@ -58,34 +58,36 @@ class MainActivity : AppCompatActivity() {
             mFlutterView = view
         }
 
-        mFactory.getOverlayView.setMenuOnClickListener {
-            Toast.makeText(
-                this@MainActivity,
-                "overlay menu",
-                Toast.LENGTH_SHORT,
-            ).show()
-        }
+        mFactory.apply {
+            setContentView(getContentFrame)
+            setSupportActionBar(getToolbarView)
 
-        mFactory.getOverlayView.setCloseOnClickListener {
-            Toast.makeText(
-                this@MainActivity,
-                "overlay close",
-                Toast.LENGTH_SHORT,
-            ).show()
-        }
-
-
-
-        mFactory.getContentView.setContent {
-            TrebleKitTheme {
-                ActivityMain(factory = mFactory)
+            getOverlayView.apply {
+                setMenuOnClickListener {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "overlay menu",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
+                setCloseOnClickListener {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "overlay close",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
             }
+
+            getContentView.setContent {
+                TrebleKitTheme {
+                    ActivityMain(factory = mFactory)
+                }
+            }
+
+            getContentFrame.addView(getContentView)
+            getContentFrame.addView(getOverlayView)
         }
-
-        mFactory.getContentFrame.addView(mFactory.getContentView)
-        mFactory.getContentFrame.addView(mFactory.getOverlayView)
-
-
     }
 
     /**

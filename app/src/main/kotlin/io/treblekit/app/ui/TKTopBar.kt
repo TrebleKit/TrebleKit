@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kyant.liquidglass.GlassStyle
@@ -38,6 +39,8 @@ import com.kyant.liquidglass.refraction.RefractionHeight
 import com.kyant.liquidglass.rememberLiquidGlassProviderState
 import com.kyant.liquidglass.shadow.GlassShadow
 import io.treblekit.app.R
+import io.treblekit.app.ui.theme.Background
+import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.theme.capsuleHeight
 import io.treblekit.app.ui.theme.capsuleRadius
 import io.treblekit.app.ui.theme.capsuleWidth
@@ -173,4 +176,20 @@ fun TKTopBar(
             containerColor = Color.Transparent,
         ),
     )
+}
+
+@Preview
+@Composable
+private fun TKTopBarLiquidGlassPreview() {
+    TrebleKitTheme {
+        TKTopBar(useMaterial = false)
+    }
+}
+
+@Preview
+@Composable
+private fun TKTopBarMaterialPreview() {
+    TrebleKitTheme {
+        TKTopBar(useMaterial = true)
+    }
 }
