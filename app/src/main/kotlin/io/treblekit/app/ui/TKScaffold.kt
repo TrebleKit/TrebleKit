@@ -60,7 +60,7 @@ fun <T> TKScaffold(
         }
     }
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.fillMaxSize(),
         topBar = {
             TKTopBar(
                 modifier = Modifier

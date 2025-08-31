@@ -57,7 +57,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
@@ -84,8 +83,6 @@ import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.pow
 
-
-
 @OptIn(ExperimentalLuminanceSamplerApi::class, ExperimentalLuminanceSamplerApi::class)
 @Composable
 fun TKNavBar(
@@ -93,7 +90,7 @@ fun TKNavBar(
     liquidGlassProviderState: LiquidGlassProviderState,
     background: Color,
     useMaterial: Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU,
-    tabs: List<NavigationItem<*>>,
+    pages: List<NavigationItem<*>>,
     selectedIndexState: MutableState<Int>,
     onTabSelected: (index: Int) -> Unit,
 ) {
@@ -138,7 +135,7 @@ fun TKNavBar(
         useMaterial -> NavigationBar(
             modifier = modifier,
         ) {
-            tabs.forEachIndexed { index, tab ->
+            pages.forEachIndexed { index, page ->
                 NavigationBarItem(
                     selected = selectedIndexState.value == index,
                     onClick = {
@@ -147,12 +144,12 @@ fun TKNavBar(
                     },
                     icon = {
                         Image(
-                            imageVector = tab.icon,
+                            imageVector = page.icon,
                             contentDescription = null,
                         )
                     },
                     label = {
-                        Text(text = tab.label)
+                        Text(text = page.label)
                     },
                     alwaysShowLabel = false,
                 )
@@ -186,7 +183,7 @@ fun TKNavBar(
                         (constraints.maxWidth.toFloat() - paddingPx * 2f).fastCoerceAtLeast(
                             minimumValue = 0f
                         )
-                    val tabWidth = if (tabs.isEmpty()) 0f else widthWithoutPaddings / tabs.size
+                    val tabWidth = if (pages.isEmpty()) 0f else widthWithoutPaddings / pages.size
                     val maxWidth =
                         (widthWithoutPaddings - tabWidth).fastCoerceAtLeast(minimumValue = 0f)
 
@@ -244,8 +241,8 @@ fun TKNavBar(
                         CompositionLocalProvider(
                             value = localContentColor provides contentColor.value
                         ) {
-                            tabs.forEachIndexed { index, tab ->
-                                key(tab) {
+                            pages.forEachIndexed { index, page ->
+                                key(page) {
                                     val itemBackgroundAlpha by animateFloatAsState(
                                         targetValue = if (selectedIndexState.value == index && !isDragging) {
                                             0.8f
@@ -314,14 +311,15 @@ fun TKNavBar(
                                     ) {
                                         Image(
                                             modifier = Modifier.size(size = 24.dp),
-                                            imageVector = tab.icon,
+                                            imageVector = page.icon,
                                             contentDescription = null,
                                             colorFilter = ColorFilter.tint(
-                                                color = itemContentColor
+                                                color = itemContentColor,
                                             ),
                                         )
                                         Text(
-                                            text = tab.label, color = itemContentColor
+                                            text = page.label,
+                                            color = itemContentColor,
                                         )
                                     }
                                 }
@@ -439,10 +437,13 @@ fun TKNavBar(
                                     isDragging = false
                                     val currentIndex = offset.value / tabWidth
                                     val targetIndex = when {
-                                        velocity > 0f -> ceil(currentIndex).toInt()
-                                        velocity < 0f -> floor(currentIndex).toInt()
+                                        velocity > 0f -> ceil(x = currentIndex).toInt()
+                                        velocity < 0f -> floor(x = currentIndex).toInt()
                                         else -> currentIndex.fastRoundToInt()
-                                    }.fastCoerceIn(0, tabs.lastIndex)
+                                    }.fastCoerceIn(
+                                        minimumValue = 0,
+                                        maximumValue = pages.lastIndex,
+                                    )
 
                                     if (selectedIndexState.value != targetIndex) {
                                         selectedIndexState.value = targetIndex
