@@ -84,12 +84,6 @@ import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.pow
 
-data class NavigationItem<T>(
-    val page: Int,
-    val route: T,
-    val label: String,
-    val icon: ImageVector,
-)
 
 
 @OptIn(ExperimentalLuminanceSamplerApi::class, ExperimentalLuminanceSamplerApi::class)

@@ -3,9 +3,8 @@ package io.treblekit.app
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.activity.SystemBarStyle
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.graphics.Color
@@ -16,77 +15,41 @@ import io.flutter.embedding.android.FlutterFragment
 import io.treblekit.app.ui.ActivityMain
 import io.treblekit.app.ui.IViewFactory
 import io.treblekit.app.ui.theme.TrebleKitTheme
-import io.treblekit.app.ui.view.HybridComposeView
-import io.treblekit.app.ui.view.OverlayView
 
 class MainActivity : AppCompatActivity() {
 
     private var mFlutterFragment: FlutterFragment? = null
-    private var mFlutterView: View? = null
-
-    private val mFactory: IViewFactory = object : IViewFactory {
-
-        override val getContentFrame: FrameLayout by lazy {
-            return@lazy FrameLayout(this@MainActivity)
-        }
-
-        override val getContentView: HybridComposeView by lazy {
-            return@lazy HybridComposeView(this@MainActivity)
-        }
-
-        override val getOverlayView: OverlayView by lazy {
-            return@lazy OverlayView(this@MainActivity)
-        }
-
-        override val getToolbarView: MaterialToolbar by lazy {
-            return@lazy MaterialToolbar(this@MainActivity)
-        }
-
-        override val getFlutterView: View by lazy {
-            return@lazy mFlutterView ?: View(this@MainActivity)
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         immersive()
 
+        var flutterView: View? = null
+
+        val factory: IViewFactory = object : IViewFactory {
+
+            override val getToolbarView: MaterialToolbar by lazy {
+                return@lazy MaterialToolbar(this@MainActivity)
+            }
+
+            override val getFlutterView: View by lazy {
+                return@lazy flutterView ?: View(this@MainActivity)
+            }
+        }
+
         FlutterMixedPlugin.loadFlutter(
             activity = this@MainActivity
         ) { fragment, view ->
             mFlutterFragment = fragment
-            mFlutterView = view
+            flutterView = view
         }
 
-        mFactory.apply {
-            setContentView(getContentView)
-            setSupportActionBar(getToolbarView)
+        setSupportActionBar(factory.getToolbarView)
 
-            getOverlayView.apply {
-                setMenuOnClickListener {
-                    Toast.makeText(
-                        this@MainActivity,
-                        "overlay menu",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                }
-                setCloseOnClickListener {
-                    Toast.makeText(
-                        this@MainActivity,
-                        "overlay close",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                }
+        setContent {
+            TrebleKitTheme {
+                ActivityMain(factory = factory)
             }
-
-            getContentView.setContent {
-                TrebleKitTheme {
-                    ActivityMain(factory = mFactory)
-                }
-            }
-
-//            getContentFrame.addView(getContentView)
-//            getContentFrame.addView(getOverlayView)
         }
     }
 

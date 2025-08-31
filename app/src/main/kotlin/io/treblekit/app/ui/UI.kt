@@ -7,10 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.twotone.CompareArrows
-import androidx.compose.material.icons.twotone.Dashboard
-import androidx.compose.material.icons.twotone.KeyboardCommandKey
-import androidx.compose.material.icons.twotone.Memory
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,51 +20,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.treblekit.app.R
 import io.treblekit.app.ui.theme.TrebleKitTheme
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object HomePage
-
-@Serializable
-data object FEOSPage
-
-@Serializable
-data object EKitPage
-
-@Serializable
-data object EbKitPage
 
 @Composable
 fun ActivityMain(factory: IViewFactory? = null) {
-    TKScaffold(
-        tabs = arrayListOf(
-            NavigationItem(
-                page = 0,
-                route = HomePage,
-                label = "主页",
-                icon = Icons.TwoTone.Dashboard,
-            ),
-            NavigationItem(
-                page = 1,
-                route = FEOSPage,
-                label = "feOS",
-                icon = Icons.TwoTone.Memory,
-            ),
-            NavigationItem(
-                page = 2,
-                route = EKitPage,
-                label = "EKit",
-                icon = Icons.TwoTone.KeyboardCommandKey,
-            ),
-            NavigationItem(
-                page = 3,
-                route = EbKitPage,
-                label = "EbKit",
-                icon = Icons.AutoMirrored.TwoTone.CompareArrows,
-            ),
-        ),
-        factory = factory,
-    ) { route, inner, goto ->
+    TKScaffold(pages = PageList) { route, inner, goto ->
         when (route) {
             HomePage -> HomePage(inner = inner)
             FEOSPage -> FEOSPage(inner = inner, factory = factory)
@@ -92,7 +47,7 @@ private fun ActivityMainPreview() {
 @Composable
 fun HomePage(modifier: Modifier = Modifier, inner: PaddingValues) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(paddingValues = inner)
     )
@@ -107,7 +62,7 @@ fun FEOSPage(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(inner),
+            .padding(paddingValues = inner),
     ) {
         ActionBar(
             modifier = Modifier.padding(

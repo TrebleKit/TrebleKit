@@ -5,20 +5,25 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
@@ -45,14 +50,13 @@ import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.theme.capsuleHeight
 import io.treblekit.app.ui.theme.capsuleRadius
 import io.treblekit.app.ui.theme.capsuleWidth
-import io.treblekit.app.ui.utils.rememberCapsulePadding
+import io.treblekit.app.ui.utils.NoOnClick
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TKTopBar(
     modifier: Modifier = Modifier,
     useMaterial: Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU,
-    factory: IViewFactory? = null,
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier,
@@ -68,9 +72,9 @@ fun TKTopBar(
                     .padding(start = (16 - 4).dp)
                     .width(width = capsuleWidth)
                     .height(height = capsuleHeight)
-                    .searchButtonStyle(
-                        style = if (useMaterial) SearchButtonStyle.Material3
-                        else SearchButtonStyle.LiquidGlass,
+                    .topBarButtonStyle(
+                        style = if (useMaterial) TopBarButtonStyle.Material3
+                        else TopBarButtonStyle.LiquidGlass,
                     )
                     .clickable(onClick = {}),
                 contentAlignment = Alignment.Center,
@@ -98,14 +102,51 @@ fun TKTopBar(
             }
         },
         actions = {
-            Spacer(
-                modifier = Modifier.padding(
-                    paddingValues = rememberCapsulePadding(
-                        factory = factory,
-                        excess = 4.dp, // TopAppBar 自带 4dp 右边距
+            Row(
+                modifier = Modifier
+                    .padding(end = (16 - 4).dp)
+                    .height(height = capsuleHeight)
+                    .width(width = capsuleWidth)
+                    .topBarButtonStyle(
+                        style = if (useMaterial) TopBarButtonStyle.Material3
+                        else TopBarButtonStyle.LiquidGlass,
                     ),
-                ),
-            )
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(
+                    modifier = Modifier
+                        .weight(weight = 1f)
+                        .fillMaxSize()
+                        .clickable(onClick = NoOnClick),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.MoreHoriz,
+                        contentDescription = null,
+                        tint = Color(color = 0xff8E8E9E),
+                    )
+                }
+                VerticalDivider(
+                    modifier = Modifier
+                        .padding(vertical = 5.dp)
+                        .wrapContentWidth()
+                        .fillMaxHeight(),
+                    color = Color(color = 0xff8E8E9E),
+                )
+                Box(
+                    modifier = Modifier
+                        .weight(weight = 1f)
+                        .fillMaxSize()
+                        .clickable(onClick = NoOnClick),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = null,
+                        tint = Color(color = 0xff8E8E9E),
+                    )
+                }
+            }
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.Transparent,
@@ -113,13 +154,13 @@ fun TKTopBar(
     )
 }
 
-enum class SearchButtonStyle {
+enum class TopBarButtonStyle {
     LiquidGlass, Material3
 }
 
 @Stable
 @Composable
-private fun Modifier.searchButtonStyle(style: SearchButtonStyle): Modifier {
+private fun Modifier.topBarButtonStyle(style: TopBarButtonStyle): Modifier {
     val liquidGlassProviderState = rememberLiquidGlassProviderState(
         backgroundColor = Color(color = 0xff434056)
     )
@@ -152,12 +193,12 @@ private fun Modifier.searchButtonStyle(style: SearchButtonStyle): Modifier {
         ),
     )
     return this then when (style) {
-        SearchButtonStyle.LiquidGlass -> Modifier.liquidGlass(
+        TopBarButtonStyle.LiquidGlass -> Modifier.liquidGlass(
             state = liquidGlassProviderState,
             style = searchButtonLiquidGlassStyle,
         )
 
-        SearchButtonStyle.Material3 -> Modifier
+        TopBarButtonStyle.Material3 -> Modifier
             .clip(
                 shape = RoundedCornerShape(
                     size = capsuleRadius,
