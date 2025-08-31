@@ -85,12 +85,12 @@ import kotlin.math.pow
 
 @OptIn(ExperimentalLuminanceSamplerApi::class, ExperimentalLuminanceSamplerApi::class)
 @Composable
-fun TKNavBar(
+fun <T> TKNavBar(
     modifier: Modifier = Modifier,
     liquidGlassProviderState: LiquidGlassProviderState,
     background: Color,
     useMaterial: Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU,
-    pages: List<NavigationItem<*>>,
+    pages: List<NavigationItem<T>>,
     selectedIndexState: MutableState<Int>,
     onTabSelected: (index: Int) -> Unit,
 ) {

@@ -75,7 +75,7 @@ fun <T> TKScaffold(
                     .wrapContentHeight(),
                 liquidGlassProviderState = providerState,
                 background = Background,
-                tabs = pages,
+                pages = pages,
                 selectedIndexState = targetPage,
                 onTabSelected = { index ->
                     coroutineScope.launch {
