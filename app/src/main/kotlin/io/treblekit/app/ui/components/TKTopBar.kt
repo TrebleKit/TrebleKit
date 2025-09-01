@@ -1,6 +1,5 @@
 package io.treblekit.app.ui.components
 
-import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -56,7 +55,7 @@ import io.treblekit.app.ui.utils.NoOnClick
 @Composable
 fun TKTopBar(
     modifier: Modifier = Modifier,
-    useMaterial: Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU,
+    useMaterial: Boolean,
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier,

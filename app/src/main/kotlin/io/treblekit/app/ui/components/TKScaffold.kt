@@ -1,5 +1,6 @@
 package io.treblekit.app.ui.components
 
+import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,10 +18,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.kyant.liquidglass.liquidGlassProvider
 import com.kyant.liquidglass.rememberLiquidGlassProviderState
 import io.treblekit.app.ui.navigation.NavigationItem
+import io.treblekit.app.ui.navigation.PageList
 import io.treblekit.app.ui.theme.Background
+import io.treblekit.app.ui.theme.TrebleKitTheme
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -37,6 +41,7 @@ typealias TKScaffoldContent<T> = @Composable (
 @Composable
 fun <T> TKScaffold(
     modifier: Modifier = Modifier,
+    useMaterial: Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU,
     pages: ArrayList<NavigationItem<T>>,
     content: TKScaffoldContent<T>,
 ) {
@@ -67,6 +72,7 @@ fun <T> TKScaffold(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
+                useMaterial = useMaterial,
             )
         },
         bottomBar = {
@@ -76,6 +82,7 @@ fun <T> TKScaffold(
                     .wrapContentHeight(),
                 liquidGlassProviderState = providerState,
                 background = Background,
+                useMaterial = useMaterial,
                 pages = pages,
                 selectedIndexState = targetPage,
                 onTabSelected = { index ->
@@ -107,5 +114,31 @@ fun <T> TKScaffold(
                 }
             },
         )
+    }
+}
+
+@Preview
+@Composable
+private fun TKScaffoldLiquidGlassPreview() {
+    TrebleKitTheme {
+        TKScaffold(
+            useMaterial = false,
+            pages = PageList,
+        ) { _, _, _ ->
+
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun TKScaffoldMaterialPreview() {
+    TrebleKitTheme {
+        TKScaffold(
+            useMaterial = true,
+            pages = PageList,
+        ) { _, _, _ ->
+
+        }
     }
 }

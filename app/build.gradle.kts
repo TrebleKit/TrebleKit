@@ -42,6 +42,7 @@ android {
 }
 
 dependencies {
+    implementation("com.google.accompanist:accompanist-drawablepainter:0.37.3")
     implementation(project(":flutter"))
     implementation(project(":flutter_mixed"))
     implementation(libs.androidliquidglass)

@@ -1,6 +1,5 @@
 package io.treblekit.app.ui.components
 
-import android.os.Build
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
@@ -16,6 +15,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,13 +27,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -42,6 +46,7 @@ import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -60,6 +65,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastCoerceAtLeast
@@ -78,6 +84,9 @@ import com.kyant.liquidglass.rememberLiquidGlassProviderState
 import com.kyant.liquidglass.sampler.ContinuousLuminanceSampler
 import com.kyant.liquidglass.sampler.ExperimentalLuminanceSamplerApi
 import io.treblekit.app.ui.navigation.NavigationItem
+import io.treblekit.app.ui.navigation.PageList
+import io.treblekit.app.ui.theme.Background
+import io.treblekit.app.ui.theme.TrebleKitTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.ceil
@@ -90,7 +99,7 @@ fun <T> TKNavBar(
     modifier: Modifier = Modifier,
     liquidGlassProviderState: LiquidGlassProviderState,
     background: Color,
-    useMaterial: Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU,
+    useMaterial: Boolean,
     pages: List<NavigationItem<T>>,
     selectedIndexState: MutableState<Int>,
     onTabSelected: (index: Int) -> Unit,
@@ -134,7 +143,17 @@ fun <T> TKNavBar(
 
     when {
         useMaterial -> NavigationBar(
-            modifier = modifier,
+            modifier = modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .clip(
+                    shape = RoundedCornerShape(
+                        topStart = 10.dp,
+                        topEnd = 10.dp,
+                    ),
+                ),
+//            containerColor = Color(color = 0xff787493),
+//            contentColor = MaterialTheme.colorScheme.contentColorFor(Color(color = 0xff787493))
         ) {
             pages.forEachIndexed { index, page ->
                 NavigationBarItem(
@@ -144,7 +163,7 @@ fun <T> TKNavBar(
                         onTabSelected(index)
                     },
                     icon = {
-                        Image(
+                        Icon(
                             imageVector = page.icon,
                             contentDescription = null,
                         )
@@ -152,6 +171,10 @@ fun <T> TKNavBar(
                     label = {
                         Text(text = page.label)
                     },
+//                    colors = NavigationBarItemDefaults.colors(
+//                        unselectedIconColor = Color.White,
+//                        unselectedTextColor = Color.White,
+//                    ),
                     alwaysShowLabel = false,
                 )
             }
@@ -160,6 +183,7 @@ fun <T> TKNavBar(
         else -> Column(
             modifier = modifier
                 .fillMaxWidth()
+                .wrapContentHeight()
                 .defaultMinSize(minHeight = 80.dp)
                 .windowInsetsPadding(insets = NavigationBarDefaults.windowInsets)
                 .padding(horizontal = 32.dp, vertical = 8.dp)
@@ -310,14 +334,20 @@ fun <T> TKNavBar(
                                             space = 2.dp, alignment = Alignment.CenterVertically
                                         ),
                                     ) {
-                                        Image(
-                                            modifier = Modifier.size(size = 24.dp),
+                                        Icon(
+                                            modifier = Modifier,
                                             imageVector = page.icon,
                                             contentDescription = null,
-                                            colorFilter = ColorFilter.tint(
-                                                color = itemContentColor,
-                                            ),
+                                            tint = itemContentColor,
                                         )
+//                                        Image(
+//                                            modifier = Modifier.size(size = 24.dp),
+//                                            imageVector = page.icon,
+//                                            contentDescription = null,
+//                                            colorFilter = ColorFilter.tint(
+//                                                color = itemContentColor,
+//                                            ),
+//                                        )
                                         Text(
                                             text = page.label,
                                             color = itemContentColor,
@@ -468,6 +498,62 @@ fun <T> TKNavBar(
                     )
                 }
             }
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun TKNavBarLiquidGlassPreview() {
+    val targetPage = remember {
+        mutableIntStateOf(value = 0)
+    }
+    val providerState = rememberLiquidGlassProviderState(
+        backgroundColor = MaterialTheme.colorScheme.background
+    )
+    TrebleKitTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .background(color = Background)
+        ) {
+            TKNavBar(
+                liquidGlassProviderState = providerState,
+                background = Background,
+                useMaterial = false,
+                pages = PageList,
+                selectedIndexState = targetPage,
+                onTabSelected = {},
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun TKNavBarMaterialPreview() {
+    val targetPage = remember {
+        mutableIntStateOf(value = 0)
+    }
+    val providerState = rememberLiquidGlassProviderState(
+        backgroundColor = MaterialTheme.colorScheme.background
+    )
+    TrebleKitTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .background(color = Background)
+        ) {
+            TKNavBar(
+                liquidGlassProviderState = providerState,
+                background = Background,
+                useMaterial = true,
+                pages = PageList,
+                selectedIndexState = targetPage,
+                onTabSelected = {},
+            )
         }
     }
 }
