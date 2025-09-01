@@ -1,4 +1,4 @@
-package io.treblekit.app.ui
+package io.treblekit.app.ui.components
 
 import android.os.Build
 import androidx.compose.animation.Animatable
@@ -77,6 +77,7 @@ import com.kyant.liquidglass.refraction.RefractionHeight
 import com.kyant.liquidglass.rememberLiquidGlassProviderState
 import com.kyant.liquidglass.sampler.ContinuousLuminanceSampler
 import com.kyant.liquidglass.sampler.ExperimentalLuminanceSamplerApi
+import io.treblekit.app.ui.navigation.NavigationItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.ceil
@@ -361,7 +362,7 @@ fun <T> TKNavBar(
                                         )).fastRoundToInt(),
                                     ),
                                 )
-                                layout(width, height) {
+                                layout(width = width, height = height) {
                                     placeable.place(
                                         x = (width - placeable.width) / 2 + paddingPx,
                                         y = (height - placeable.height) / 2 + paddingPx

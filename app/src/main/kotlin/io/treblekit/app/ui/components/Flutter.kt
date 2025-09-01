@@ -1,4 +1,4 @@
-package io.treblekit.app.ui
+package io.treblekit.app.ui.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

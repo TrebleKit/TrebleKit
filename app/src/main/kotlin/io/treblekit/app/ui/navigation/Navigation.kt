@@ -1,4 +1,4 @@
-package io.treblekit.app.ui
+package io.treblekit.app.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.twotone.CompareArrows
@@ -19,7 +19,7 @@ data class NavigationItem<T>(
 data object HomePage
 
 @Serializable
-data object FEOSPage
+data object FeOSPage
 
 @Serializable
 data object EKitPage
@@ -36,7 +36,7 @@ val PageList: ArrayList<NavigationItem<Any>> = arrayListOf(
     ),
     NavigationItem(
         page = 1,
-        route = FEOSPage,
+        route = FeOSPage,
         label = "feOS",
         icon = Icons.TwoTone.Memory,
     ),

@@ -1,4 +1,4 @@
-package io.treblekit.app.ui
+package io.treblekit.app.ui.components
 
 import android.view.View
 import android.widget.TextView

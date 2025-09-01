@@ -1,4 +1,4 @@
-package io.treblekit.app.ui
+package io.treblekit.app.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,6 +19,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import com.kyant.liquidglass.liquidGlassProvider
 import com.kyant.liquidglass.rememberLiquidGlassProviderState
+import io.treblekit.app.ui.navigation.NavigationItem
 import io.treblekit.app.ui.theme.Background
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
