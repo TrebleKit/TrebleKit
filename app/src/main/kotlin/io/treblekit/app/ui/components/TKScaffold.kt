@@ -48,7 +48,7 @@ fun <T> TKScaffold(
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(
         pageCount = { pages.size },
-        initialPage = 0,
+        initialPage = 2,
     )
     val targetPage = remember {
         mutableIntStateOf(value = pagerState.currentPage)
