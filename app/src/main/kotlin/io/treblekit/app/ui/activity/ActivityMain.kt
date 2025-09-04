@@ -22,8 +22,8 @@ fun ActivityMain(factory: IViewFactory? = null) {
     TKScaffold(pages = PageList) { route, inner, goto ->
         when (route) {
             HomePage -> HomePage(inner = inner, factory = factory)
-            FeOSPage -> FeOSPage(inner = inner, factory = factory)
-            EKitPage -> EKitPage(inner = inner)
+            FeOSPage -> FeOSPage(inner = inner, factory = factory, goto = goto)
+            EKitPage -> EKitPage(inner = inner, goto = goto)
             EbKitPage -> EbKitPage(inner = inner)
             else -> UnknownPage(inner = inner)
         }
@@ -32,7 +32,7 @@ fun ActivityMain(factory: IViewFactory? = null) {
 
 @Preview(
     name = "ActivityMain",
-    device = "spec:width=1080px,height=2424px,isRound=true",
+    device = "spec:width=1080px,height=2424px",
     showSystemUi = true,
     showBackground = true,
     fontScale = 1.0f,

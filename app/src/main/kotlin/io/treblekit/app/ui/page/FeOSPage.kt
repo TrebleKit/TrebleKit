@@ -1,14 +1,36 @@
 package io.treblekit.app.ui.page
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.treblekit.app.ui.components.Flutter
+import io.treblekit.app.ui.components.GotoPage
 import io.treblekit.app.ui.components.IViewFactory
+import io.treblekit.app.ui.components.ViewFactory
+import io.treblekit.app.ui.navigation.EKitPage
 import io.treblekit.app.ui.theme.Background
 import io.treblekit.app.ui.theme.TrebleKitTheme
 
@@ -16,55 +38,77 @@ import io.treblekit.app.ui.theme.TrebleKitTheme
 fun FeOSPage(
     modifier: Modifier = Modifier,
     inner: PaddingValues = PaddingValues(),
+    goto: GotoPage<EKitPage> = { EKitPage },
     factory: IViewFactory? = null,
 ) {
-    Flutter(
+    val inspection: Boolean = LocalInspectionMode.current
+    val count = remember { mutableIntStateOf(value = 0) }
+    Surface(
         modifier = modifier
+            .fillMaxSize()
             .padding(paddingValues = inner)
             .padding(all = 16.dp),
-        factory = factory,
-    )
-//    Column(
-//        modifier = modifier
-//            .fillMaxSize()
-//            .padding(paddingValues = inner),
-//    ) {
-//        ActionBar(
-//            modifier = Modifier.padding(
-//                start = 16.dp,
-//                end = 16.dp,
-//                top = 16.dp,
-//                bottom = 8.dp,
-//            ),
-//            factory = factory,
-//            title = {
-//                Text(
-//                    text = stringResource(
-//                        id = R.string.app_name,
-//                    ),
-//                )
-//            },
-//            navigationIcon = {
-//                IconButton(
-//                    onClick = {},
-//                ) {
-//                    Icon(
-//                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-//                        contentDescription = null,
-//                    )
-//                }
-//            },
-//        )
-//        Flutter(
-//            modifier = Modifier.padding(
-//                start = 16.dp,
-//                end = 16.dp,
-//                top = 8.dp,
-//                bottom = 16.dp,
-//            ),
-//            factory = factory,
-//        )
-//    }
+        shape = MaterialTheme.shapes.medium,
+    ) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            bottomBar = {
+                BottomAppBar(
+                    floatingActionButton = {
+                        FloatingActionButton(
+                            onClick = {
+                                if (inspection) {
+                                    count.intValue++
+                                } else {
+                                    goto(EKitPage)
+                                }
+                            },
+                        ) {
+                            Icon(
+                                imageVector = if (inspection) {
+                                    Icons.Filled.Add
+                                } else {
+                                    Icons.AutoMirrored.Filled.OpenInNew
+                                },
+                                contentDescription = null,
+                            )
+                        }
+                    },
+                    actions = {},
+                    windowInsets = WindowInsets()
+                )
+            },
+            containerColor = Color.Transparent,
+            contentWindowInsets = WindowInsets(),
+        ) { innerPadding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues = innerPadding),
+                contentAlignment = Alignment.Center,
+            ) {
+                when {
+                    inspection -> Column(
+                        modifier = Modifier.wrapContentSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = "You have pushed the button this many times:")
+                        Text(
+                            text = count.intValue.toString(),
+                            style = MaterialTheme.typography.headlineMedium,
+                        )
+                    }
+
+                    else -> ViewFactory(
+                        modifier = Modifier.fillMaxSize(),
+                        factory = factory,
+                    ) {
+                        getFlutterView
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Preview

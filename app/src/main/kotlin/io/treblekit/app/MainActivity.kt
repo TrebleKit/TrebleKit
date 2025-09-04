@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(factory.getToolbarView)
 
         setContent {
-            TrebleKitTheme {
+            TrebleKitTheme(dynamicColor = false) {
                 ActivityMain(factory = factory)
             }
         }
