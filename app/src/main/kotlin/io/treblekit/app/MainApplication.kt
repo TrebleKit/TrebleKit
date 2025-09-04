@@ -8,7 +8,7 @@ class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        FlutterMixedPlugin.initFlutter(this@MainApplication)
+        FlutterMixedPlugin.initFlutter(this@MainApplication) { engine -> }
         DynamicColors.applyToActivitiesIfAvailable(this@MainApplication)
     }
 }

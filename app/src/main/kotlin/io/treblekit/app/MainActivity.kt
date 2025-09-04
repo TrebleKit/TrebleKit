@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.toArgb
 import com.google.android.material.appbar.MaterialToolbar
 import com.wyq0918dev.flutter_mixed.FlutterMixedPlugin
 import io.flutter.embedding.android.FlutterFragment
+import io.flutter.embedding.android.RenderMode
 import io.treblekit.app.ui.activity.ActivityMain
 import io.treblekit.app.ui.components.IViewFactory
 import io.treblekit.app.ui.theme.TrebleKitTheme
@@ -23,32 +24,47 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        immersive()
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.auto(
+                lightScrim = Color.Transparent.toArgb(),
+                darkScrim = Color.Transparent.toArgb(),
+            ),
+            navigationBarStyle = SystemBarStyle.auto(
+                lightScrim = Color.Transparent.toArgb(),
+                darkScrim = Color.Transparent.toArgb(),
+            ),
+        )
 
-        var flutterView: View? = null
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.isNavigationBarContrastEnforced = false
+        }
 
         val factory: IViewFactory = object : IViewFactory {
 
             override val getToolbarView: MaterialToolbar by lazy {
-                return@lazy MaterialToolbar(this@MainActivity)
+                return@lazy MaterialToolbar(this@MainActivity).let {
+                    setSupportActionBar(it)
+                    return@let it
+                }
             }
 
             override val getFlutterView: View by lazy {
-                return@lazy flutterView ?: View(this@MainActivity)
+                return@lazy FlutterMixedPlugin.loadFlutter(
+                    activity = this@MainActivity,
+                    renderMode = RenderMode.texture, // 混合开发
+                ) { fragment, view ->
+                    mFlutterFragment = fragment
+                    return@loadFlutter view
+                }.let { flutter ->
+                    return@let flutter ?: View(
+                        this@MainActivity,
+                    )
+                }
             }
         }
 
-        FlutterMixedPlugin.loadFlutter(
-            activity = this@MainActivity
-        ) { fragment, view ->
-            mFlutterFragment = fragment
-            flutterView = view
-        }
-
-        setSupportActionBar(factory.getToolbarView)
-
         setContent {
-            TrebleKitTheme(dynamicColor = false) {
+            TrebleKitTheme {
                 ActivityMain(factory = factory)
             }
         }
@@ -91,24 +107,5 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mFlutterFragment = null
-    }
-
-    /**
-     * 导航栏状态栏沉浸
-     */
-    private fun immersive() {
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.auto(
-                lightScrim = Color.Transparent.toArgb(),
-                darkScrim = Color.Transparent.toArgb(),
-            ),
-            navigationBarStyle = SystemBarStyle.auto(
-                lightScrim = Color.Transparent.toArgb(),
-                darkScrim = Color.Transparent.toArgb(),
-            ),
-        )
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            window.isNavigationBarContrastEnforced = false
-        }
     }
 }

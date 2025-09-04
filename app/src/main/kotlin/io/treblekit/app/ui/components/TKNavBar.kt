@@ -273,7 +273,8 @@ fun <T> TKNavBar(
                                         } else {
                                             0f
                                         }, animationSpec = spring(
-                                            dampingRatio = 0.8f, stiffness = 200f
+                                            dampingRatio = 0.8f,
+                                            stiffness = 200f,
                                         )
                                     )
                                     val itemContentColor by animateColorAsState(
