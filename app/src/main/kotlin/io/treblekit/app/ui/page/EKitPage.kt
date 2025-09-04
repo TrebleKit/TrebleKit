@@ -101,6 +101,7 @@ fun EKitPage(
                         onClick = {
 
                         },
+                        alwaysShowLabel = false,
                     )
                     NavigationBarItem(
                         icon = {
@@ -110,12 +111,13 @@ fun EKitPage(
                             )
                         },
                         label = {
-                            Text(text = "首页")
+                            Text(text = "应用")
                         },
                         selected = false,
                         onClick = {
 
                         },
+                        alwaysShowLabel = false,
                     )
                     NavigationBarItem(
                         icon = {
@@ -125,14 +127,14 @@ fun EKitPage(
                             )
                         },
                         label = {
-                            Text(text = "首页")
+                            Text(text = "我的")
                         },
                         selected = false,
                         onClick = {
 
                         },
+                        alwaysShowLabel = false,
                     )
-
                 }
             },
             contentWindowInsets = WindowInsets(),

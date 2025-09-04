@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -146,14 +147,12 @@ fun <T> TKNavBar(
             modifier = modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .clip(
-                    shape = RoundedCornerShape(
-                        topStart = 10.dp,
-                        topEnd = 10.dp,
-                    ),
-                ),
-//            containerColor = Color(color = 0xff787493),
-//            contentColor = MaterialTheme.colorScheme.contentColorFor(Color(color = 0xff787493))
+                .defaultMinSize(minHeight = 80.dp)
+                .windowInsetsPadding(insets = NavigationBarDefaults.windowInsets)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .selectableGroup()
+                .clip(shape = CardDefaults.shape),
+            containerColor = Color(color = 0xff787493),
         ) {
             pages.forEachIndexed { index, page ->
                 NavigationBarItem(
@@ -340,14 +339,6 @@ fun <T> TKNavBar(
                                             contentDescription = null,
                                             tint = itemContentColor,
                                         )
-//                                        Image(
-//                                            modifier = Modifier.size(size = 24.dp),
-//                                            imageVector = page.icon,
-//                                            contentDescription = null,
-//                                            colorFilter = ColorFilter.tint(
-//                                                color = itemContentColor,
-//                                            ),
-//                                        )
                                         Text(
                                             text = page.label,
                                             color = itemContentColor,

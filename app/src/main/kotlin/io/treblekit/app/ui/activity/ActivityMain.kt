@@ -19,7 +19,7 @@ import io.treblekit.app.ui.theme.TrebleKitTheme
 
 @Composable
 fun ActivityMain(factory: IViewFactory? = null) {
-    TKScaffold(pages = PageList) { route, inner, goto ->
+    TKScaffold(pages = PageList, useMaterial = false) { route, inner, goto ->
         when (route) {
             HomePage -> HomePage(inner = inner, factory = factory)
             FeOSPage -> FeOSPage(inner = inner, factory = factory, goto = goto)

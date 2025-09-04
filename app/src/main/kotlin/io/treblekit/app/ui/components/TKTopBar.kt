@@ -72,8 +72,7 @@ fun TKTopBar(
                     .width(width = capsuleWidth)
                     .height(height = capsuleHeight)
                     .topBarButtonStyle(
-                        style = if (useMaterial) TopBarButtonStyle.Material3
-                        else TopBarButtonStyle.LiquidGlass,
+                        style = getStyle(useMaterial = useMaterial),
                     )
                     .clickable(onClick = {}),
                 contentAlignment = Alignment.Center,
@@ -107,8 +106,7 @@ fun TKTopBar(
                     .height(height = capsuleHeight)
                     .width(width = capsuleWidth)
                     .topBarButtonStyle(
-                        style = if (useMaterial) TopBarButtonStyle.Material3
-                        else TopBarButtonStyle.LiquidGlass,
+                        style = getStyle(useMaterial = useMaterial),
                     ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -153,7 +151,15 @@ fun TKTopBar(
     )
 }
 
-enum class TopBarButtonStyle {
+private fun getStyle(useMaterial: Boolean): TopBarButtonStyle {
+    return if (useMaterial) {
+        TopBarButtonStyle.Material3
+    } else {
+        TopBarButtonStyle.LiquidGlass
+    }
+}
+
+private enum class TopBarButtonStyle {
     LiquidGlass, Material3
 }
 
