@@ -59,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text('feOS'),
         actions: [const CapsulePlaceholder()],
       ),
+      bottomNavigationBar: BottomAppBar(),
       body: Column(
         children: [
           Card.filled(
@@ -78,17 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '111',
-                    ),
-                    Text(
-                      '111',
-                    ),
-                    Text(
-                      '111',
-                    ),
-                  ],
+                  children: [Text('111'), Text('111'), Text('111')],
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -99,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

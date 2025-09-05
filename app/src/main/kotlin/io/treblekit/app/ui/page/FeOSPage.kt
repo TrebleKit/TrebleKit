@@ -5,16 +5,23 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -52,31 +59,35 @@ fun FeOSPage(
     ) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            bottomBar = {
-                BottomAppBar(
-                    floatingActionButton = {
-                        FloatingActionButton(
-                            onClick = {
-                                if (inspection) {
-                                    count.intValue++
-                                } else {
-                                    goto(EKitPage)
-                                }
-                            },
-                        ) {
-                            Icon(
-                                imageVector = if (inspection) {
-                                    Icons.Filled.Add
-                                } else {
-                                    Icons.AutoMirrored.Filled.OpenInNew
-                                },
-                                contentDescription = null,
-                            )
+//            bottomBar = {
+//                BottomAppBar(
+//                    floatingActionButton = {
+//
+//                    },
+//                    actions = {},
+//                    windowInsets = WindowInsets()
+//                )
+//            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    modifier = Modifier.padding(bottom = 80.0.dp),
+                    onClick = {
+                        if (inspection) {
+                            count.intValue++
+                        } else {
+                            goto(EKitPage)
                         }
                     },
-                    actions = {},
-                    windowInsets = WindowInsets()
-                )
+                ) {
+                    Icon(
+                        imageVector = if (inspection) {
+                            Icons.Filled.Add
+                        } else {
+                            Icons.AutoMirrored.Filled.OpenInNew
+                        },
+                        contentDescription = null,
+                    )
+                }
             },
             containerColor = Color.Transparent,
             contentWindowInsets = WindowInsets(),
