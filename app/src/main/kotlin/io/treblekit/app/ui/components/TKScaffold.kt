@@ -53,9 +53,6 @@ fun <T> TKScaffold(
     val targetPage = remember {
         mutableIntStateOf(value = pagerState.currentPage)
     }
-    val providerState = rememberLiquidGlassProviderState(
-        backgroundColor = MaterialTheme.colorScheme.background
-    )
     LaunchedEffect(key1 = pagerState) {
         snapshotFlow {
             pagerState.currentPage
@@ -80,7 +77,6 @@ fun <T> TKScaffold(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
-                liquidGlassProviderState = providerState,
                 background = Background,
                 useMaterial = useMaterial,
                 pages = pages,
@@ -92,12 +88,10 @@ fun <T> TKScaffold(
                 },
             )
         },
+        containerColor = Background,
     ) { inner ->
         HorizontalPager(
-            modifier = Modifier
-                .fillMaxSize()
-                .liquidGlassProvider(state = providerState)
-                .background(color = Background),
+            modifier = Modifier.fillMaxSize(),
             state = pagerState,
             userScrollEnabled = false,
             pageContent = { page ->

@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         setContent {
-            TrebleKitTheme {
+            TrebleKitTheme(dynamicColor = false) {
                 ActivityMain(factory = factory)
             }
         }

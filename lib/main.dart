@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mixed/flutter_mixed.dart';
 import 'package:freefeos/freefeos.dart';
 import 'package:multi_builder/multi_builder.dart';
@@ -10,36 +11,32 @@ void main() => runApp(const MyApp());
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // ThemeData _getTheme(Brightness brightness) {
-  //   return ThemeData(
-  //     brightness: brightness,
-  //     colorScheme: ColorScheme.fromSeed(
-  //       seedColor: Colors.blue,
-  //       brightness: brightness,
-  //     ),
-  //     appBarTheme: const AppBarTheme(
-  //       systemOverlayStyle: SystemUiOverlayStyle(
-  //         statusBarIconBrightness: Brightness.light,
-  //         systemNavigationBarIconBrightness: Brightness.light,
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  final MaterialTheme theme = const MaterialTheme();
+  ThemeData _getTheme(Brightness brightness) {
+    MaterialTheme theme = const MaterialTheme(TextTheme());
+    return (brightness == Brightness.light ? theme.light() : theme.dark())
+        .copyWith(
+          appBarTheme: const AppBarTheme(
+            systemOverlayStyle: SystemUiOverlayStyle(
+              statusBarIconBrightness: Brightness.light,
+              systemNavigationBarIconBrightness: Brightness.light,
+            ),
+          ),
+        );
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'TrebleKit',
-      theme: theme.light(),
-      darkTheme: theme.dark(),
+      onGenerateTitle: (context) {
+        return 'TrebleKit';
+      },
+      theme: _getTheme(Brightness.light),
+      darkTheme: _getTheme(Brightness.dark),
       builder: <TransitionBuilder>[
         FreeFEOS.builder,
         FlutterMixed.builder,
       ].toBuilder,
       home: const MyHomePage(),
-      // debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -73,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Tooltip(
               message: '',
               child: ListTile(
-                leading: Icon(Icons.check_circle_outline),
+                leading: const Icon(Icons.check_circle_outline),
                 title: Text('111'),
                 subtitle: Column(
                   mainAxisSize: MainAxisSize.min,

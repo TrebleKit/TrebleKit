@@ -2,6 +2,7 @@ package io.treblekit.app.ui.page
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,7 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.CheckCircleOutline
@@ -33,12 +36,15 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
@@ -61,8 +67,10 @@ fun EKitPage(
     inner: PaddingValues = PaddingValues(),
     goto: GotoPage<FeOSPage> = { FeOSPage },
 ) {
-    val context = LocalContext.current
-    val inspection = LocalInspectionMode.current
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
+        state = rememberTopAppBarState()
+    )
+    val scroll = rememberScrollState()
     Surface(
         modifier = modifier
             .fillMaxSize()
@@ -71,7 +79,9 @@ fun EKitPage(
         shape = MaterialTheme.shapes.medium,
     ) {
         Scaffold(
-            modifier = modifier.fillMaxSize(),
+            modifier = modifier.fillMaxSize().nestedScroll(
+                connection = scrollBehavior.nestedScrollConnection,
+            ),
             topBar = {
                 CenterAlignedTopAppBar(
                     title = {
@@ -143,49 +153,14 @@ fun EKitPage(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues = padding)
+                    .verticalScroll(state = scroll),
             ) {
-                Row(
+
+                Header(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 22.dp, top = 16.dp, end = 22.dp, bottom = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Image(
-                        painter = if (inspection) painterResource(
-                            id = R.drawable.baseline_preview_24,
-                        ) else rememberDrawablePainter(
-                            drawable = ContextCompat.getDrawable(
-                                context, R.mipmap.ic_ecosedkit
-                            ),
-                        ),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(size = 58.dp)
-                            .clip(shape = CardDefaults.shape),
-                    )
-                    Text(
-                        text = "EcosedKit",
-                        modifier = Modifier.padding(start = 16.dp),
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                    Box(
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .padding(all = 8.dp)
-                            .clip(shape = RoundedCornerShape(size = 5.dp)),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(
-                            text = "JC-ULTRA",
-                            modifier = Modifier
-                                .background(color = Color.Black)
-                                .padding(vertical = 2.dp, horizontal = 4.dp),
-                            color = Color.White,
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 16.dp, bottom = 8.dp)
+                )
 
                 StateCard(
                     modifier = Modifier.padding(
@@ -235,6 +210,56 @@ private fun EKitPagePreview() {
                 color = Background,
             ),
         )
+    }
+}
+
+@Composable
+fun Header(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val inspection = LocalInspectionMode.current
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(horizontal = 6.dp),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Image(
+            painter = if (inspection) painterResource(
+                id = R.drawable.baseline_preview_24,
+            ) else rememberDrawablePainter(
+                drawable = ContextCompat.getDrawable(
+                    context, R.mipmap.ic_ecosedkit
+                ),
+            ),
+            contentDescription = null,
+            modifier = Modifier
+                .size(size = 58.dp)
+                .clip(shape = CardDefaults.shape),
+        )
+        Text(
+            text = "EcosedKit",
+            modifier = Modifier.padding(start = 16.dp),
+            style = MaterialTheme.typography.titleLarge,
+        )
+        Box(
+            modifier = Modifier
+                .wrapContentSize()
+                .padding(all = 8.dp)
+                .clip(shape = RoundedCornerShape(size = 5.dp)),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = "JC-ULTRA",
+                modifier = Modifier
+                    .background(color = Color.Black)
+                    .padding(vertical = 2.dp, horizontal = 4.dp),
+                color = Color.White,
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
 
