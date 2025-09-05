@@ -1,5 +1,6 @@
 package io.treblekit.app.ui.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.SpringSpec
@@ -100,6 +101,8 @@ fun <T> TKNavBar(
     val padding = 4.dp
     val paddingPx = with(density) { padding.roundToPx() }
 
+
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -119,10 +122,7 @@ fun <T> TKNavBar(
                 modifier = Modifier
                     .weight(weight = 1f)
                     .height(height = 64.dp)
-                    .fillMaxWidth()
-                    .pointerInput(key1 = Unit) {
-                        detectTapGestures {}
-                    },
+                    .fillMaxWidth(),
             ) {
                 val widthWithoutPaddings =
                     (constraints.maxWidth.toFloat() - paddingPx * 2f).fastCoerceAtLeast(
@@ -151,10 +151,9 @@ fun <T> TKNavBar(
                 }
 
                 Row(
-                    modifier = Modifier
+                    modifier = if (useMaterial) Modifier.fillMaxSize().clip(shape = RoundedCornerShape(50.dp))
+                        .background(Color(color = 0xff434056)).padding(all = padding) else Modifier
                         .fillMaxSize()
-//                        .clip(shape = RoundedCornerShape(50.dp))
-//                        .background(Color(color = 0xff434056))
                         .liquidGlassProvider(
                             state = bottomTabsLiquidGlassProviderState,
                         )
@@ -274,7 +273,8 @@ fun <T> TKNavBar(
                     ),
                 )
 
-                Spacer(
+
+                if (!useMaterial) Spacer(
                     modifier = Modifier
                         .layout { measurable, constraints ->
                             val width = tabWidth.fastRoundToInt()
