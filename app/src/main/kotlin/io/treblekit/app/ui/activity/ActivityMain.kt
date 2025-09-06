@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import io.treblekit.app.ui.components.IViewFactory
+import io.treblekit.app.IViewFactory
 import io.treblekit.app.ui.components.TKNavBar
 import io.treblekit.app.ui.components.TKTopBar
 import io.treblekit.app.ui.navigation.EKitPage

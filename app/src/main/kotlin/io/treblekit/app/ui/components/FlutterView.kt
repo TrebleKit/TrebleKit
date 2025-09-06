@@ -8,17 +8,31 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
-import com.google.android.material.appbar.MaterialToolbar
+import io.treblekit.app.IViewFactory
 import io.treblekit.app.R
 import io.treblekit.app.ui.theme.TrebleKitTheme
 
-interface IViewFactory {
-    val getToolbarView: MaterialToolbar
-    val getFlutterView: View
+@Composable
+fun FlutterView(
+    modifier: Modifier = Modifier,
+    factory: IViewFactory? = null,
+) {
+    ViewFactory(
+        modifier = modifier,
+        factory = factory,
+    ) {
+        getFlutterView
+    }
+}
+
+@Preview
+@Composable
+private fun FlutterViewPreview() {
+    FlutterView()
 }
 
 @Composable
-fun ViewFactory(
+private fun ViewFactory(
     modifier: Modifier = Modifier,
     factory: IViewFactory? = null,
     view: IViewFactory.() -> View? = { null },

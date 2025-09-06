@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
         FlutterMixed.builder,
       ].toBuilder,
       home: const MyHomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

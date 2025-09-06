@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
-import io.treblekit.app.ui.components.IViewFactory
+import io.treblekit.app.IViewFactory
 import io.treblekit.app.ui.theme.ToolbarHeight
 import io.treblekit.app.ui.theme.TrebleKitTheme
 
