@@ -220,7 +220,7 @@ fun Header(modifier: Modifier = Modifier) {
                 id = R.drawable.baseline_preview_24,
             ) else rememberDrawablePainter(
                 drawable = ContextCompat.getDrawable(
-                    context, R.mipmap.ic_ecosedkit
+                    context, R.drawable.ic_ecosedkit
                 ),
             ),
             contentDescription = null,
