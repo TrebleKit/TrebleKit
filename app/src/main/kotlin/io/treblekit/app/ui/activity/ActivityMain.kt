@@ -19,29 +19,24 @@ import io.treblekit.app.ui.theme.TrebleKitTheme
 
 @Composable
 fun ActivityMain(factory: IViewFactory? = null) {
-    TKScaffold(pages = PageList, useMaterial = false) { navController ->
+    TKScaffold(
+        pages = PageList,
+        startDestination = HomePage,
+        useMaterial = true,
+    ) { navController ->
         composable<HomePage> {
             HomePage(factory = factory)
         }
         composable<FeOSPage> {
             FeOSPage(factory = factory, navController = navController)
         }
-        composable<EKitPage>{
+        composable<EKitPage> {
             EKitPage(navController = navController)
         }
         composable<EbKitPage> {
             EbKitPage()
         }
     }
-//    TKScaffold(pages = PageList, useMaterial = false) { route, goto ->
-//        when (route) {
-//            HomePage -> HomePage(factory = factory)
-//            FeOSPage -> FeOSPage(factory = factory, goto = goto)
-//            EKitPage -> EKitPage(goto = goto)
-//            EbKitPage -> EbKitPage()
-//            else -> UnknownPage()
-//        }
-//    }
 }
 
 @Preview(

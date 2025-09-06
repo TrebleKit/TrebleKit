@@ -57,10 +57,12 @@ import io.treblekit.app.ui.utils.NoOnClick
 @Composable
 fun TKTopBar(
     modifier: Modifier = Modifier,
-    useMaterial: Boolean,
+    useLiquidGlass: Boolean,
 ) {
     CenterAlignedTopAppBar(
-        modifier = modifier.fillMaxWidth().wrapContentHeight(),
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
         title = {
             Text(
                 text = stringResource(id = R.string.app_name),
@@ -74,7 +76,7 @@ fun TKTopBar(
                     .width(width = capsuleWidth)
                     .height(height = capsuleHeight)
                     .topBarButtonStyle(
-                        style = getStyle(useMaterial = useMaterial),
+                        style = getStyle(useLiquidGlass = useLiquidGlass),
                     )
                     .clickable(onClick = {}),
                 contentAlignment = Alignment.Center,
@@ -108,7 +110,7 @@ fun TKTopBar(
                     .height(height = capsuleHeight)
                     .width(width = capsuleWidth)
                     .topBarButtonStyle(
-                        style = getStyle(useMaterial = useMaterial),
+                        style = getStyle(useLiquidGlass = useLiquidGlass),
                     ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -153,11 +155,11 @@ fun TKTopBar(
     )
 }
 
-private fun getStyle(useMaterial: Boolean): TopBarButtonStyle {
-    return if (useMaterial) {
-        TopBarButtonStyle.Material3
-    } else {
+private fun getStyle(useLiquidGlass: Boolean): TopBarButtonStyle {
+    return if (useLiquidGlass) {
         TopBarButtonStyle.LiquidGlass
+    } else {
+        TopBarButtonStyle.Material3
     }
 }
 
@@ -227,7 +229,7 @@ private fun TKTopBarLiquidGlassPreview() {
             modifier = Modifier.background(
                 color = Background,
             ),
-            useMaterial = false,
+            useLiquidGlass = true,
         )
     }
 }
@@ -240,7 +242,7 @@ private fun TKTopBarMaterialPreview() {
             modifier = Modifier.background(
                 color = Background,
             ),
-            useMaterial = true,
+            useLiquidGlass = false,
         )
     }
 }

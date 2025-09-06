@@ -31,7 +31,6 @@ import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
@@ -39,6 +38,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,6 +59,11 @@ import androidx.compose.ui.util.fastCoerceAtLeast
 import androidx.compose.ui.util.fastCoerceIn
 import androidx.compose.ui.util.fastRoundToInt
 import androidx.compose.ui.util.lerp
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.kyant.liquidglass.GlassStyle
 import com.kyant.liquidglass.liquidGlass
 import com.kyant.liquidglass.liquidGlassProvider
@@ -68,24 +73,27 @@ import com.kyant.liquidglass.refraction.RefractionAmount
 import com.kyant.liquidglass.refraction.RefractionHeight
 import com.kyant.liquidglass.rememberLiquidGlassProviderState
 import com.kyant.liquidglass.sampler.ExperimentalLuminanceSamplerApi
+import io.treblekit.app.ui.navigation.HomePage
 import io.treblekit.app.ui.navigation.NavigationItem
 import io.treblekit.app.ui.navigation.PageList
 import io.treblekit.app.ui.theme.Background
 import io.treblekit.app.ui.theme.TrebleKitTheme
+import io.treblekit.app.ui.utils.navigateTo
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlin.math.ceil
 import kotlin.math.floor
 
 @OptIn(ExperimentalLuminanceSamplerApi::class, ExperimentalLuminanceSamplerApi::class)
 @Composable
-fun <T> TKNavBar(
+fun <T : Any> TKNavBar(
     modifier: Modifier = Modifier,
+    navController: NavHostController,
+    pages: List<NavigationItem<T>>,
+    startDestination: T,
     background: Color,
     useMaterial: Boolean,
-    pages: List<NavigationItem<T>>,
-    selectedIndexState: MutableState<Int>,
-    onTabSelected: (index: Int) -> Unit,
 ) {
     val providerState = rememberLiquidGlassProviderState(
         backgroundColor = background
@@ -100,6 +108,37 @@ fun <T> TKNavBar(
     val padding = 4.dp
     val paddingPx = with(density) { padding.roundToPx() }
 
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+    val selectedIndexState = remember {
+        var startIndex = 0
+        pages.forEachIndexed { index, item ->
+            if (item.route == startDestination) {
+                startIndex = index
+            }
+        }
+        mutableIntStateOf(value = startIndex)
+    }
+
+    LaunchedEffect(key1 = currentDestination) {
+        snapshotFlow {
+            currentDestination?.hierarchy
+        }.collectLatest {
+            for (page in pages) {
+                val isCurrent: Boolean? = currentDestination?.hierarchy?.any {
+                    return@any it.hasRoute(route = page.route::class)
+                }
+                if (isCurrent == true) {
+                    pages.forEachIndexed { index, item ->
+                        if (item.route == page.route) {
+                            selectedIndexState.intValue = index
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 
     Column(
@@ -132,13 +171,13 @@ fun <T> TKNavBar(
                     (widthWithoutPaddings - tabWidth).fastCoerceAtLeast(minimumValue = 0f)
 
                 LaunchedEffect(
-                    key1 = selectedIndexState.value,
+                    key1 = selectedIndexState.intValue,
                     key2 = tabWidth,
                     key3 = isDragging,
                 ) {
                     if (tabWidth > 0 && !isDragging) {
                         offset.animateTo(
-                            targetValue = (selectedIndexState.value * tabWidth).fastCoerceIn(
+                            targetValue = (selectedIndexState.intValue * tabWidth).fastCoerceIn(
                                 0f, maxWidth
                             ),
                             animationSpec = SpringSpec(
@@ -179,7 +218,7 @@ fun <T> TKNavBar(
                     pages.forEachIndexed { index, page ->
                         key(page) {
                             val itemBackgroundAlpha by animateFloatAsState(
-                                targetValue = if (selectedIndexState.value == index && !isDragging) {
+                                targetValue = if (selectedIndexState.intValue == index && !isDragging) {
                                     0.8f
                                 } else {
                                     0f
@@ -189,7 +228,7 @@ fun <T> TKNavBar(
                                 )
                             )
                             val itemContentColor by animateColorAsState(
-                                targetValue = if (selectedIndexState.value == index && !isDragging) {
+                                targetValue = if (selectedIndexState.intValue == index && !isDragging) {
                                     MaterialTheme.colorScheme.onPrimaryContainer
                                 } else {
                                     Color(color = 0xff8E8E9E)
@@ -197,8 +236,7 @@ fun <T> TKNavBar(
                                     dampingRatio = 0.8f, stiffness = 200f
                                 )
                             )
-                            val itemContainerColor =
-                                MaterialTheme.colorScheme.primaryContainer
+                            val itemContainerColor = MaterialTheme.colorScheme.primaryContainer
                             Column(
                                 modifier = Modifier
                                     .clip(shape = RoundedCornerShape(percent = 50))
@@ -210,9 +248,13 @@ fun <T> TKNavBar(
                                     }
                                     .pointerInput(key1 = Unit) {
                                         detectTapGestures {
-                                            if (selectedIndexState.value != index) {
-                                                selectedIndexState.value = index
-                                                onTabSelected(index)
+                                            if (selectedIndexState.intValue != index) {
+                                                selectedIndexState.intValue = index
+//                                                onTabSelected(index)
+                                                navigateTo(
+                                                    navController = navController,
+                                                    route = pages[index].route,
+                                                )
                                                 animationScope.launch {
                                                     launch {
                                                         offset.animateTo(
@@ -334,10 +376,10 @@ fun <T> TKNavBar(
 //                            ),
 //                            shape = RoundedCornerShape(percent = 50),
 //                        )
-                        .background(
-                            color = background,
-                            shape = RoundedCornerShape(percent = 50),
-                        )
+                    .background(
+                        color = background,
+                        shape = RoundedCornerShape(percent = 50),
+                    )
                         .liquidGlass(
                             state = bottomTabsLiquidGlassProviderState,
                             style = GlassStyle(
@@ -383,9 +425,13 @@ fun <T> TKNavBar(
                                     maximumValue = pages.lastIndex,
                                 )
 
-                                if (selectedIndexState.value != targetIndex) {
-                                    selectedIndexState.value = targetIndex
-                                    onTabSelected(targetIndex)
+                                if (selectedIndexState.intValue != targetIndex) {
+                                    selectedIndexState.intValue = targetIndex
+//                                    onTabSelected(targetIndex)
+                                    navigateTo(
+                                        navController = navController,
+                                        route = pages[targetIndex].route,
+                                    )
                                 }
 
                                 animationScope.launch {
@@ -412,9 +458,6 @@ fun <T> TKNavBar(
 @Preview
 @Composable
 private fun TKNavBarLiquidGlassPreview() {
-    val targetPage = remember {
-        mutableIntStateOf(value = 0)
-    }
     TrebleKitTheme {
         Box(
             modifier = Modifier
@@ -426,10 +469,8 @@ private fun TKNavBarLiquidGlassPreview() {
                 background = Background,
                 useMaterial = false,
                 pages = PageList,
-                selectedIndexState = targetPage,
-                onTabSelected = { index ->
-                    targetPage.intValue = index
-                },
+                startDestination = HomePage,
+                navController = rememberNavController(),
             )
         }
     }
@@ -438,9 +479,6 @@ private fun TKNavBarLiquidGlassPreview() {
 @Preview
 @Composable
 private fun TKNavBarMaterialPreview() {
-    val targetPage = remember {
-        mutableIntStateOf(value = 0)
-    }
     TrebleKitTheme {
         Box(
             modifier = Modifier
@@ -452,10 +490,8 @@ private fun TKNavBarMaterialPreview() {
                 background = Background,
                 useMaterial = true,
                 pages = PageList,
-                selectedIndexState = targetPage,
-                onTabSelected = { index ->
-                    targetPage.intValue = index
-                },
+                startDestination = HomePage,
+                navController = rememberNavController(),
             )
         }
     }
