@@ -22,7 +22,7 @@ fun ActivityMain(factory: IViewFactory? = null) {
     TKScaffold(
         pages = PageList,
         startDestination = HomePage,
-        useMaterial = true,
+        useLiquidGlass = false,
     ) { navController ->
         composable<HomePage> {
             HomePage(factory = factory)
