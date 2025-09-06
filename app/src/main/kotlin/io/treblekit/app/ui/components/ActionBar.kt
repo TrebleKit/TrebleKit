@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.treblekit.app.R
+import io.treblekit.app.ui.theme.ToolbarHeight
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.utils.NoOnClick
 
@@ -62,6 +63,7 @@ fun ActionBar(
                 .wrapContentHeight(),
             navigationIcon = navigationIcon,
             actions = actions,
+            expandedHeight = ToolbarHeight,
             windowInsets = WindowInsets(),
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = Color.Transparent,

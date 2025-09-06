@@ -12,17 +12,18 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   ThemeData _getTheme(Brightness brightness) {
-    MaterialTheme theme = const MaterialTheme(TextTheme());
-    return (brightness == Brightness.light ? theme.light() : theme.dark())
-        .copyWith(
-          appBarTheme: const AppBarTheme(
-            centerTitle: true,
-            systemOverlayStyle: SystemUiOverlayStyle(
-              statusBarIconBrightness: Brightness.light,
-              systemNavigationBarIconBrightness: Brightness.light,
-            ),
-          ),
-        );
+    final MaterialTheme theme = const MaterialTheme(TextTheme());
+    final bool isLight = brightness == Brightness.light;
+    final ThemeData themeData = isLight ? theme.light() : theme.dark();
+    return themeData.copyWith(
+      appBarTheme: const AppBarTheme(
+        centerTitle: true,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.light,
+          systemNavigationBarIconBrightness: Brightness.light,
+        ),
+      ),
+    );
   }
 
   @override

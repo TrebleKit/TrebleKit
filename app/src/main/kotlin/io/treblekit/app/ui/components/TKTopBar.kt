@@ -46,11 +46,13 @@ import com.kyant.liquidglass.refraction.RefractionHeight
 import com.kyant.liquidglass.rememberLiquidGlassProviderState
 import com.kyant.liquidglass.shadow.GlassShadow
 import io.treblekit.app.R
-import io.treblekit.app.ui.theme.Background
+import io.treblekit.app.ui.theme.AppBackgroundColor
+import io.treblekit.app.ui.theme.CapsuleEdgePadding
+import io.treblekit.app.ui.theme.CapsuleHeight
+import io.treblekit.app.ui.theme.CapsuleIndent
+import io.treblekit.app.ui.theme.CapsuleRadius
+import io.treblekit.app.ui.theme.CapsuleWidth
 import io.treblekit.app.ui.theme.TrebleKitTheme
-import io.treblekit.app.ui.theme.capsuleHeight
-import io.treblekit.app.ui.theme.capsuleRadius
-import io.treblekit.app.ui.theme.capsuleWidth
 import io.treblekit.app.ui.utils.NoOnClick
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,9 +74,9 @@ fun TKTopBar(
         navigationIcon = {
             Box(
                 modifier = Modifier
-                    .padding(start = (16 - 4).dp)
-                    .width(width = capsuleWidth)
-                    .height(height = capsuleHeight)
+                    .padding(start = CapsuleEdgePadding)
+                    .width(width = CapsuleWidth)
+                    .height(height = CapsuleHeight)
                     .topBarButtonStyle(
                         style = getStyle(useLiquidGlass = useLiquidGlass),
                     )
@@ -106,9 +108,9 @@ fun TKTopBar(
         actions = {
             Row(
                 modifier = Modifier
-                    .padding(end = (16 - 4).dp)
-                    .height(height = capsuleHeight)
-                    .width(width = capsuleWidth)
+                    .padding(end = CapsuleEdgePadding)
+                    .height(height = CapsuleHeight)
+                    .width(width = CapsuleWidth)
                     .topBarButtonStyle(
                         style = getStyle(useLiquidGlass = useLiquidGlass),
                     ),
@@ -129,7 +131,7 @@ fun TKTopBar(
                 }
                 VerticalDivider(
                     modifier = Modifier
-                        .padding(vertical = 5.dp)
+                        .padding(vertical = CapsuleIndent)
                         .wrapContentWidth()
                         .fillMaxHeight(),
                     color = Color(color = 0xff8E8E9E),
@@ -170,17 +172,13 @@ private enum class TopBarButtonStyle {
 @Stable
 @Composable
 private fun Modifier.topBarButtonStyle(style: TopBarButtonStyle): Modifier {
-    val liquidGlassProviderState = rememberLiquidGlassProviderState(
+    val providerState = rememberLiquidGlassProviderState(
         backgroundColor = Color(color = 0xff434056)
     )
-    val searchButtonLiquidGlassStyle = GlassStyle(
-        shape = RoundedCornerShape(
-            size = capsuleRadius,
-        ),
+    val buttonStyle = GlassStyle(
+        shape = RoundedCornerShape(percent = CapsuleRadius),
         innerRefraction = InnerRefraction(
-            height = RefractionHeight(
-                value = 8.dp,
-            ),
+            height = RefractionHeight(value = 8.dp),
             amount = RefractionAmount.Full,
         ),
         material = GlassMaterial(
@@ -203,21 +201,13 @@ private fun Modifier.topBarButtonStyle(style: TopBarButtonStyle): Modifier {
     )
     return this then when (style) {
         TopBarButtonStyle.LiquidGlass -> Modifier.liquidGlass(
-            state = liquidGlassProviderState,
-            style = searchButtonLiquidGlassStyle,
+            state = providerState,
+            style = buttonStyle,
         )
 
         TopBarButtonStyle.Material3 -> Modifier
-            .clip(
-                shape = RoundedCornerShape(
-                    size = capsuleRadius,
-                ),
-            )
-            .background(
-                color = Color(
-                    color = 0xff434056,
-                ),
-            )
+            .clip(shape = RoundedCornerShape(percent = 50))
+            .background(color = Color(color = 0xff434056))
     }
 }
 
@@ -227,7 +217,7 @@ private fun TKTopBarLiquidGlassPreview() {
     TrebleKitTheme {
         TKTopBar(
             modifier = Modifier.background(
-                color = Background,
+                color = AppBackgroundColor,
             ),
             useLiquidGlass = true,
         )
@@ -240,7 +230,7 @@ private fun TKTopBarMaterialPreview() {
     TrebleKitTheme {
         TKTopBar(
             modifier = Modifier.background(
-                color = Background,
+                color = AppBackgroundColor,
             ),
             useLiquidGlass = false,
         )

@@ -225,4 +225,4 @@ val CapsuleContainer: Color = Color(color = 0xff434056) // 胶囊背景填充
 val CapsuleStroke: Color = Color(color = 0xff8E8E9E) // 胶囊背景描边
 val CapsuleContent: Color = Color(color = 0xff8E8E9E) // 胶囊前景
 
-val Background: Color = Color(color = 0xff1B1B2B)
+val AppBackgroundColor: Color = Color(color = 0xff1B1B2B)

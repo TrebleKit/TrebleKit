@@ -41,7 +41,11 @@ fun FeOSPage(
         modifier = modifier.fillMaxSize(),
         floatingActionButton = {
             FloatingActionButton(
-                modifier = Modifier.padding(bottom = 80.0.dp),
+                modifier = if (inspection) {
+                    Modifier
+                } else {
+                    Modifier.padding(bottom = 80.0.dp)
+                },
                 onClick = {
                     if (inspection) {
                         count.intValue++

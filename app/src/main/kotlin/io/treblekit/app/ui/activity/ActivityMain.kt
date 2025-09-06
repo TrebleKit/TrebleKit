@@ -25,17 +25,18 @@ import io.treblekit.app.ui.page.EKitPage
 import io.treblekit.app.ui.page.EbKitPage
 import io.treblekit.app.ui.page.FeOSPage
 import io.treblekit.app.ui.page.HomePage
-import io.treblekit.app.ui.theme.Background
+import io.treblekit.app.ui.theme.AppBackgroundColor
 import io.treblekit.app.ui.theme.TrebleKitTheme
 
 @Composable
 fun ActivityMain(
+    modifier: Modifier = Modifier,
     factory: IViewFactory? = null,
-    useLiquidGlass: Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+    useLiquidGlass: Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU,
 ) {
     val navController = rememberNavController()
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         topBar = {
             TKTopBar(
                 useLiquidGlass = useLiquidGlass,
@@ -46,11 +47,11 @@ fun ActivityMain(
                 navController = navController,
                 pages = PageList,
                 startDestination = HomePage,
-                background = Background,
+                background = AppBackgroundColor,
                 useLiquidGlass = useLiquidGlass,
             )
         },
-        containerColor = Background,
+        containerColor = AppBackgroundColor,
     ) { innerPadding ->
         Surface(
             modifier = Modifier
@@ -63,21 +64,20 @@ fun ActivityMain(
                 navController = navController,
                 startDestination = HomePage,
                 modifier = Modifier.fillMaxSize(),
-                builder = {
-                    composable<HomePage> {
-                        HomePage(factory = factory)
-                    }
-                    composable<FeOSPage> {
-                        FeOSPage(navController = navController, factory = factory)
-                    }
-                    composable<EKitPage> {
-                        EKitPage(navController = navController)
-                    }
-                    composable<EbKitPage> {
-                        EbKitPage()
-                    }
-                },
-            )
+            ) {
+                composable<HomePage> {
+                    HomePage(navController = navController, factory = factory)
+                }
+                composable<FeOSPage> {
+                    FeOSPage(navController = navController, factory = factory)
+                }
+                composable<EKitPage> {
+                    EKitPage(navController = navController)
+                }
+                composable<EbKitPage> {
+                    EbKitPage(navController = navController)
+                }
+            }
         }
     }
 }

@@ -50,11 +50,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import io.treblekit.app.R
 import io.treblekit.app.ui.navigation.FeOSPage
+import io.treblekit.app.ui.theme.ToolbarHeight
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.utils.NoOnClick
 import io.treblekit.app.ui.utils.navigateTo
@@ -72,9 +72,7 @@ fun EKitPage(
     Scaffold(
         modifier = modifier
             .fillMaxSize()
-            .nestedScroll(
-                connection = scrollBehavior.nestedScrollConnection,
-            ),
+            .nestedScroll(connection = scrollBehavior.nestedScrollConnection),
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -83,6 +81,7 @@ fun EKitPage(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
+                expandedHeight = ToolbarHeight,
                 windowInsets = WindowInsets(),
             )
         },
@@ -107,7 +106,6 @@ fun EKitPage(
                     onClick = {
 
                     },
-                    alwaysShowLabel = false,
                 )
                 NavigationBarItem(
                     icon = {
@@ -123,7 +121,6 @@ fun EKitPage(
                     onClick = {
 
                     },
-                    alwaysShowLabel = false,
                 )
                 NavigationBarItem(
                     icon = {
@@ -139,7 +136,6 @@ fun EKitPage(
                     onClick = {
 
                     },
-                    alwaysShowLabel = false,
                 )
             }
         },
