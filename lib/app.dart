@@ -4,6 +4,7 @@ import 'package:flutter_mixed/flutter_mixed.dart';
 import 'package:freefeos/freefeos.dart';
 import 'package:multi_builder/multi_builder.dart';
 
+import 'ecosedkit.dart';
 import 'home.dart';
 import 'theme.dart';
 
@@ -43,7 +44,10 @@ class TrebleKitApp extends StatelessWidget {
         FreeFEOS.builder,
         FlutterMixed.builder,
       ].toBuilder,
-      home: const MyHomePage(),
+      routes: {
+        '/': (_) => const MyHomePage(),
+        '/ecosedkit': (_) => const EcosedkitPage(),
+      },
       debugShowCheckedModeBanner: false,
     );
   }

@@ -49,6 +49,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pushNamed('/ecosedkit'),
+            child: Text('EcosedKit'),
+          ),
         ],
       ),
     );
