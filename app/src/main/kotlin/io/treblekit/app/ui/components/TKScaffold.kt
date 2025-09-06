@@ -1,15 +1,11 @@
 package io.treblekit.app.ui.components
 
 import android.os.Build
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,8 +15,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.kyant.liquidglass.liquidGlassProvider
-import com.kyant.liquidglass.rememberLiquidGlassProviderState
 import io.treblekit.app.ui.navigation.NavigationItem
 import io.treblekit.app.ui.navigation.PageList
 import io.treblekit.app.ui.theme.Background
@@ -65,18 +59,10 @@ fun <T> TKScaffold(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
-            TKTopBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                useMaterial = useMaterial,
-            )
+            TKTopBar(useMaterial = useMaterial)
         },
         bottomBar = {
             TKNavBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
                 background = Background,
                 useMaterial = useMaterial,
                 pages = pages,

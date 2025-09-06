@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
     return (brightness == Brightness.light ? theme.light() : theme.dark())
         .copyWith(
           appBarTheme: const AppBarTheme(
+            centerTitle: true,
             systemOverlayStyle: SystemUiOverlayStyle(
               statusBarIconBrightness: Brightness.light,
               systemNavigationBarIconBrightness: Brightness.light,

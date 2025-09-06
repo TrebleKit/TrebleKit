@@ -36,6 +36,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -79,14 +80,19 @@ fun EKitPage(
         shape = MaterialTheme.shapes.medium,
     ) {
         Scaffold(
-            modifier = modifier.fillMaxSize().nestedScroll(
-                connection = scrollBehavior.nestedScrollConnection,
-            ),
+            modifier = modifier
+                .fillMaxSize()
+                .nestedScroll(
+                    connection = scrollBehavior.nestedScrollConnection,
+                ),
             topBar = {
                 CenterAlignedTopAppBar(
                     title = {
                         Text(text = "EKit")
                     },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
                     windowInsets = WindowInsets(),
                 )
             },

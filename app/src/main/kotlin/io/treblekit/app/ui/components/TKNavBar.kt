@@ -1,6 +1,5 @@
 package io.treblekit.app.ui.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.SpringSpec
@@ -124,12 +123,12 @@ fun <T> TKNavBar(
                     .height(height = 64.dp)
                     .fillMaxWidth(),
             ) {
-                val widthWithoutPaddings =
+                val widthWithoutPaddings: Float =
                     (constraints.maxWidth.toFloat() - paddingPx * 2f).fastCoerceAtLeast(
                         minimumValue = 0f
                     )
-                val tabWidth = if (pages.isEmpty()) 0f else widthWithoutPaddings / pages.size
-                val maxWidth =
+                val tabWidth: Float = if (pages.isEmpty()) 0f else widthWithoutPaddings / pages.size
+                val maxWidth: Float =
                     (widthWithoutPaddings - tabWidth).fastCoerceAtLeast(minimumValue = 0f)
 
                 LaunchedEffect(
@@ -151,8 +150,11 @@ fun <T> TKNavBar(
                 }
 
                 Row(
-                    modifier = if (useMaterial) Modifier.fillMaxSize().clip(shape = RoundedCornerShape(50.dp))
-                        .background(Color(color = 0xff434056)).padding(all = padding) else Modifier
+                    modifier = if (useMaterial) Modifier
+                        .fillMaxSize()
+                        .clip(shape = RoundedCornerShape(50.dp))
+                        .background(Color(color = 0xff434056))
+                        .padding(all = padding) else Modifier
                         .fillMaxSize()
                         .liquidGlassProvider(
                             state = bottomTabsLiquidGlassProviderState,
@@ -199,11 +201,7 @@ fun <T> TKNavBar(
                                 MaterialTheme.colorScheme.primaryContainer
                             Column(
                                 modifier = Modifier
-                                    .clip(
-                                        shape = RoundedCornerShape(
-                                            percent = 50
-                                        )
-                                    )
+                                    .clip(shape = RoundedCornerShape(percent = 50))
                                     .drawBehind {
                                         drawRect(
                                             color = itemContainerColor,
@@ -240,7 +238,8 @@ fun <T> TKNavBar(
                                     .height(height = 56.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.spacedBy(
-                                    space = 2.dp, alignment = Alignment.CenterVertically
+                                    space = 2.dp,
+                                    alignment = Alignment.CenterVertically,
                                 ),
                             ) {
                                 Icon(
