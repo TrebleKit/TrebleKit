@@ -1,8 +1,6 @@
 package io.treblekit.app.ui.page
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -18,19 +16,15 @@ import androidx.compose.ui.unit.dp
 import io.treblekit.app.R
 import io.treblekit.app.ui.components.ActionBar
 import io.treblekit.app.ui.components.IViewFactory
-import io.treblekit.app.ui.theme.Background
 import io.treblekit.app.ui.theme.TrebleKitTheme
 
 @Composable
 fun HomePage(
     modifier: Modifier = Modifier,
-    inner: PaddingValues = PaddingValues(),
     factory: IViewFactory? = null,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(paddingValues = inner)
+        modifier = modifier.fillMaxSize()
     ) {
         ActionBar(
             modifier = Modifier.padding(
@@ -65,10 +59,6 @@ fun HomePage(
 @Composable
 private fun HomePagePreview() {
     TrebleKitTheme {
-        HomePage(
-            modifier = Modifier.background(
-                color = Background,
-            ),
-        )
+        HomePage()
     }
 }

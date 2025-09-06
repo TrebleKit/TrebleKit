@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -34,9 +33,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -53,156 +50,151 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import io.treblekit.app.R
-import io.treblekit.app.ui.components.GotoPage
 import io.treblekit.app.ui.navigation.FeOSPage
-import io.treblekit.app.ui.theme.Background
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.utils.NoOnClick
+import io.treblekit.app.ui.utils.navigateTo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EKitPage(
     modifier: Modifier = Modifier,
-    inner: PaddingValues = PaddingValues(),
-    goto: GotoPage<FeOSPage> = { FeOSPage },
+    navController: NavHostController? = null,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
         state = rememberTopAppBarState()
     )
     val scroll = rememberScrollState()
-    Surface(
+    Scaffold(
         modifier = modifier
             .fillMaxSize()
-            .padding(paddingValues = inner)
-            .padding(all = 16.dp),
-        shape = MaterialTheme.shapes.medium,
-    ) {
-        Scaffold(
-            modifier = modifier
-                .fillMaxSize()
-                .nestedScroll(
-                    connection = scrollBehavior.nestedScrollConnection,
-                ),
-            topBar = {
-                CenterAlignedTopAppBar(
-                    title = {
-                        Text(text = "EKit")
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    windowInsets = WindowInsets(),
-                )
-            },
-            bottomBar = {
-                NavigationBar(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    windowInsets = WindowInsets(),
-                ) {
-                    NavigationBarItem(
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Filled.Home,
-                                contentDescription = null,
-                            )
-                        },
-                        label = {
-                            Text(text = "首页")
-                        },
-                        selected = true,
-                        onClick = {
-
-                        },
-                        alwaysShowLabel = false,
-                    )
-                    NavigationBarItem(
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Outlined.Apps,
-                                contentDescription = null,
-                            )
-                        },
-                        label = {
-                            Text(text = "应用")
-                        },
-                        selected = false,
-                        onClick = {
-
-                        },
-                        alwaysShowLabel = false,
-                    )
-                    NavigationBarItem(
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Outlined.AccountCircle,
-                                contentDescription = null,
-                            )
-                        },
-                        label = {
-                            Text(text = "我的")
-                        },
-                        selected = false,
-                        onClick = {
-
-                        },
-                        alwaysShowLabel = false,
-                    )
-                }
-            },
-            contentWindowInsets = WindowInsets(),
-        ) { padding ->
-            Column(
+            .nestedScroll(
+                connection = scrollBehavior.nestedScrollConnection,
+            ),
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(text = "EKit")
+                },
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues = padding)
-                    .verticalScroll(state = scroll),
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                windowInsets = WindowInsets(),
+            )
+        },
+        bottomBar = {
+            NavigationBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                windowInsets = WindowInsets(),
             ) {
-
-                Header(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 16.dp, bottom = 8.dp)
-                )
-
-                StateCard(
-                    modifier = Modifier.padding(
-                        start = 16.dp,
-                        top = 8.dp,
-                        end = 16.dp,
-                        bottom = 8.dp,
-                    ),
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    onClick = NoOnClick,
-                    icon = Icons.Filled.CheckCircleOutline,
-                    title = "一切正常",
-                    subTitleTop = "AppID: xxxxxxx",
-                    subTitleBottom = "版本: 1.0",
-                )
-
-
-                StateCard(
-                    modifier = Modifier.padding(
-                        start = 16.dp,
-                        top = 8.dp,
-                        end = 16.dp,
-                        bottom = 8.dp,
-                    ),
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                    onClick = {
-                        goto(FeOSPage)
+                NavigationBarItem(
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Filled.Home,
+                            contentDescription = null,
+                        )
                     },
-                    icon = Icons.AutoMirrored.Filled.OpenInNew,
-                    title = "feOS",
-                    subTitleTop = "FreeFEOS Connect",
-                    subTitleBottom = "点击跳转feOS",
+                    label = {
+                        Text(text = "首页")
+                    },
+                    selected = true,
+                    onClick = {
+
+                    },
+                    alwaysShowLabel = false,
                 )
+                NavigationBarItem(
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Apps,
+                            contentDescription = null,
+                        )
+                    },
+                    label = {
+                        Text(text = "应用")
+                    },
+                    selected = false,
+                    onClick = {
 
+                    },
+                    alwaysShowLabel = false,
+                )
+                NavigationBarItem(
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Outlined.AccountCircle,
+                            contentDescription = null,
+                        )
+                    },
+                    label = {
+                        Text(text = "我的")
+                    },
+                    selected = false,
+                    onClick = {
 
+                    },
+                    alwaysShowLabel = false,
+                )
             }
+        },
+        contentWindowInsets = WindowInsets(),
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues = padding)
+                .verticalScroll(state = scroll),
+        ) {
+
+            Header(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 16.dp, bottom = 8.dp)
+            )
+
+            StateCard(
+                modifier = Modifier.padding(
+                    start = 16.dp,
+                    top = 8.dp,
+                    end = 16.dp,
+                    bottom = 8.dp,
+                ),
+                color = MaterialTheme.colorScheme.primaryContainer,
+                onClick = NoOnClick,
+                icon = Icons.Filled.CheckCircleOutline,
+                title = "一切正常",
+                subTitleTop = "AppID: xxxxxxx",
+                subTitleBottom = "版本: 1.0",
+            )
+
+
+            StateCard(
+                modifier = Modifier.padding(
+                    start = 16.dp,
+                    top = 8.dp,
+                    end = 16.dp,
+                    bottom = 8.dp,
+                ),
+                color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                onClick = {
+                    navigateTo(
+                        navController = navController,
+                        route = FeOSPage,
+                    )
+                },
+                icon = Icons.AutoMirrored.Filled.OpenInNew,
+                title = "feOS",
+                subTitleTop = "FreeFEOS Connect",
+                subTitleBottom = "点击跳转feOS",
+            )
+
+
         }
     }
 }
@@ -211,11 +203,7 @@ fun EKitPage(
 @Composable
 private fun EKitPagePreview() {
     TrebleKitTheme {
-        EKitPage(
-            modifier = Modifier.background(
-                color = Background,
-            ),
-        )
+        EKitPage()
     }
 }
 

@@ -3,6 +3,7 @@ package io.treblekit.app.ui.activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
+import androidx.navigation.compose.composable
 import io.treblekit.app.ui.components.IViewFactory
 import io.treblekit.app.ui.components.TKScaffold
 import io.treblekit.app.ui.navigation.EKitPage
@@ -14,20 +15,33 @@ import io.treblekit.app.ui.page.EKitPage
 import io.treblekit.app.ui.page.EbKitPage
 import io.treblekit.app.ui.page.FeOSPage
 import io.treblekit.app.ui.page.HomePage
-import io.treblekit.app.ui.page.UnknownPage
 import io.treblekit.app.ui.theme.TrebleKitTheme
 
 @Composable
 fun ActivityMain(factory: IViewFactory? = null) {
-    TKScaffold(pages = PageList, useMaterial = false) { route, inner, goto ->
-        when (route) {
-            HomePage -> HomePage(inner = inner, factory = factory)
-            FeOSPage -> FeOSPage(inner = inner, factory = factory, goto = goto)
-            EKitPage -> EKitPage(inner = inner, goto = goto)
-            EbKitPage -> EbKitPage(inner = inner)
-            else -> UnknownPage(inner = inner)
+    TKScaffold(pages = PageList, useMaterial = false) { navController ->
+        composable<HomePage> {
+            HomePage(factory = factory)
+        }
+        composable<FeOSPage> {
+            FeOSPage(factory = factory, navController = navController)
+        }
+        composable<EKitPage>{
+            EKitPage(navController = navController)
+        }
+        composable<EbKitPage> {
+            EbKitPage()
         }
     }
+//    TKScaffold(pages = PageList, useMaterial = false) { route, goto ->
+//        when (route) {
+//            HomePage -> HomePage(factory = factory)
+//            FeOSPage -> FeOSPage(factory = factory, goto = goto)
+//            EKitPage -> EKitPage(goto = goto)
+//            EbKitPage -> EbKitPage()
+//            else -> UnknownPage()
+//        }
+//    }
 }
 
 @Preview(

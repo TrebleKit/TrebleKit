@@ -31,74 +31,65 @@ import io.treblekit.app.ui.theme.TrebleKitTheme
 @Composable
 fun EbKitPage(
     modifier: Modifier = Modifier,
-    inner: PaddingValues = PaddingValues(),
 ) {
-    Surface(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(paddingValues = inner)
-            .padding(all = 16.dp),
-        shape = MaterialTheme.shapes.medium,
-    ) {
-        Scaffold(
-            modifier = modifier.fillMaxSize(),
-            topBar = {
-                CenterAlignedTopAppBar(
-                    title = {
-                        Text(text = "EbKit")
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    windowInsets = WindowInsets(),
-                )
-            },
-            bottomBar = {
-                NavigationBar(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    windowInsets = WindowInsets(),
-                ) {
-                    NavigationBarItem(
-                        selected = true,
-                        onClick = { },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Filled.Home,
-                                contentDescription = null,
-                            )
-                        },
-                        label = {
-                            Text(text = "Home")
-                        },
-                        alwaysShowLabel = false,
-                    )
-                    NavigationBarItem(
-                        selected = false,
-                        onClick = { },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Filled.Settings,
-                                contentDescription = null,
-                            )
-                        },
-                        label = {
-                            Text(text = "Settings")
-                        },
-                        alwaysShowLabel = false,
-                    )
-                }
-            },
-            contentWindowInsets = WindowInsets(),
-        ) { padding ->
-            Box(
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(text = "EbKit")
+                },
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues = padding)
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                windowInsets = WindowInsets(),
+            )
+        },
+        bottomBar = {
+            NavigationBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                windowInsets = WindowInsets(),
             ) {
-
+                NavigationBarItem(
+                    selected = true,
+                    onClick = { },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Filled.Home,
+                            contentDescription = null,
+                        )
+                    },
+                    label = {
+                        Text(text = "Home")
+                    },
+                    alwaysShowLabel = false,
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Filled.Settings,
+                            contentDescription = null,
+                        )
+                    },
+                    label = {
+                        Text(text = "Settings")
+                    },
+                    alwaysShowLabel = false,
+                )
             }
+        },
+        contentWindowInsets = WindowInsets(),
+    ) { padding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues = padding)
+        ) {
+
         }
     }
 }

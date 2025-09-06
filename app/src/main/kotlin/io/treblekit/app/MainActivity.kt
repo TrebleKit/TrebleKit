@@ -18,9 +18,30 @@ import io.treblekit.app.ui.activity.ActivityMain
 import io.treblekit.app.ui.components.IViewFactory
 import io.treblekit.app.ui.theme.TrebleKitTheme
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), IViewFactory {
 
     private var mFlutterFragment: FlutterFragment? = null
+
+    override val getToolbarView: MaterialToolbar by lazy {
+        return@lazy MaterialToolbar(this@MainActivity).let {
+            setSupportActionBar(it)
+            return@let it
+        }
+    }
+
+    override val getFlutterView: View by lazy {
+        return@lazy FlutterMixedPlugin.loadFlutter(
+            activity = this@MainActivity,
+            renderMode = RenderMode.texture, // 混合开发
+        ) { fragment, view ->
+            mFlutterFragment = fragment
+            return@loadFlutter view
+        }.let { flutter ->
+            return@let flutter ?: View(
+                this@MainActivity,
+            )
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,33 +60,9 @@ class MainActivity : AppCompatActivity() {
             window.isNavigationBarContrastEnforced = false
         }
 
-        val factory: IViewFactory = object : IViewFactory {
-
-            override val getToolbarView: MaterialToolbar by lazy {
-                return@lazy MaterialToolbar(this@MainActivity).let {
-                    setSupportActionBar(it)
-                    return@let it
-                }
-            }
-
-            override val getFlutterView: View by lazy {
-                return@lazy FlutterMixedPlugin.loadFlutter(
-                    activity = this@MainActivity,
-                    renderMode = RenderMode.texture, // 混合开发
-                ) { fragment, view ->
-                    mFlutterFragment = fragment
-                    return@loadFlutter view
-                }.let { flutter ->
-                    return@let flutter ?: View(
-                        this@MainActivity,
-                    )
-                }
-            }
-        }
-
         setContent {
             TrebleKitTheme(dynamicColor = false) {
-                ActivityMain(factory = factory)
+                ActivityMain(factory = this)
             }
         }
     }
