@@ -93,7 +93,7 @@ fun <T : Any> TKNavBar(
     pages: List<NavigationItem<T>>,
     startDestination: T,
     background: Color,
-    useMaterial: Boolean,
+    useLiquidGlass: Boolean,
 ) {
     val providerState = rememberLiquidGlassProviderState(
         backgroundColor = background
@@ -189,7 +189,7 @@ fun <T : Any> TKNavBar(
                 }
 
                 Row(
-                    modifier = if (useMaterial) Modifier
+                    modifier = if (!useLiquidGlass) Modifier
                         .fillMaxSize()
                         .clip(shape = RoundedCornerShape(50.dp))
                         .background(Color(color = 0xff434056))
@@ -250,7 +250,6 @@ fun <T : Any> TKNavBar(
                                         detectTapGestures {
                                             if (selectedIndexState.intValue != index) {
                                                 selectedIndexState.intValue = index
-//                                                onTabSelected(index)
                                                 navigateTo(
                                                     navController = navController,
                                                     route = pages[index].route,
@@ -315,7 +314,7 @@ fun <T : Any> TKNavBar(
                 )
 
 
-                if (!useMaterial) Spacer(
+                if (useLiquidGlass) Spacer(
                     modifier = Modifier
                         .layout { measurable, constraints ->
                             val width = tabWidth.fastRoundToInt()
@@ -370,16 +369,10 @@ fun <T : Any> TKNavBar(
                                 pivotFractionY = 0f,
                             )
                         }
-//                        .background(
-//                            color = MaterialTheme.colorScheme.primaryContainer.copy(
-//                                alpha = 0.15f
-//                            ),
-//                            shape = RoundedCornerShape(percent = 50),
-//                        )
-                    .background(
-                        color = background,
-                        shape = RoundedCornerShape(percent = 50),
-                    )
+                        .background(
+                            color = background,
+                            shape = RoundedCornerShape(percent = 50),
+                        )
                         .liquidGlass(
                             state = bottomTabsLiquidGlassProviderState,
                             style = GlassStyle(
@@ -427,7 +420,6 @@ fun <T : Any> TKNavBar(
 
                                 if (selectedIndexState.intValue != targetIndex) {
                                     selectedIndexState.intValue = targetIndex
-//                                    onTabSelected(targetIndex)
                                     navigateTo(
                                         navController = navController,
                                         route = pages[targetIndex].route,
@@ -467,7 +459,7 @@ private fun TKNavBarLiquidGlassPreview() {
         ) {
             TKNavBar(
                 background = Background,
-                useMaterial = false,
+                useLiquidGlass = true,
                 pages = PageList,
                 startDestination = HomePage,
                 navController = rememberNavController(),
@@ -488,7 +480,7 @@ private fun TKNavBarMaterialPreview() {
         ) {
             TKNavBar(
                 background = Background,
-                useMaterial = true,
+                useLiquidGlass = false,
                 pages = PageList,
                 startDestination = HomePage,
                 navController = rememberNavController(),
