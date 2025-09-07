@@ -416,16 +416,16 @@ fun <T : Any> TKNavBar(
     }
 }
 
+private enum class NavBarStyle {
+    LiquidGlass, Material3
+}
+
 private fun getStyle(useLiquidGlass: Boolean): NavBarStyle {
     return if (useLiquidGlass) {
         NavBarStyle.LiquidGlass
     } else {
         NavBarStyle.Material3
     }
-}
-
-private enum class NavBarStyle {
-    LiquidGlass, Material3
 }
 
 @Stable
