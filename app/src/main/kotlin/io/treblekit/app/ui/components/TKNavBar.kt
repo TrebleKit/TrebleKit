@@ -104,7 +104,6 @@ fun <T : Any> TKNavBar(
     navController: NavHostController,
     pages: List<NavigationItem<T>>,
     startDestination: T,
-    background: Color,
     useLiquidGlass: Boolean,
 ) {
     val navBackStackEntry: NavBackStackEntry? by navController.currentBackStackEntryAsState()
@@ -343,7 +342,7 @@ fun <T : Any> TKNavBar(
                         )
                     }
                     .background(
-                        color = background,
+                        color = AppBackgroundColor,
                         shape = RoundedCornerShape(percent = 50),
                     )
                     .liquidGlass(
@@ -490,7 +489,6 @@ private fun TKNavBarLiquidGlassPreview() {
                 .background(color = AppBackgroundColor)
         ) {
             TKNavBar(
-                background = AppBackgroundColor,
                 useLiquidGlass = true,
                 pages = PageList,
                 startDestination = HomePage,
@@ -511,7 +509,6 @@ private fun TKNavBarMaterialPreview() {
                 .background(color = AppBackgroundColor)
         ) {
             TKNavBar(
-                background = AppBackgroundColor,
                 useLiquidGlass = false,
                 pages = PageList,
                 startDestination = HomePage,

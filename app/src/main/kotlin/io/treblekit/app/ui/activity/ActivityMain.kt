@@ -47,7 +47,6 @@ fun ActivityMain(
                 navController = navController,
                 pages = PageList,
                 startDestination = HomePage,
-                background = AppBackgroundColor,
                 useLiquidGlass = useLiquidGlass,
             )
         },
