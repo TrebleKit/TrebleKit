@@ -157,21 +157,21 @@ fun TKTopBar(
     )
 }
 
-private fun getStyle(useLiquidGlass: Boolean): TopBarButtonStyle {
+private fun getStyle(useLiquidGlass: Boolean): TopBarStyle {
     return if (useLiquidGlass) {
-        TopBarButtonStyle.LiquidGlass
+        TopBarStyle.LiquidGlass
     } else {
-        TopBarButtonStyle.Material3
+        TopBarStyle.Material3
     }
 }
 
-private enum class TopBarButtonStyle {
+private enum class TopBarStyle {
     LiquidGlass, Material3
 }
 
 @Stable
 @Composable
-private fun Modifier.topBarButtonStyle(style: TopBarButtonStyle): Modifier {
+private fun Modifier.topBarButtonStyle(style: TopBarStyle): Modifier {
     val providerState = rememberLiquidGlassProviderState(
         backgroundColor = Color(color = 0xff434056)
     )
@@ -200,12 +200,12 @@ private fun Modifier.topBarButtonStyle(style: TopBarButtonStyle): Modifier {
         ),
     )
     return this then when (style) {
-        TopBarButtonStyle.LiquidGlass -> Modifier.liquidGlass(
+        TopBarStyle.LiquidGlass -> Modifier.liquidGlass(
             state = providerState,
             style = buttonStyle,
         )
 
-        TopBarButtonStyle.Material3 -> Modifier
+        TopBarStyle.Material3 -> Modifier
             .clip(shape = RoundedCornerShape(percent = 50))
             .background(color = Color(color = 0xff434056))
     }

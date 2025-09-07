@@ -1,6 +1,5 @@
 package io.treblekit.app.ui.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
@@ -24,14 +23,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
@@ -49,7 +49,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
@@ -110,7 +109,6 @@ fun <T : Any> TKNavBar(
 ) {
     val navBackStackEntry: NavBackStackEntry? by navController.currentBackStackEntryAsState()
     val currentDestination: NavDestination? = navBackStackEntry?.destination
-    val providerState = rememberLiquidGlassProviderState(backgroundColor = background)
     val blockProviderState = rememberLiquidGlassProviderState(backgroundColor = null)
     val animationScope: CoroutineScope = rememberCoroutineScope()
     val isDragging: MutableState<Boolean> = remember { mutableStateOf(value = false) }
@@ -126,8 +124,21 @@ fun <T : Any> TKNavBar(
         }
         mutableIntStateOf(value = startIndex)
     }
-
-    NavigationBar(
+    val scaleXFraction: Float by animateFloatAsState(
+        targetValue = if (!isDragging.value) 0f else 1f,
+        animationSpec = spring(
+            dampingRatio = 0.5f,
+            stiffness = 300f,
+        ),
+    )
+    val scaleYFraction: Float by animateFloatAsState(
+        targetValue = if (!isDragging.value) 0f else 1f,
+        animationSpec = spring(
+            dampingRatio = 0.5f,
+            stiffness = 600f,
+        ),
+    )
+    BottomAppBar(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight(),
@@ -139,10 +150,11 @@ fun <T : Any> TKNavBar(
                 .height(height = 64.dp)
                 .padding(horizontal = 32.dp),
         ) {
-            val widthWithoutPaddings: Float = (constraints.maxWidth.toFloat() - paddingPx * 2f).fastCoerceAtLeast(minimumValue = 0f)
+            val widthWithoutPaddings: Float =
+                (constraints.maxWidth.toFloat() - paddingPx * 2f).fastCoerceAtLeast(minimumValue = 0f)
             val tabWidth: Float = if (pages.isEmpty()) 0f else widthWithoutPaddings / pages.size
-            val maxWidth: Float = (widthWithoutPaddings - tabWidth).fastCoerceAtLeast(minimumValue = 0f)
-
+            val maxWidth: Float =
+                (widthWithoutPaddings - tabWidth).fastCoerceAtLeast(minimumValue = 0f)
             LaunchedEffect(
                 key1 = selectedIndexState.intValue,
                 key2 = tabWidth,
@@ -160,7 +172,6 @@ fun <T : Any> TKNavBar(
                     )
                 }
             }
-
             LaunchedEffect(key1 = currentDestination) {
                 snapshotFlow {
                     currentDestination?.hierarchy
@@ -181,42 +192,22 @@ fun <T : Any> TKNavBar(
                     }
                 }
             }
-
             Row(
-                modifier = if (!useLiquidGlass) Modifier
+                modifier = Modifier
                     .fillMaxSize()
-                    .clip(shape = RoundedCornerShape(percent = 50))
-                    .background(Color(color = 0xff434056))
-                    .padding(all = padding) else Modifier
-                    .fillMaxSize()
-                    .liquidGlassProvider(state = blockProviderState)
-                    .liquidGlass(
-                        state = providerState,
-                        style = GlassStyle(
-                            shape = RoundedCornerShape(percent = 50),
-                            innerRefraction = InnerRefraction(
-                                height = RefractionHeight(value = 12.dp),
-                                amount = RefractionAmount.Half
-                            ),
-                            shadow = GlassShadow(
-                                elevation = 4.dp,
-                                brush = SolidColor(
-                                    value = Color.Black.copy(
-                                        alpha = 0.15f,
-                                    ),
-                                ),
-                            ),
-                            material = GlassMaterial(
-                                brush = SolidColor(value = Color(color = 0xff434056)),
-                                alpha = 0.5f,
-                            ),
-                        ),
+                    .navBarBlockProvider(
+                        style = getStyle(useLiquidGlass = useLiquidGlass),
+                        blockProviderState = blockProviderState,
+                    )
+                    .navBarContainerStyle(
+                        style = getStyle(useLiquidGlass = useLiquidGlass),
                     )
                     .padding(all = padding),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 pages.forEachIndexed { index, page ->
                     key(page) {
+                        val backgroundColor: Color = MaterialTheme.colorScheme.primaryContainer
                         val backgroundAlpha: Float by animateFloatAsState(
                             targetValue = if (selectedIndexState.intValue == index && !isDragging.value) {
                                 0.8f
@@ -236,62 +227,255 @@ fun <T : Any> TKNavBar(
                                 dampingRatio = 0.8f, stiffness = 200f
                             )
                         )
-
-                        NavBarItem(
-                            modifier = Modifier.weight(1f),
-                            icon = page.icon,
-                            label = page.label,
-                            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-                            backgroundAlpha = backgroundAlpha,
-                            contentColor = contentColor,
-                            onTap = {
-                                if (selectedIndexState.intValue != index) {
-                                    selectedIndexState.intValue = index
-                                    navigateTo(
-                                        navController = navController,
-                                        route = pages[index].route,
+                        Column(
+                            modifier = modifier
+                                .weight(weight = 1f)
+                                .clip(shape = RoundedCornerShape(percent = 50))
+                                .drawBehind {
+                                    drawRect(
+                                        color = backgroundColor,
+                                        alpha = backgroundAlpha,
                                     )
-                                    animationScope.launch {
-                                        launch {
-                                            offset.animateTo(
-                                                targetValue = (index * tabWidth).fastCoerceIn(
-                                                    0f, maxWidth
-                                                ),
-                                                animationSpec = spring(
-                                                    dampingRatio = 0.8f,
-                                                    stiffness = 200f,
-                                                ),
+                                }
+                                .pointerInput(key1 = Unit) {
+                                    detectTapGestures {
+                                        if (selectedIndexState.intValue != index) {
+                                            selectedIndexState.intValue = index
+                                            navigateTo(
+                                                navController = navController,
+                                                route = pages[index].route,
                                             )
-                                        }
-                                        launch {
-                                            isDragging.value = true
-                                            delay(timeMillis = 200)
-                                            isDragging.value = false
+                                            animationScope.launch {
+                                                launch {
+                                                    offset.animateTo(
+                                                        targetValue = (index * tabWidth).fastCoerceIn(
+                                                            0f, maxWidth
+                                                        ),
+                                                        animationSpec = spring(
+                                                            dampingRatio = 0.8f,
+                                                            stiffness = 200f,
+                                                        ),
+                                                    )
+                                                }
+                                                launch {
+                                                    isDragging.value = true
+                                                    delay(timeMillis = 200)
+                                                    isDragging.value = false
+                                                }
+                                            }
                                         }
                                     }
                                 }
-                            })
+                                .height(height = 56.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(
+                                space = 2.dp,
+                                alignment = Alignment.CenterVertically,
+                            ),
+                        ) {
+                            Icon(
+                                modifier = Modifier,
+                                imageVector = page.icon,
+                                contentDescription = null,
+                                tint = contentColor,
+                            )
+                            Text(
+                                text = page.label,
+                                color = contentColor,
+                            )
+                        }
                     }
                 }
             }
-
-
-            NavSelectBlock(
-                useLiquidGlass = useLiquidGlass,
-                isDragging = isDragging,
-                tabWidth = tabWidth,
-                maxWidth = maxWidth,
-                paddingPx = paddingPx,
-                background = background,
-                offset = offset,
-                selectedIndexState = selectedIndexState,
-                bottomTabsLiquidGlassProviderState = blockProviderState,
-                navController = navController,
-                pages = pages,
+            if (useLiquidGlass) Spacer(
+                modifier = Modifier
+                    .layout { measurable, constraints ->
+                        val width = tabWidth.fastRoundToInt()
+                        val height = 56.dp.roundToPx()
+                        val placeable = measurable.measure(
+                            Constraints.fixed(
+                                width = (width * lerp(
+                                    start = 1f,
+                                    stop = 1.5f,
+                                    fraction = scaleXFraction,
+                                )).fastRoundToInt(),
+                                height = (height * lerp(
+                                    start = 1f,
+                                    stop = 1.5f,
+                                    fraction = scaleYFraction,
+                                )).fastRoundToInt(),
+                            ),
+                        )
+                        layout(width = width, height = height) {
+                            placeable.place(
+                                x = (width - placeable.width) / 2 + paddingPx,
+                                y = (height - placeable.height) / 2 + paddingPx
+                            )
+                        }
+                    }
+                    .drawWithContent {
+                        translate(
+                            left = 0f,
+                            top = lerp(
+                                start = 0f,
+                                stop = 4f,
+                                fraction = scaleYFraction,
+                            ).dp.toPx(),
+                        ) {
+                            this@drawWithContent.drawContent()
+                        }
+                    }
+                    .graphicsLayer {
+                        translationX = offset.value
+                        scaleX = lerp(
+                            start = 1f,
+                            stop = 0.9f,
+                            fraction = scaleXFraction,
+                        )
+                        scaleY = lerp(
+                            start = 1f,
+                            stop = 0.9f,
+                            fraction = scaleYFraction,
+                        )
+                        transformOrigin = TransformOrigin(
+                            pivotFractionX = 0f,
+                            pivotFractionY = 0f,
+                        )
+                    }
+                    .background(
+                        color = background,
+                        shape = RoundedCornerShape(percent = 50),
+                    )
+                    .liquidGlass(
+                        state = blockProviderState,
+                        style = GlassStyle(
+                            shape = RoundedCornerShape(percent = 50),
+                            innerRefraction = InnerRefraction(
+                                height = RefractionHeight(
+                                    value = animateFloatAsState(
+                                        targetValue = if (!isDragging.value) {
+                                            0f
+                                        } else {
+                                            10f
+                                        }
+                                    ).value.dp
+                                ),
+                                amount = RefractionAmount.Half,
+                            ),
+                            material = GlassMaterial.None,
+                        ),
+                    )
+                    .draggable(
+                        state = rememberDraggableState { delta ->
+                            animationScope.launch {
+                                offset.snapTo(
+                                    targetValue = (offset.value + delta).fastCoerceIn(
+                                        minimumValue = 0f,
+                                        maximumValue = maxWidth,
+                                    ),
+                                )
+                            }
+                        },
+                        orientation = Orientation.Horizontal,
+                        startDragImmediately = true,
+                        onDragStarted = { isDragging.value = true },
+                        onDragStopped = { velocity ->
+                            isDragging.value = false
+                            val currentIndex = offset.value / tabWidth
+                            val targetIndex = when {
+                                velocity > 0f -> ceil(x = currentIndex).toInt()
+                                velocity < 0f -> floor(x = currentIndex).toInt()
+                                else -> currentIndex.fastRoundToInt()
+                            }.fastCoerceIn(
+                                minimumValue = 0,
+                                maximumValue = pages.lastIndex,
+                            )
+                            if (selectedIndexState.intValue != targetIndex) {
+                                selectedIndexState.intValue = targetIndex
+                                navigateTo(
+                                    navController = navController,
+                                    route = pages[targetIndex].route,
+                                )
+                            }
+                            animationScope.launch {
+                                offset.animateTo(
+                                    targetValue = (targetIndex * tabWidth).fastCoerceIn(
+                                        minimumValue = 0f,
+                                        maximumValue = maxWidth,
+                                    ),
+                                    animationSpec = spring(
+                                        dampingRatio = 0.8f,
+                                        stiffness = 200f,
+                                    ),
+                                )
+                            }
+                        },
+                    )
             )
-
-
         }
+    }
+}
+
+private fun getStyle(useLiquidGlass: Boolean): NavBarStyle {
+    return if (useLiquidGlass) {
+        NavBarStyle.LiquidGlass
+    } else {
+        NavBarStyle.Material3
+    }
+}
+
+private enum class NavBarStyle {
+    LiquidGlass, Material3
+}
+
+@Stable
+@Composable
+private fun Modifier.navBarBlockProvider(
+    style: NavBarStyle,
+    blockProviderState: LiquidGlassProviderState,
+): Modifier {
+    return when (style) {
+        NavBarStyle.LiquidGlass -> this then Modifier.liquidGlassProvider(
+            state = blockProviderState,
+        )
+        NavBarStyle.Material3 -> this
+    }
+}
+
+@Stable
+@Composable
+private fun Modifier.navBarContainerStyle(style: NavBarStyle): Modifier {
+    val providerState = rememberLiquidGlassProviderState(
+        backgroundColor = AppBackgroundColor
+    )
+    val glassStyle = GlassStyle(
+        shape = RoundedCornerShape(percent = 50),
+        innerRefraction = InnerRefraction(
+            height = RefractionHeight(value = 12.dp),
+            amount = RefractionAmount.Half
+        ),
+        shadow = GlassShadow(
+            elevation = 4.dp,
+            brush = SolidColor(
+                value = Color.Black.copy(
+                    alpha = 0.15f,
+                ),
+            ),
+        ),
+        material = GlassMaterial(
+            brush = SolidColor(value = Color(color = 0xff434056)),
+            alpha = 0.5f,
+        ),
+    )
+    return this then when (style) {
+        NavBarStyle.LiquidGlass -> Modifier.liquidGlass(
+            state = providerState,
+            style = glassStyle,
+        )
+
+        NavBarStyle.Material3 -> Modifier
+            .clip(shape = RoundedCornerShape(percent = 50))
+            .background(color = Color(color = 0xff434056))
     }
 }
 
@@ -334,219 +518,5 @@ private fun TKNavBarMaterialPreview() {
                 navController = rememberNavController(),
             )
         }
-    }
-}
-
-@Composable
-fun NavBarItem(
-    modifier: Modifier = Modifier,
-    icon: ImageVector,
-    label: String,
-    backgroundColor: Color,
-    backgroundAlpha: Float,
-    contentColor: Color,
-    onTap: () -> Unit,
-) {
-
-    Column(
-        modifier = modifier
-            .clip(shape = RoundedCornerShape(percent = 50))
-            .drawBehind {
-                drawRect(
-                    color = backgroundColor,
-                    alpha = backgroundAlpha,
-                )
-            }
-            .pointerInput(key1 = Unit) {
-                detectTapGestures {
-                    onTap()
-                }
-            }
-            .height(height = 56.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(
-            space = 2.dp,
-            alignment = Alignment.CenterVertically,
-        ),
-    ) {
-        Icon(
-            modifier = Modifier,
-            imageVector = icon,
-            contentDescription = null,
-            tint = contentColor,
-        )
-        Text(
-            text = label,
-            color = contentColor,
-        )
-    }
-
-}
-
-@Composable
-fun <T : Any> NavSelectBlock(
-    modifier: Modifier = Modifier,
-    useLiquidGlass: Boolean,
-    isDragging: MutableState<Boolean>,
-    tabWidth: Float,
-    maxWidth: Float,
-    paddingPx: Int,
-    background: Color,
-    offset: Animatable<Float, AnimationVector1D>,
-    selectedIndexState: MutableIntState,
-    bottomTabsLiquidGlassProviderState: LiquidGlassProviderState,
-    navController: NavHostController,
-    pages: List<NavigationItem<T>>,
-
-    ) {
-    val animationScope = rememberCoroutineScope()
-
-    val scaleXFraction: Float by animateFloatAsState(
-        targetValue = if (!isDragging.value) 0f else 1f,
-        animationSpec = spring(
-            dampingRatio = 0.5f,
-            stiffness = 300f,
-        ),
-    )
-    val scaleYFraction: Float by animateFloatAsState(
-        targetValue = if (!isDragging.value) 0f else 1f,
-        animationSpec = spring(
-            dampingRatio = 0.5f,
-            stiffness = 600f,
-        ),
-    )
-
-
-    AnimatedVisibility(
-        modifier = modifier,
-        visible = useLiquidGlass,
-    ) {
-        Spacer(
-            modifier = Modifier
-                .layout { measurable, constraints ->
-                    val width = tabWidth.fastRoundToInt()
-                    val height = 56.dp.roundToPx()
-                    val placeable = measurable.measure(
-                        Constraints.fixed(
-                            width = (width * lerp(
-                                start = 1f,
-                                stop = 1.5f,
-                                fraction = scaleXFraction,
-                            )).fastRoundToInt(),
-                            height = (height * lerp(
-                                start = 1f,
-                                stop = 1.5f,
-                                fraction = scaleYFraction,
-                            )).fastRoundToInt(),
-                        ),
-                    )
-                    layout(width = width, height = height) {
-                        placeable.place(
-                            x = (width - placeable.width) / 2 + paddingPx,
-                            y = (height - placeable.height) / 2 + paddingPx
-                        )
-                    }
-                }
-                .drawWithContent {
-                    translate(
-                        left = 0f,
-                        top = lerp(
-                            start = 0f,
-                            stop = 4f,
-                            fraction = scaleYFraction,
-                        ).dp.toPx(),
-                    ) {
-                        this@drawWithContent.drawContent()
-                    }
-                }
-                .graphicsLayer {
-                    translationX = offset.value
-                    scaleX = lerp(
-                        start = 1f,
-                        stop = 0.9f,
-                        fraction = scaleXFraction,
-                    )
-                    scaleY = lerp(
-                        start = 1f,
-                        stop = 0.9f,
-                        fraction = scaleYFraction,
-                    )
-                    transformOrigin = TransformOrigin(
-                        pivotFractionX = 0f,
-                        pivotFractionY = 0f,
-                    )
-                }
-                .background(
-                    color = background,
-                    shape = RoundedCornerShape(percent = 50),
-                )
-                .liquidGlass(
-                    state = bottomTabsLiquidGlassProviderState,
-                    style = GlassStyle(
-                        shape = RoundedCornerShape(percent = 50),
-                        innerRefraction = InnerRefraction(
-                            height = RefractionHeight(
-                                value = animateFloatAsState(
-                                    targetValue = if (!isDragging.value) {
-                                        0f
-                                    } else {
-                                        10f
-                                    }
-                                ).value.dp
-                            ),
-                            amount = RefractionAmount.Half,
-                        ),
-                        material = GlassMaterial.None,
-                    ),
-                )
-                .draggable(
-                    state = rememberDraggableState { delta ->
-                        animationScope.launch {
-                            offset.snapTo(
-                                targetValue = (offset.value + delta).fastCoerceIn(
-                                    minimumValue = 0f,
-                                    maximumValue = maxWidth,
-                                ),
-                            )
-                        }
-                    },
-                    orientation = Orientation.Horizontal,
-                    startDragImmediately = true,
-                    onDragStarted = { isDragging.value = true },
-                    onDragStopped = { velocity ->
-                        isDragging.value = false
-                        val currentIndex = offset.value / tabWidth
-                        val targetIndex = when {
-                            velocity > 0f -> ceil(x = currentIndex).toInt()
-                            velocity < 0f -> floor(x = currentIndex).toInt()
-                            else -> currentIndex.fastRoundToInt()
-                        }.fastCoerceIn(
-                            minimumValue = 0,
-                            maximumValue = pages.lastIndex,
-                        )
-
-                        if (selectedIndexState.intValue != targetIndex) {
-                            selectedIndexState.intValue = targetIndex
-                            navigateTo(
-                                navController = navController,
-                                route = pages[targetIndex].route,
-                            )
-                        }
-
-                        animationScope.launch {
-                            offset.animateTo(
-                                targetValue = (targetIndex * tabWidth).fastCoerceIn(
-                                    minimumValue = 0f,
-                                    maximumValue = maxWidth,
-                                ),
-                                animationSpec = spring(
-                                    dampingRatio = 0.8f,
-                                    stiffness = 200f,
-                                ),
-                            )
-                        }
-                    },
-                )
-        )
     }
 }
