@@ -76,7 +76,6 @@ import com.kyant.liquidglass.refraction.InnerRefraction
 import com.kyant.liquidglass.refraction.RefractionAmount
 import com.kyant.liquidglass.refraction.RefractionHeight
 import com.kyant.liquidglass.rememberLiquidGlassProviderState
-import com.kyant.liquidglass.sampler.ExperimentalLuminanceSamplerApi
 import com.kyant.liquidglass.shadow.GlassShadow
 import io.treblekit.app.ui.navigation.HomePage
 import io.treblekit.app.ui.navigation.NavigationItem
@@ -93,11 +92,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.ceil
 import kotlin.math.floor
 
-@OptIn(
-    ExperimentalLuminanceSamplerApi::class,
-    ExperimentalLuminanceSamplerApi::class,
-    FlowPreview::class,
-)
+@OptIn(FlowPreview::class)
 @Composable
 fun <T : Any> TKNavBar(
     modifier: Modifier = Modifier,
