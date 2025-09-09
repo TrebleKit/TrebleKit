@@ -23,11 +23,11 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import io.treblekit.app.IViewFactory
 import io.treblekit.app.ui.components.FlutterView
 import io.treblekit.app.ui.navigation.EKitPage
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.utils.navigateTo
+import io.treblekit.common.IViewFactory
 
 @Composable
 fun FeOSPage(

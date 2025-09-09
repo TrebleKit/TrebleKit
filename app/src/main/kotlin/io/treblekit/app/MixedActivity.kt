@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.wyq0918dev.flutter_mixed.FlutterMixedPlugin
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.android.RenderMode
+import io.treblekit.common.IViewFactory
 
 abstract class MixedActivity : AppCompatActivity(), IViewFactory {
 

@@ -23,3 +23,4 @@ dependencyResolutionManagement {
 }
 apply(from = rootProject.projectDir.resolve(relative = ".android/include_flutter.groovy"))
 include(":app")
+include(":common")

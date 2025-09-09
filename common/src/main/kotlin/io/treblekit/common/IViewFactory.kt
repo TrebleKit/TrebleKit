@@ -1,4 +1,4 @@
-package io.treblekit.app
+package io.treblekit.common
 
 import android.view.View
 
