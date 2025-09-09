@@ -27,13 +27,11 @@ import io.treblekit.app.ui.components.FlutterView
 import io.treblekit.app.ui.navigation.EKitPage
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.utils.navigateTo
-import io.treblekit.common.IViewFactory
 
 @Composable
 fun FeOSPage(
     modifier: Modifier = Modifier,
     navController: NavHostController? = null,
-    factory: IViewFactory? = null,
 ) {
     val inspection: Boolean = LocalInspectionMode.current
     val count = remember { mutableIntStateOf(value = 0) }
@@ -88,8 +86,7 @@ fun FeOSPage(
                 }
 
                 else -> FlutterView(
-                    modifier = Modifier.fillMaxSize(),
-                    factory = factory,
+                    modifier = Modifier.fillMaxSize()
                 )
             }
         }

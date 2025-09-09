@@ -1,7 +1,9 @@
 package io.treblekit.app.ui.components
 
+import android.app.Activity
 import android.view.View
 import android.widget.TextView
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -13,16 +15,8 @@ import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.common.IViewFactory
 
 @Composable
-fun FlutterView(
-    modifier: Modifier = Modifier,
-    factory: IViewFactory? = null,
-) {
-    ViewFactory(
-        modifier = modifier,
-        factory = factory,
-    ) {
-        getFlutterView
-    }
+fun FlutterView(modifier: Modifier = Modifier) {
+    ViewFactory(modifier = modifier) { getFlutterView }
 }
 
 @Preview
@@ -34,9 +28,9 @@ private fun FlutterViewPreview() {
 @Composable
 private fun ViewFactory(
     modifier: Modifier = Modifier,
-    factory: IViewFactory? = null,
     view: IViewFactory.() -> View? = { null },
 ) {
+    val activity: Activity? = LocalActivity.current
     val inspection: Boolean = LocalInspectionMode.current
     val inspectionModeText: String = stringResource(
         id = R.string.inspection_mode_text,
@@ -45,7 +39,12 @@ private fun ViewFactory(
         factory = { context ->
             when {
                 inspection -> TextView(context)
-                factory?.view() != null -> factory.view()!!
+                activity != null && activity is IViewFactory -> {
+                    (activity as? IViewFactory)?.view() ?: error(
+                        message = "IViewFactory not implemented",
+                    )
+                }
+
                 else -> View(context)
             }
         },

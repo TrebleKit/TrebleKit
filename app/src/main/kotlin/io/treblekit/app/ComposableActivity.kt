@@ -10,7 +10,7 @@ import androidx.compose.ui.UiComposable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 
-abstract class ComposableActivity : MixedActivity() {
+abstract class ComposableActivity : HybridActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -26,12 +26,10 @@ import io.treblekit.app.ui.page.FeOSPage
 import io.treblekit.app.ui.page.HomePage
 import io.treblekit.app.ui.theme.AppBackgroundColor
 import io.treblekit.app.ui.theme.TrebleKitTheme
-import io.treblekit.common.IViewFactory
 
 @Composable
 fun ActivityMain(
     modifier: Modifier = Modifier,
-    factory: IViewFactory? = null,
     useLiquidGlass: Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU,
 ) {
     val navController = rememberNavController()
@@ -68,7 +66,7 @@ fun ActivityMain(
                     HomePage(navController = navController)
                 }
                 composable<FeOSPage> {
-                    FeOSPage(navController = navController, factory = factory)
+                    FeOSPage(navController = navController)
                 }
                 composable<EKitPage> {
                     EKitPage(navController = navController)

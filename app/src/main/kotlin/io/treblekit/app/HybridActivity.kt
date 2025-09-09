@@ -8,19 +8,19 @@ import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.android.RenderMode
 import io.treblekit.common.IViewFactory
 
-abstract class MixedActivity : AppCompatActivity(), IViewFactory {
+abstract class HybridActivity : AppCompatActivity(), IViewFactory {
 
     private var mFlutterFragment: FlutterFragment? = null
 
     override val getFlutterView: View by lazy {
         return@lazy FlutterMixedPlugin.loadFlutter(
-            activity = this@MixedActivity,
+            activity = this@HybridActivity,
             renderMode = RenderMode.texture, // 混合开发
         ) { fragment, view ->
             mFlutterFragment = fragment
             return@loadFlutter view
         }.let { flutter ->
-            return@let flutter ?: View(this@MixedActivity)
+            return@let flutter ?: View(this@HybridActivity)
         }
     }
 
@@ -43,6 +43,7 @@ abstract class MixedActivity : AppCompatActivity(), IViewFactory {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults, deviceId)
         mFlutterFragment?.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         mFlutterFragment?.onActivityResult(requestCode, resultCode, data)

@@ -8,8 +8,8 @@ class MainActivity : ComposableActivity() {
 
     @Composable
     override fun Content() {
-        TrebleKitTheme(dynamicColor = false) {
-            ActivityMain(factory = this)
+        TrebleKitTheme {
+            ActivityMain()
         }
     }
 }

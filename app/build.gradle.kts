@@ -42,13 +42,13 @@ android {
 }
 
 dependencies {
-    implementation("com.google.accompanist:accompanist-drawablepainter:0.37.3")
-    implementation("androidx.compose.material:material-icons-extended:1.7.8")
-    implementation("androidx.navigation:navigation-compose:2.9.3")
     implementation(project(":common"))
     implementation(project(":flutter"))
     implementation(project(":flutter_mixed"))
     implementation(libs.androidliquidglass)
+    implementation(libs.accompanist.drawablepainter)
+
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.material.icons.extended)
