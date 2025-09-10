@@ -27,7 +27,9 @@ abstract class ComposableActivity : HybridActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             window.isNavigationBarContrastEnforced = false
         }
-        setContent { Content() }
+        setContent {
+            Content()
+        }
     }
 
     @Composable

@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
@@ -207,24 +208,27 @@ fun <T : Any> TKNavBar(
                                 0.8f
                             } else {
                                 0f
-                            }, animationSpec = spring(
+                            },
+                            animationSpec = spring(
                                 dampingRatio = 0.8f,
                                 stiffness = 200f,
-                            )
+                            ),
                         )
                         val contentColor: Color by animateColorAsState(
                             targetValue = if (selectedIndexState.intValue == index && !isDragging.value) {
                                 MaterialTheme.colorScheme.onPrimaryContainer
                             } else {
                                 Color(color = 0xff8E8E9E)
-                            }, animationSpec = spring(
-                                dampingRatio = 0.8f, stiffness = 200f
-                            )
+                            },
+                            animationSpec = spring(
+                                dampingRatio = 0.8f,
+                                stiffness = 200f,
+                            ),
                         )
                         Column(
                             modifier = modifier
                                 .weight(weight = 1f)
-                                .clip(shape = RoundedCornerShape(percent = 50))
+                                .clip(shape = CircleShape)
                                 .drawBehind {
                                     drawRect(
                                         color = backgroundColor,
@@ -338,12 +342,12 @@ fun <T : Any> TKNavBar(
                     }
                     .background(
                         color = AppBackgroundColor,
-                        shape = RoundedCornerShape(percent = 50),
+                        shape = CircleShape,
                     )
                     .liquidGlass(
                         state = blockProviderState,
                         style = GlassStyle(
-                            shape = RoundedCornerShape(percent = 50),
+                            shape = CircleShape,
                             innerRefraction = InnerRefraction(
                                 height = RefractionHeight(
                                     value = animateFloatAsState(
@@ -432,6 +436,7 @@ private fun Modifier.navBarBlockProvider(
         NavBarStyle.LiquidGlass -> this then Modifier.liquidGlassProvider(
             state = blockProviderState,
         )
+
         NavBarStyle.Material3 -> this
     }
 }
@@ -443,10 +448,9 @@ private fun Modifier.navBarContainerStyle(style: NavBarStyle): Modifier {
         backgroundColor = AppBackgroundColor
     )
     val glassStyle = GlassStyle(
-        shape = RoundedCornerShape(percent = 50),
+        shape = CircleShape,
         innerRefraction = InnerRefraction(
-            height = RefractionHeight(value = 12.dp),
-            amount = RefractionAmount.Half
+            height = RefractionHeight(value = 12.dp), amount = RefractionAmount.Half
         ),
         shadow = GlassShadow(
             elevation = 4.dp,

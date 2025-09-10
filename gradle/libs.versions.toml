@@ -3,6 +3,7 @@ accompanistDrawablepainter = "0.37.3"
 agp = "8.13.0"
 androidliquidglass = "1.0.0-alpha06"
 appcompat = "1.7.1"
+capsule = "2.0.1"
 kotlin = "2.2.10"
 coreKtx = "1.17.0"
 junit = "4.13.2"
@@ -23,6 +24,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -40,7 +42,8 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 accompanist-drawablepainter = { module = "com.google.accompanist:accompanist-drawablepainter", version.ref = "accompanistDrawablepainter" }
-androidliquidglass = { group = "com.github.Kyant0", name = "AndroidLiquidGlass", version.ref = "androidliquidglass" }
+kyant0-liquidglass = { group = "com.github.Kyant0", name = "AndroidLiquidGlass", version.ref = "androidliquidglass" }
+kyant0-capsule = { module = "com.github.Kyant0:Capsule", version.ref = "capsule" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
