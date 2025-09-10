@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -37,6 +38,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kyant.capsule.ContinuousCapsule
+import com.kyant.capsule.continuities.G1Continuity
+import com.kyant.capsule.continuities.G2Continuity
+import com.kyant.capsule.continuities.G2ContinuityProfile
 import com.kyant.liquidglass.GlassStyle
 import com.kyant.liquidglass.liquidGlass
 import com.kyant.liquidglass.material.GlassMaterial
@@ -172,20 +177,19 @@ private enum class TopBarStyle {
 @Stable
 @Composable
 private fun Modifier.topBarButtonStyle(style: TopBarStyle): Modifier {
+    val bgcolor = Color(color = 0xff434056)
     val providerState = rememberLiquidGlassProviderState(
-        backgroundColor = Color(color = 0xff434056)
+        backgroundColor = bgcolor
     )
     val buttonStyle = GlassStyle(
-        shape = RoundedCornerShape(percent = CapsuleRadius),
+        shape = ContinuousCapsule,
         innerRefraction = InnerRefraction(
             height = RefractionHeight(value = 8.dp),
             amount = RefractionAmount.Full,
         ),
         material = GlassMaterial(
             brush = SolidColor(
-                value = Color(
-                    color = 0xff434056
-                ).copy(
+                value = bgcolor.copy(
                     alpha = 0.5f
                 ),
             ),
@@ -206,8 +210,8 @@ private fun Modifier.topBarButtonStyle(style: TopBarStyle): Modifier {
         )
 
         TopBarStyle.Material3 -> Modifier
-            .clip(shape = RoundedCornerShape(percent = 50))
-            .background(color = Color(color = 0xff434056))
+            .clip(shape = CircleShape)
+            .background(color = bgcolor)
     }
 }
 

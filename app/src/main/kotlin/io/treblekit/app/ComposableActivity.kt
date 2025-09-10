@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.UiComposable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.core.view.WindowCompat
 
 abstract class ComposableActivity : HybridActivity() {
 
@@ -24,6 +25,7 @@ abstract class ComposableActivity : HybridActivity() {
                 darkScrim = Color.Transparent.toArgb(),
             ),
         )
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             window.isNavigationBarContrastEnforced = false
         }

@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -45,9 +44,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -68,6 +69,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.kyant.capsule.ContinuousCapsule
 import com.kyant.liquidglass.GlassStyle
 import com.kyant.liquidglass.LiquidGlassProviderState
 import com.kyant.liquidglass.liquidGlass
@@ -143,7 +145,23 @@ fun <T : Any> TKNavBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(height = 64.dp)
-                .padding(horizontal = 32.dp),
+                .padding(horizontal = 32.dp)
+                .drawWithContent {
+                    scale(
+                        scaleX = lerp(
+                            start = 1f,
+                            stop = 1.02f,
+                            fraction = scaleYFraction,
+                        ),
+                        scaleY = lerp(
+                            start = 1f,
+                            stop = 1.02f,
+                            fraction = scaleYFraction,
+                        ),
+                    ) {
+                        this@drawWithContent.drawContent()
+                    }
+                },
         ) {
             val widthWithoutPaddings: Float =
                 (constraints.maxWidth.toFloat() - paddingPx * 2f).fastCoerceAtLeast(minimumValue = 0f)
@@ -228,7 +246,7 @@ fun <T : Any> TKNavBar(
                         Column(
                             modifier = modifier
                                 .weight(weight = 1f)
-                                .clip(shape = CircleShape)
+                                .blockRounded(style = getStyle(useLiquidGlass = useLiquidGlass))
                                 .drawBehind {
                                     drawRect(
                                         color = backgroundColor,
@@ -342,12 +360,12 @@ fun <T : Any> TKNavBar(
                     }
                     .background(
                         color = AppBackgroundColor,
-                        shape = CircleShape,
+                        shape = ContinuousCapsule,
                     )
                     .liquidGlass(
                         state = blockProviderState,
                         style = GlassStyle(
-                            shape = CircleShape,
+                            shape = ContinuousCapsule,
                             innerRefraction = InnerRefraction(
                                 height = RefractionHeight(
                                     value = animateFloatAsState(
@@ -428,16 +446,25 @@ private fun getStyle(useLiquidGlass: Boolean): NavBarStyle {
 
 @Stable
 @Composable
+private fun Modifier.blockRounded(style: NavBarStyle): Modifier {
+    return this then when (style) {
+        NavBarStyle.LiquidGlass -> Modifier.clip(shape = ContinuousCapsule)
+        NavBarStyle.Material3 -> Modifier.clip(shape = CircleShape)
+    }
+}
+
+@Stable
+@Composable
 private fun Modifier.navBarBlockProvider(
     style: NavBarStyle,
     blockProviderState: LiquidGlassProviderState,
 ): Modifier {
-    return when (style) {
-        NavBarStyle.LiquidGlass -> this then Modifier.liquidGlassProvider(
+    return this then when (style) {
+        NavBarStyle.LiquidGlass -> Modifier.liquidGlassProvider(
             state = blockProviderState,
         )
 
-        NavBarStyle.Material3 -> this
+        NavBarStyle.Material3 -> Modifier
     }
 }
 
@@ -448,7 +475,7 @@ private fun Modifier.navBarContainerStyle(style: NavBarStyle): Modifier {
         backgroundColor = AppBackgroundColor
     )
     val glassStyle = GlassStyle(
-        shape = CircleShape,
+        shape = ContinuousCapsule,
         innerRefraction = InnerRefraction(
             height = RefractionHeight(value = 12.dp), amount = RefractionAmount.Half
         ),
@@ -472,7 +499,7 @@ private fun Modifier.navBarContainerStyle(style: NavBarStyle): Modifier {
         )
 
         NavBarStyle.Material3 -> Modifier
-            .clip(shape = RoundedCornerShape(percent = 50))
+            .clip(shape = CircleShape)
             .background(color = Color(color = 0xff434056))
     }
 }
