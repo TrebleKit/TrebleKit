@@ -96,13 +96,25 @@ fun <T : Any> TKNavBar(
 ) {
     val navBackStackEntry: NavBackStackEntry? by navController.currentBackStackEntryAsState()
     val currentDestination: NavDestination? = navBackStackEntry?.destination
-    val blockProviderState = rememberLiquidGlassProviderState(backgroundColor = null)
+    val blockProviderState = rememberLiquidGlassProviderState(
+        backgroundColor = null,
+    )
     val animationScope: CoroutineScope = rememberCoroutineScope()
-    var isDragging: Boolean by remember { mutableStateOf(value = false) }
-    val offset: Animatable<Float, AnimationVector1D> = remember { Animatable(initialValue = 0f) }
+    var isDragging: Boolean by remember {
+        mutableStateOf(value = false)
+    }
+    val offset: Animatable<Float, AnimationVector1D> = remember {
+        Animatable(initialValue = 0f)
+    }
     val padding: Dp = 4.dp
-    val paddingPx: Int = with(receiver = LocalDensity.current) { padding.roundToPx() }
-    var selectedIndexState: Int by remember { mutableIntStateOf(value = 0) }
+    val paddingPx: Int = with(
+        receiver = LocalDensity.current,
+    ) {
+        padding.roundToPx()
+    }
+    var selectedIndexState: Int by remember {
+        mutableIntStateOf(value = 0)
+    }
     val scaleXFraction: Float by animateFloatAsState(
         targetValue = if (!isDragging) 0f else 1f,
         animationSpec = spring(
