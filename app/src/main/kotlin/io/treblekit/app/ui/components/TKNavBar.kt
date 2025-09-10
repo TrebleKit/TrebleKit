@@ -28,8 +28,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableIntState
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -37,6 +35,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -83,13 +82,11 @@ import io.treblekit.app.ui.theme.AppBackgroundColor
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.utils.navigateTo
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.ceil
 import kotlin.math.floor
 
-@OptIn(FlowPreview::class)
 @Composable
 fun <T : Any> TKNavBar(
     modifier: Modifier = Modifier,
@@ -101,28 +98,20 @@ fun <T : Any> TKNavBar(
     val currentDestination: NavDestination? = navBackStackEntry?.destination
     val blockProviderState = rememberLiquidGlassProviderState(backgroundColor = null)
     val animationScope: CoroutineScope = rememberCoroutineScope()
-    val isDragging: MutableState<Boolean> = remember { mutableStateOf(value = false) }
+    var isDragging: Boolean by remember { mutableStateOf(value = false) }
     val offset: Animatable<Float, AnimationVector1D> = remember { Animatable(initialValue = 0f) }
     val padding: Dp = 4.dp
     val paddingPx: Int = with(receiver = LocalDensity.current) { padding.roundToPx() }
-    val selectedIndexState: MutableIntState = remember(key1 = currentDestination) {
-        mutableIntStateOf(
-            value = pages.indexOfFirst { page ->
-                return@indexOfFirst currentDestination?.hierarchy?.any {
-                    return@any it.hasRoute(route = page.route::class)
-                } == true
-            }.coerceAtLeast(minimumValue = 0)
-        )
-    }
+    var selectedIndexState: Int by remember { mutableIntStateOf(value = 0) }
     val scaleXFraction: Float by animateFloatAsState(
-        targetValue = if (!isDragging.value) 0f else 1f,
+        targetValue = if (!isDragging) 0f else 1f,
         animationSpec = spring(
             dampingRatio = 0.5f,
             stiffness = 300f,
         ),
     )
     val scaleYFraction: Float by animateFloatAsState(
-        targetValue = if (!isDragging.value) 0f else 1f,
+        targetValue = if (!isDragging) 0f else 1f,
         animationSpec = spring(
             dampingRatio = 0.5f,
             stiffness = 600f,
@@ -162,13 +151,13 @@ fun <T : Any> TKNavBar(
             val maxWidth: Float =
                 (widthWithoutPaddings - tabWidth).fastCoerceAtLeast(minimumValue = 0f)
             LaunchedEffect(
-                key1 = selectedIndexState.intValue,
+                key1 = selectedIndexState,
                 key2 = tabWidth,
                 key3 = isDragging,
             ) {
-                if (tabWidth > 0 && !isDragging.value) {
+                if (tabWidth > 0 && !isDragging) {
                     offset.animateTo(
-                        targetValue = (selectedIndexState.intValue * tabWidth).fastCoerceIn(
+                        targetValue = (selectedIndexState * tabWidth).fastCoerceIn(
                             0f, maxWidth
                         ),
                         animationSpec = SpringSpec(
@@ -184,8 +173,8 @@ fun <T : Any> TKNavBar(
                         return@any it.hasRoute(route = page.route::class)
                     } == true
                 }
-                if (currentIndex >= 0) {
-                    selectedIndexState.intValue = currentIndex
+                if (currentIndex != -1) {
+                    selectedIndexState = currentIndex
                 }
             }
             Row(
@@ -205,7 +194,7 @@ fun <T : Any> TKNavBar(
                     key(page) {
                         val backgroundColor: Color = MaterialTheme.colorScheme.primaryContainer
                         val backgroundAlpha: Float by animateFloatAsState(
-                            targetValue = if (selectedIndexState.intValue == index && !isDragging.value) {
+                            targetValue = if (selectedIndexState == index && !isDragging) {
                                 0.8f
                             } else {
                                 0f
@@ -216,7 +205,7 @@ fun <T : Any> TKNavBar(
                             ),
                         )
                         val contentColor: Color by animateColorAsState(
-                            targetValue = if (selectedIndexState.intValue == index && !isDragging.value) {
+                            targetValue = if (selectedIndexState == index && !isDragging) {
                                 MaterialTheme.colorScheme.onPrimaryContainer
                             } else {
                                 Color(color = 0xff8E8E9E)
@@ -238,8 +227,8 @@ fun <T : Any> TKNavBar(
                                 }
                                 .pointerInput(key1 = Unit) {
                                     detectTapGestures {
-                                        if (selectedIndexState.intValue != index) {
-                                            selectedIndexState.intValue = index
+                                        if (selectedIndexState != index) {
+                                            selectedIndexState = index
                                             navigateTo(
                                                 navController = navController,
                                                 route = pages[index].route,
@@ -257,9 +246,9 @@ fun <T : Any> TKNavBar(
                                                     )
                                                 }
                                                 launch {
-                                                    isDragging.value = true
+                                                    isDragging = true
                                                     delay(timeMillis = 200)
-                                                    isDragging.value = false
+                                                    isDragging = false
                                                 }
                                             }
                                         }
@@ -352,7 +341,7 @@ fun <T : Any> TKNavBar(
                             innerRefraction = InnerRefraction(
                                 height = RefractionHeight(
                                     value = animateFloatAsState(
-                                        targetValue = if (!isDragging.value) {
+                                        targetValue = if (!isDragging) {
                                             0f
                                         } else {
                                             10f
@@ -377,9 +366,11 @@ fun <T : Any> TKNavBar(
                         },
                         orientation = Orientation.Horizontal,
                         startDragImmediately = true,
-                        onDragStarted = { isDragging.value = true },
+                        onDragStarted = {
+                            isDragging = true
+                        },
                         onDragStopped = { velocity ->
-                            isDragging.value = false
+                            isDragging = false
                             val currentIndex = offset.value / tabWidth
                             val targetIndex = when {
                                 velocity > 0f -> ceil(x = currentIndex).toInt()
@@ -389,8 +380,8 @@ fun <T : Any> TKNavBar(
                                 minimumValue = 0,
                                 maximumValue = pages.lastIndex,
                             )
-                            if (selectedIndexState.intValue != targetIndex) {
-                                selectedIndexState.intValue = targetIndex
+                            if (selectedIndexState != targetIndex) {
+                                selectedIndexState = targetIndex
                                 navigateTo(
                                     navController = navController,
                                     route = pages[targetIndex].route,
