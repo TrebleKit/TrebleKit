@@ -40,11 +40,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.TransformOrigin
@@ -150,12 +148,12 @@ fun <T : Any> TKNavBar(
                     scale(
                         scaleX = lerp(
                             start = 1f,
-                            stop = 1.02f,
+                            stop = 1.03f,
                             fraction = scaleYFraction,
                         ),
                         scaleY = lerp(
                             start = 1f,
-                            stop = 1.02f,
+                            stop = 1.03f,
                             fraction = scaleYFraction,
                         ),
                     ) {
