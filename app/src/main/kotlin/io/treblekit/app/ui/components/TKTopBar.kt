@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreHoriz
@@ -39,9 +37,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kyant.capsule.ContinuousCapsule
-import com.kyant.capsule.continuities.G1Continuity
-import com.kyant.capsule.continuities.G2Continuity
-import com.kyant.capsule.continuities.G2ContinuityProfile
 import com.kyant.liquidglass.GlassStyle
 import com.kyant.liquidglass.liquidGlass
 import com.kyant.liquidglass.material.GlassMaterial
@@ -55,7 +50,6 @@ import io.treblekit.app.ui.theme.AppBackgroundColor
 import io.treblekit.app.ui.theme.CapsuleEdgePadding
 import io.treblekit.app.ui.theme.CapsuleHeight
 import io.treblekit.app.ui.theme.CapsuleIndent
-import io.treblekit.app.ui.theme.CapsuleRadius
 import io.treblekit.app.ui.theme.CapsuleWidth
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.utils.NoOnClick
@@ -210,7 +204,7 @@ private fun Modifier.topBarButtonStyle(style: TopBarStyle): Modifier {
         )
 
         TopBarStyle.Material3 -> Modifier
-            .clip(shape = CircleShape)
+            .clip(shape = ContinuousCapsule)
             .background(color = bgcolor)
     }
 }

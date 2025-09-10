@@ -83,6 +83,7 @@ fun EKitPage(
                     .wrapContentHeight(),
                 expandedHeight = ToolbarHeight,
                 windowInsets = WindowInsets(),
+                scrollBehavior = scrollBehavior,
             )
         },
         bottomBar = {

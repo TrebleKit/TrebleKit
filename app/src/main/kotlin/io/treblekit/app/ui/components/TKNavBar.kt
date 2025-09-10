@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +40,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
@@ -246,7 +246,7 @@ fun <T : Any> TKNavBar(
                         Column(
                             modifier = modifier
                                 .weight(weight = 1f)
-                                .blockRounded(style = getStyle(useLiquidGlass = useLiquidGlass))
+                                .clip(shape = ContinuousCapsule)
                                 .drawBehind {
                                     drawRect(
                                         color = backgroundColor,
@@ -446,15 +446,6 @@ private fun getStyle(useLiquidGlass: Boolean): NavBarStyle {
 
 @Stable
 @Composable
-private fun Modifier.blockRounded(style: NavBarStyle): Modifier {
-    return this then when (style) {
-        NavBarStyle.LiquidGlass -> Modifier.clip(shape = ContinuousCapsule)
-        NavBarStyle.Material3 -> Modifier.clip(shape = CircleShape)
-    }
-}
-
-@Stable
-@Composable
 private fun Modifier.navBarBlockProvider(
     style: NavBarStyle,
     blockProviderState: LiquidGlassProviderState,
@@ -499,7 +490,7 @@ private fun Modifier.navBarContainerStyle(style: NavBarStyle): Modifier {
         )
 
         NavBarStyle.Material3 -> Modifier
-            .clip(shape = CircleShape)
+            .clip(shape = ContinuousCapsule)
             .background(color = Color(color = 0xff434056))
     }
 }
