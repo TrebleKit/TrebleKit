@@ -37,7 +37,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -78,7 +77,6 @@ import com.kyant.liquidglass.refraction.RefractionAmount
 import com.kyant.liquidglass.refraction.RefractionHeight
 import com.kyant.liquidglass.rememberLiquidGlassProviderState
 import com.kyant.liquidglass.shadow.GlassShadow
-import io.treblekit.app.ui.navigation.HomePage
 import io.treblekit.app.ui.navigation.NavigationItem
 import io.treblekit.app.ui.navigation.PageList
 import io.treblekit.app.ui.theme.AppBackgroundColor
@@ -87,8 +85,6 @@ import io.treblekit.app.ui.utils.navigateTo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -99,7 +95,6 @@ fun <T : Any> TKNavBar(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     pages: List<NavigationItem<T>>,
-    startDestination: T,
     useLiquidGlass: Boolean,
 ) {
     val navBackStackEntry: NavBackStackEntry? by navController.currentBackStackEntryAsState()
@@ -110,14 +105,14 @@ fun <T : Any> TKNavBar(
     val offset: Animatable<Float, AnimationVector1D> = remember { Animatable(initialValue = 0f) }
     val padding: Dp = 4.dp
     val paddingPx: Int = with(receiver = LocalDensity.current) { padding.roundToPx() }
-    val selectedIndexState: MutableIntState = remember {
-        var startIndex = 0
-        pages.forEachIndexed { index, item ->
-            if (item.route == startDestination) {
-                startIndex = index
-            }
-        }
-        mutableIntStateOf(value = startIndex)
+    val selectedIndexState: MutableIntState = remember(key1 = currentDestination) {
+        mutableIntStateOf(
+            value = pages.indexOfFirst { page ->
+                return@indexOfFirst currentDestination?.hierarchy?.any {
+                    return@any it.hasRoute(route = page.route::class)
+                } == true
+            }.coerceAtLeast(minimumValue = 0)
+        )
     }
     val scaleXFraction: Float by animateFloatAsState(
         targetValue = if (!isDragging.value) 0f else 1f,
@@ -184,23 +179,13 @@ fun <T : Any> TKNavBar(
                 }
             }
             LaunchedEffect(key1 = currentDestination) {
-                snapshotFlow {
-                    currentDestination?.hierarchy
-                }.debounce(
-                    timeoutMillis = 150,
-                ).collectLatest {
-                    for (page in pages) {
-                        val isCurrent: Boolean? = currentDestination?.hierarchy?.any {
-                            return@any it.hasRoute(route = page.route::class)
-                        }
-                        if (isCurrent == true) {
-                            pages.forEachIndexed { index, item ->
-                                if (item.route == page.route) {
-                                    selectedIndexState.intValue = index
-                                }
-                            }
-                        }
-                    }
+                val currentIndex: Int = pages.indexOfFirst { page ->
+                    return@indexOfFirst currentDestination?.hierarchy?.any {
+                        return@any it.hasRoute(route = page.route::class)
+                    } == true
+                }
+                if (currentIndex >= 0) {
+                    selectedIndexState.intValue = currentIndex
                 }
             }
             Row(
@@ -506,7 +491,6 @@ private fun TKNavBarLiquidGlassPreview() {
             TKNavBar(
                 useLiquidGlass = true,
                 pages = PageList,
-                startDestination = HomePage,
                 navController = rememberNavController(),
             )
         }
@@ -526,7 +510,6 @@ private fun TKNavBarMaterialPreview() {
             TKNavBar(
                 useLiquidGlass = false,
                 pages = PageList,
-                startDestination = HomePage,
                 navController = rememberNavController(),
             )
         }

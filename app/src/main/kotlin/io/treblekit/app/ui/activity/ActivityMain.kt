@@ -42,7 +42,6 @@ fun ActivityMain(
             TKNavBar(
                 navController = navController,
                 pages = PageList,
-                startDestination = HomePage,
                 useLiquidGlass = useLiquidGlass,
             )
         },
@@ -55,7 +54,7 @@ fun ActivityMain(
         ) {
             NavHost(
                 navController = navController,
-                startDestination = HomePage,
+                startDestination = FeOSPage,
                 modifier = Modifier.fillMaxSize(),
             ) {
                 composable<HomePage> {
