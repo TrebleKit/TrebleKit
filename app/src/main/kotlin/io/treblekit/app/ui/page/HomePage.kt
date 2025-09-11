@@ -21,13 +21,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import io.treblekit.app.ui.theme.ToolbarHeight
 import io.treblekit.app.ui.theme.TrebleKitTheme
+import io.treblekit.app.ui.utils.NullableController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomePage(
-    modifier: Modifier = Modifier,
-    navController: NavHostController? = null,
-) {
+fun NavHostController?.HomePage(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -121,6 +119,8 @@ fun HomePage(
 @Composable
 private fun HomePagePreview() {
     TrebleKitTheme {
-        HomePage()
+        NullableController {
+            HomePage()
+        }
     }
 }
