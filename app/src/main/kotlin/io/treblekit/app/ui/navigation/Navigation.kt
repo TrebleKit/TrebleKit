@@ -56,10 +56,10 @@ val PageList: ArrayList<NavigationItem<Any>> = arrayListOf(
 @Composable
 fun rememberNavGraph(
     navController: NavHostController,
-    home: @Composable (NavHostController) -> Unit,
-    feOS: @Composable (NavHostController) -> Unit,
-    eKit: @Composable (NavHostController) -> Unit,
-    ebKit: @Composable (NavHostController) -> Unit,
+    home: @Composable NavHostController.() -> Unit,
+    feOS: @Composable NavHostController.() -> Unit,
+    eKit: @Composable NavHostController.() -> Unit,
+    ebKit: @Composable NavHostController.() -> Unit,
 ): NavGraphBuilder.() -> Unit {
     return {
         composable<HomePage> {

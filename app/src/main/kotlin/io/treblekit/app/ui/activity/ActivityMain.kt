@@ -47,10 +47,10 @@ fun ActivityMain(
             startDestination = HomePage,
             builder = rememberNavGraph(
                 navController = navController,
-                home = { HomePage(navController = it) },
-                feOS = { FeOSPage(navController = it) },
-                eKit = { EKitPage(navController = it) },
-                ebKit = { EbKitPage(navController = it) },
+                home = { HomePage(navController = this) },
+                feOS = { FeOSPage(navController = this) },
+                eKit = { EKitPage(navController = this) },
+                ebKit = { EbKitPage(navController = this) },
             )
         )
     }
