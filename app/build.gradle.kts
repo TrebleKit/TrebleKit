@@ -56,6 +56,8 @@ dependencies {
     implementation(libs.kyant0.liquidglass)
     implementation(libs.kyant0.capsule)
     implementation(libs.accompanist.drawablepainter)
+    implementation(libs.shizuku.api)
+    implementation(libs.shizuku.provider)
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.appcompat)
