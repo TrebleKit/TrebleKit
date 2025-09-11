@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -134,6 +135,7 @@ fun <T : Any> TKNavBar(
             .fillMaxWidth()
             .wrapContentHeight(),
         containerColor = Color.Transparent,
+        contentPadding = PaddingValues.Zero,
     ) {
         BoxWithConstraints(
             modifier = Modifier
@@ -143,13 +145,13 @@ fun <T : Any> TKNavBar(
                 .drawWithContent {
                     scale(
                         scaleX = lerp(
-                            start = 1f,
-                            stop = 1.03f,
+                            start = 0.97f,
+                            stop = 1.0f,
                             fraction = scaleYFraction,
                         ),
                         scaleY = lerp(
-                            start = 1f,
-                            stop = 1.03f,
+                            start = 0.97f,
+                            stop = 1.0f,
                             fraction = scaleYFraction,
                         ),
                     ) {

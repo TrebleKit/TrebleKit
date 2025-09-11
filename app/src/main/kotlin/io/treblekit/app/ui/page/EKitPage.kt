@@ -92,6 +92,7 @@ fun EKitPage(
                     .fillMaxWidth()
                     .wrapContentHeight(),
                 windowInsets = WindowInsets(),
+
             ) {
                 NavigationBarItem(
                     icon = {
