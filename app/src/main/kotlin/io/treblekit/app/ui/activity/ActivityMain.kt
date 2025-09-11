@@ -7,17 +7,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.treblekit.app.ui.components.TKContent
 import io.treblekit.app.ui.components.TKNavBar
 import io.treblekit.app.ui.components.TKTopBar
-import io.treblekit.app.ui.navigation.EKitPage
-import io.treblekit.app.ui.navigation.EbKitPage
-import io.treblekit.app.ui.navigation.FeOSPage
 import io.treblekit.app.ui.navigation.HomePage
 import io.treblekit.app.ui.navigation.PageList
+import io.treblekit.app.ui.navigation.rememberNavGraph
 import io.treblekit.app.ui.page.EKitPage
 import io.treblekit.app.ui.page.EbKitPage
 import io.treblekit.app.ui.page.FeOSPage
@@ -34,9 +30,7 @@ fun ActivityMain(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
-            TKTopBar(
-                useLiquidGlass = useLiquidGlass,
-            )
+            TKTopBar(useLiquidGlass = useLiquidGlass)
         },
         bottomBar = {
             TKNavBar(
@@ -48,29 +42,17 @@ fun ActivityMain(
         containerColor = AppBackgroundColor,
     ) { innerPadding ->
         TKContent(
-            modifier = Modifier.padding(
-                paddingValues = innerPadding,
-            ),
-        ) {
-            NavHost(
+            modifier = Modifier.padding(paddingValues = innerPadding),
+            navController = navController,
+            startDestination = HomePage,
+            builder = rememberNavGraph(
                 navController = navController,
-                startDestination = FeOSPage,
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                composable<HomePage> {
-                    HomePage(navController = navController)
-                }
-                composable<FeOSPage> {
-                    FeOSPage(navController = navController)
-                }
-                composable<EKitPage> {
-                    EKitPage(navController = navController)
-                }
-                composable<EbKitPage> {
-                    EbKitPage(navController = navController)
-                }
-            }
-        }
+                home = { HomePage(navController = it) },
+                feOS = { FeOSPage(navController = it) },
+                eKit = { EKitPage(navController = it) },
+                ebKit = { EbKitPage(navController = it) },
+            )
+        )
     }
 }
 
@@ -78,9 +60,7 @@ fun ActivityMain(
 @Composable
 private fun ActivityMainLiquidGlassPreview() {
     TrebleKitTheme {
-        ActivityMain(
-            useLiquidGlass = true,
-        )
+        ActivityMain(useLiquidGlass = true)
     }
 }
 
@@ -88,8 +68,6 @@ private fun ActivityMainLiquidGlassPreview() {
 @Composable
 private fun ActivityMainNoLiquidGlassPreview() {
     TrebleKitTheme {
-        ActivityMain(
-            useLiquidGlass = false,
-        )
+        ActivityMain(useLiquidGlass = false)
     }
 }

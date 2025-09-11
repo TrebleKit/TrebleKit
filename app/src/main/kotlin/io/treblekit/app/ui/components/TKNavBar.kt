@@ -170,7 +170,8 @@ fun <T : Any> TKNavBar(
                 if (tabWidth > 0 && !isDragging) {
                     offset.animateTo(
                         targetValue = (selectedIndexState * tabWidth).fastCoerceIn(
-                            0f, maxWidth
+                            minimumValue = 0f,
+                            maximumValue = maxWidth,
                         ),
                         animationSpec = SpringSpec(
                             dampingRatio = 0.8f,

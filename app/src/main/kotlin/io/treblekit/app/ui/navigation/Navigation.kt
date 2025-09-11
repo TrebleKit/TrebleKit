@@ -5,7 +5,11 @@ import androidx.compose.material.icons.automirrored.twotone.CompareArrows
 import androidx.compose.material.icons.twotone.Dashboard
 import androidx.compose.material.icons.twotone.KeyboardCommandKey
 import androidx.compose.material.icons.twotone.Memory
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 
 data class NavigationItem<T>(
@@ -48,3 +52,27 @@ val PageList: ArrayList<NavigationItem<Any>> = arrayListOf(
         icon = Icons.AutoMirrored.TwoTone.CompareArrows,
     ),
 )
+
+@Composable
+fun rememberNavGraph(
+    navController: NavHostController,
+    home: @Composable (NavHostController) -> Unit,
+    feOS: @Composable (NavHostController) -> Unit,
+    eKit: @Composable (NavHostController) -> Unit,
+    ebKit: @Composable (NavHostController) -> Unit,
+): NavGraphBuilder.() -> Unit {
+    return {
+        composable<HomePage> {
+            home(navController)
+        }
+        composable<FeOSPage> {
+            feOS(navController)
+        }
+        composable<EKitPage> {
+            eKit(navController)
+        }
+        composable<EbKitPage> {
+            ebKit(navController)
+        }
+    }
+}
