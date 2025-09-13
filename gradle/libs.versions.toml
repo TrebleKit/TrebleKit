@@ -1,7 +1,7 @@
 [versions]
 accompanistDrawablepainter = "0.37.3"
 agp = "8.13.0"
-androidliquidglass = "1.0.0-alpha07"
+androidliquidglass = "1.0.0-alpha08"
 api = "13.1.5"
 appcompat = "1.7.1"
 capsule = "2.0.1"
