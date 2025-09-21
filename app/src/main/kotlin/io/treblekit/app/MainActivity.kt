@@ -67,7 +67,9 @@ class MainActivity : AppCompatActivity(), IViewFactory, FlutterEngineConfigurato
         }
         mFlutterFragment = loadFlutterFragment()
         setContent {
-            TrebleKitTheme {
+            TrebleKitTheme(
+                dynamicColor = false
+            ) {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(), topBar = {
                         TopAppBar(

@@ -21,7 +21,6 @@ fun Application.loadFlutter(): FlutterEngine {
 fun loadFlutterFragment(): FlutterFragment {
     return FlutterFragment
         .withCachedEngine(ENGINE_ID)
-        .destroyEngineWithFragment(false)
         .renderMode(RenderMode.texture)
         .build()
 }
