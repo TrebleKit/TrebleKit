@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.core.view.WindowCompat
 import androidx.viewpager2.widget.ViewPager2
 import io.flutter.embedding.android.FlutterEngineConfigurator
@@ -49,7 +50,6 @@ class MainActivity : AppCompatActivity(), IViewFactory, FlutterEngineConfigurato
 
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
@@ -68,43 +68,44 @@ class MainActivity : AppCompatActivity(), IViewFactory, FlutterEngineConfigurato
         }
         mFlutterFragment = loadFlutterFragment()
         setContent {
-            TrebleKitTheme(
-                dynamicColor = false
-            ) {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(), topBar = {
-                        TopAppBar(
-                            title = {
-                                Text(text = stringResource(id = R.string.app_name))
-                            })
-                    },
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
-                ) { innerPadding ->
-//                    Greeting(
-//                        name = "Android", modifier = Modifier.padding(paddingValues = innerPadding)
-//                    )
-                    FlutterView(
-                        modifier = Modifier.fillMaxSize().padding(paddingValues = innerPadding)
-                    )
-                }
+            TrebleKitTheme {
+                ActivityMain()
             }
         }
     }
 
-
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!", modifier = modifier
+    @Preview(
+        device = "id:pixel_9",
+        apiLevel = 36,
+        showSystemUi = true,
+        showBackground = true,
+        wallpaper = Wallpapers.BLUE_DOMINATED_EXAMPLE,
     )
+    @Composable
+    private fun ActivityMainPreview() {
+        TrebleKitTheme {
+            ActivityMain()
+        }
+    }
 }
 
-@Preview(showBackground = true)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GreetingPreview() {
-    TrebleKitTheme {
-        Greeting("Android")
+fun ActivityMain(modifier: Modifier = Modifier) {
+    Scaffold(
+        modifier = modifier.fillMaxSize(), topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(id = R.string.app_name))
+                },
+            )
+        },
+        containerColor = MaterialTheme.colorScheme.primaryContainer
+    ) { innerPadding ->
+        FlutterView(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues = innerPadding)
+        )
     }
 }
