@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -76,7 +77,9 @@ class MainActivity : AppCompatActivity(), IViewFactory, FlutterEngineConfigurato
                             title = {
                                 Text(text = stringResource(id = R.string.app_name))
                             })
-                    }) { innerPadding ->
+                    },
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                ) { innerPadding ->
 //                    Greeting(
 //                        name = "Android", modifier = Modifier.padding(paddingValues = innerPadding)
 //                    )
