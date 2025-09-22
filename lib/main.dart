@@ -1,30 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:freefeos/freefeos.dart';
+import 'package:multi_builder/multi_builder.dart';
+
+import 'theme.dart';
+
 
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  final MaterialTheme theme = const MaterialTheme();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        appBarTheme: AppBarTheme(
-          systemOverlayStyle: SystemUiOverlayStyle(
-            systemNavigationBarColor: Colors.transparent,
-            systemNavigationBarDividerColor: Colors.transparent,
-            systemNavigationBarIconBrightness: Brightness.dark,
-            systemNavigationBarContrastEnforced: false,
-            statusBarColor: Colors.transparent,
-            statusBarBrightness: Brightness.light,
-            statusBarIconBrightness: Brightness.dark,
-            systemStatusBarContrastEnforced: false,
-          ),
-        )
-      ),
+      theme: theme.light(),
+      darkTheme: theme.dark(),
+      builder: <TransitionBuilder>[
+        FreeFEOS.builder,
+      ].toBuilder,
       home: const MyHomePage(),
     );
   }
