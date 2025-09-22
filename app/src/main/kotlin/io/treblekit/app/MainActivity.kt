@@ -1,5 +1,6 @@
 package io.treblekit.app
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -65,6 +66,52 @@ class MainActivity : AppCompatActivity(), IViewFactory, FlutterEngineConfigurato
         }
     }
 
+    override fun onPostResume() {
+        super.onPostResume()
+        mFlutterFragment?.onPostResume()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        mFlutterFragment?.onNewIntent(intent)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        mFlutterFragment?.onRequestPermissionsResult(
+            requestCode,
+            permissions,
+            grantResults
+        )
+    }
+
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
+        super.onActivityResult(requestCode, resultCode, data)
+        mFlutterFragment?.onActivityResult(
+            requestCode,
+            resultCode,
+            data
+        )
+    }
+
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        mFlutterFragment?.onUserLeaveHint()
+    }
+
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        mFlutterFragment?.onTrimMemory(level)
+    }
+
     @Preview(
         device = "id:pixel_9",
         apiLevel = 36,
@@ -73,7 +120,7 @@ class MainActivity : AppCompatActivity(), IViewFactory, FlutterEngineConfigurato
         wallpaper = Wallpapers.BLUE_DOMINATED_EXAMPLE,
     )
     @Composable
-    private fun ActivityMainPreview() {
+    private fun MainActivityPreview() {
         TrebleKitTheme {
             ActivityMain()
         }
