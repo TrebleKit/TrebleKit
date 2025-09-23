@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -35,6 +36,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Adb
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FlutterDash
 import androidx.compose.material.icons.filled.Home
@@ -66,6 +69,8 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -114,27 +119,6 @@ import kotlinx.serialization.Serializable
 @Composable
 fun ActivityMain(modifier: Modifier = Modifier) {
     var underLayerVisible: Boolean by remember { mutableStateOf(value = false) }
-//    val lifecycleOwner = LocalLifecycleOwner.current as? ComponentActivity
-//    val backCallback = object : OnBackPressedCallback(true) {
-//        override fun handleOnBackPressed() {
-//            // 你的逻辑
-////            popBackStack()
-//            underLayerVisible = false
-//            isEnabled = false // 防止多次触发
-//        }
-//    }
-//
-//    DisposableEffect(Unit) {
-//        if (underLayerVisible) {
-//            lifecycleOwner?.onBackPressedDispatcher?.addCallback(
-//                onBackPressedCallback = backCallback,
-//            )
-//        }
-//
-//        onDispose {
-//            backCallback.remove()
-//        } // 清理回调以避免内存泄漏
-//    }
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
@@ -261,6 +245,15 @@ fun UnderLayer(
     }
 }
 
+@Preview
+@Composable
+fun UnderLayerPreview() {
+    TrebleKitTheme {
+        UnderLayer()
+    }
+}
+
+
 private fun <T> getPageWithRoute(route: T): Int {
     var result = 0
     for (page in pages) {
@@ -270,6 +263,7 @@ private fun <T> getPageWithRoute(route: T): Int {
     }
     return result
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -439,8 +433,8 @@ fun ULBottomBar(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 text = {
-                    Text(text = "返回")
-                },
+                Text(text = "返回")
+            },
                 icon = {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -476,7 +470,7 @@ fun ULAppsPage(
             ),
         ) {
             Text(
-                text = "音乐和视频",
+                text = "核心服务",
                 fontSize = 14.sp,
                 color = Color(
                     color = 0xFF8E8E9E,
@@ -488,52 +482,159 @@ fun ULAppsPage(
             animateToFlutter = animateToEcosed,
         )
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(
-                    start = 30.dp,
-                    bottom = 15.dp,
-                    top = 30.dp,
-                    end = 30.dp,
-                ),
+            modifier = Modifier.padding(
+                start = 30.dp,
+                bottom = 15.dp,
+                top = 30.dp,
+            ),
         ) {
-            Row {
-                Box(
-                    modifier = Modifier.weight(weight = 1f),
-                    contentAlignment = Alignment.CenterStart
+            Text(
+                text = "互联互通",
+                fontSize = 14.sp,
+                color = Color(
+                    color = 0xFF8E8E9E,
+                ),
+            )
+        }
+
+        Surface(
+            modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(
+                start = 20.dp, top = 0.dp, end = 20.dp, bottom = 15.dp
+            ),
+            shape = ContinuousRoundedRectangle(size = 16.dp),
+            color = Color(color = 0xFF434056)
+        ) {
+            Row(
+                modifier = Modifier.padding(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(space = 10.dp),
+            ) {
+                Column(
+                    modifier = modifier.wrapContentSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Text(
-                        text = "最近使用小程序",
-                        fontSize = 14.sp,
-                        color = Color(color = 0xff8E8E9E),
-                    )
-                }
-                Box(
-                    modifier = Modifier
-                        .weight(weight = 1f)
-                        .wrapContentHeight(align = Alignment.CenterVertically),
-                    contentAlignment = Alignment.CenterEnd
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
+                    Box(
+                        modifier = Modifier
+                            .size(size = 40.dp)
+                            .clip(shape = RoundedCornerShape(size = 35.dp))
+                            .background(color = Color(color = 0xFF8E8E9E))
+                            .clickable(onClick = {}),
+                        contentAlignment = Alignment.Center,
                     ) {
-                        Text(
-                            text = "更多",
-                            fontSize = 14.sp,
-                            color = Color(color = 0xff8E8E9E),
-                        )
                         Icon(
-                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                            imageVector = Icons.Filled.Add,
                             contentDescription = null,
-                            modifier = Modifier.size(size = 16.dp),
-                            tint = Color(color = 0xff8E8E9E),
                         )
                     }
+                    Text(
+                        text = "app",
+                        fontSize = 15.sp,
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+//                            modifier = Modifier.fillMaxWidth()
+                    )
                 }
+                Column(
+                    modifier = modifier.wrapContentSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(size = 40.dp)
+                            .clip(shape = RoundedCornerShape(size = 35.dp))
+                            .background(color = Color(color = 0xFF8E8E9E))
+                            .clickable(onClick = {}),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = null,
+                        )
+                    }
+                    Text(
+                        text = "app",
+                        fontSize = 15.sp,
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+//                            modifier = Modifier.fillMaxWidth()
+                    )
+                }
+                Column(
+                    modifier = modifier.wrapContentSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(size = 40.dp)
+                            .clip(shape = RoundedCornerShape(size = 35.dp))
+                            .background(color = Color(color = 0xFF8E8E9E))
+                            .clickable(onClick = {}),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = null,
+                        )
+                    }
+                    Text(
+                        text = "app",
+                        fontSize = 15.sp,
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+//                            modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
+
             }
         }
-        AppsGrid(list = miniProgramList)
+
+//        Box(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .wrapContentHeight()
+//                .padding(
+//                    start = 30.dp,
+//                    bottom = 15.dp,
+//                    top = 30.dp,
+//                    end = 30.dp,
+//                ),
+//        ) {
+//            Row {
+//                Box(
+//                    modifier = Modifier.weight(weight = 1f),
+//                    contentAlignment = Alignment.CenterStart
+//                ) {
+//                    Text(
+//                        text = "最近使用小程序",
+//                        fontSize = 14.sp,
+//                        color = Color(color = 0xff8E8E9E),
+//                    )
+//                }
+//                Box(
+//                    modifier = Modifier
+//                        .weight(weight = 1f)
+//                        .wrapContentHeight(align = Alignment.CenterVertically),
+//                    contentAlignment = Alignment.CenterEnd
+//                ) {
+//                    Row(
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ) {
+//                        Text(
+//                            text = "更多",
+//                            fontSize = 14.sp,
+//                            color = Color(color = 0xff8E8E9E),
+//                        )
+//                        Icon(
+//                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+//                            contentDescription = null,
+//                            modifier = Modifier.size(size = 16.dp),
+//                            tint = Color(color = 0xff8E8E9E),
+//                        )
+//                    }
+//                }
+//            }
+//        }
+//        AppsGrid(list = miniProgramList)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -546,7 +647,7 @@ fun ULAppsPage(
             contentAlignment = Alignment.CenterStart,
         ) {
             Text(
-                text = "我的小程序",
+                text = "常用应用",
                 fontSize = 14.sp,
                 color = Color(color = 0xff8E8E9E),
             )
@@ -644,7 +745,7 @@ fun RecentPlayer(
             modifier = Modifier
                 .height(height = 60.dp)
                 .fillMaxWidth()
-                .clip(shape = RoundedCornerShape(size = 40.dp))
+                .clip(shape = ContinuousCapsule)
                 .background(Color(color = 0xFF434056))
                 .clickable(onClick = animateToFlutter),
             contentAlignment = Alignment.Center
@@ -828,46 +929,26 @@ fun ULEKitPage(
     modifier: Modifier = Modifier,
     animateToApps: () -> Unit = NoOnClick,
 ) {
-//    val lifecycleOwner = LocalLifecycleOwner.current as? ComponentActivity
-//    val backCallback = object : OnBackPressedCallback(true) {
-//        override fun handleOnBackPressed() {
-//            // 你的逻辑
-//            animateToApps()
-//            isEnabled = false // 防止多次触发
-//        }
-//    }
-//    DisposableEffect(Unit) {
-//        lifecycleOwner?.onBackPressedDispatcher?.addCallback(
-//            onBackPressedCallback = backCallback,
-//        )
-//        onDispose {
-//            backCallback.remove()
-//        } // 清理回调以避免内存泄漏
-//    }
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
         ULActionBar(
             modifier = Modifier.padding(
-                start = 16.dp,
-                top = 16.dp,
-                end = 16.dp,
-                bottom = 8.dp,
-            ),
-            title = {
-                Text(text = "EcosedKit")
-            },
-            navigationIcon = {
-                IconButton(
-                    onClick = animateToApps,
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = null
-                    )
-                }
+            start = 16.dp,
+            top = 16.dp,
+            end = 16.dp,
+            bottom = 8.dp,
+        ), title = {
+            Text(text = "EcosedKit")
+        }, navigationIcon = {
+            IconButton(
+                onClick = animateToApps,
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null
+                )
             }
-        )
+        })
         Surface(
             modifier = Modifier
                 .fillMaxSize()
@@ -886,13 +967,6 @@ fun ULEKitPage(
     }
 }
 
-@Preview
-@Composable
-fun UnderLayerPreview() {
-    TrebleKitTheme {
-        UnderLayer()
-    }
-}
 
 data class AppDestination<T>(
     val label: String,
