@@ -1,8 +1,12 @@
 package io.treblekit.app
 
+import android.content.Context
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,10 +22,19 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.FlutterDash
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Search
@@ -53,13 +66,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -74,6 +92,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.window.core.layout.WindowWidthSizeClass
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
+import com.google.accompanist.imageloading.rememberDrawablePainter
 import com.kyant.capsule.ContinuousCapsule
 import com.kyant.capsule.ContinuousRoundedRectangle
 import io.treblekit.app.ui.theme.CapsuleEdgePadding
@@ -81,6 +102,7 @@ import io.treblekit.app.ui.theme.CapsuleHeight
 import io.treblekit.app.ui.theme.CapsuleIndent
 import io.treblekit.app.ui.theme.CapsuleWidth
 import io.treblekit.app.ui.theme.TrebleKitTheme
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Composable
@@ -116,11 +138,41 @@ fun ActivityMainPreview() {
     }
 }
 
+@Serializable
+data object AppsPage
+
+@Serializable
+data object EKitPage
+
+private data class MPPage<T>(
+    val page: Int,
+    val route: T,
+)
+
+private val pages = arrayListOf(
+    MPPage(
+        page = 0,
+        route = AppsPage,
+    ),
+    MPPage(
+        page = 1,
+        route = EKitPage,
+    ),
+)
+
 @Composable
 fun UnderLayer(
     modifier: Modifier = Modifier,
     popBackStack: () -> Unit = NoOnClick,
+    initialPage: Int = getPageWithRoute(
+        route = AppsPage,
+    ),
 ) {
+    val pageState = rememberPagerState(
+        initialPage = initialPage,
+        pageCount = { pages.size },
+    )
+    val coroutineScope = rememberCoroutineScope()
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -131,8 +183,62 @@ fun UnderLayer(
         },
         containerColor = Color(color = 0xff1B1B2B),
     ) { innerPadding ->
-EcosedPage(modifier = Modifier.padding(innerPadding))
+        HorizontalPager(
+            state = pageState,
+            modifier = Modifier.padding(
+                paddingValues = innerPadding,
+            ),
+            userScrollEnabled = false,
+        ) { page ->
+            when (pages[page].route) {
+                AppsPage -> ULAppsPage(
+                    popBackStack = popBackStack,
+                    animateToEcosed = {
+                        coroutineScope.launch {
+                            pageState.animateScrollToPage(
+                                page = getPageWithRoute(
+                                    route = EKitPage,
+                                ),
+                            )
+                        }
+                    },
+                )
+
+                EKitPage  -> ULEKitPage(
+                    animateToApps = {
+                        coroutineScope.launch {
+                            pageState.animateScrollToPage(
+                                page = getPageWithRoute(
+                                    route = AppsPage,
+                                ),
+                            )
+                        }
+                    },
+                )
+
+                else -> Box(
+                    modifier = modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = "未知页面",
+                        color = MaterialTheme.colorScheme.error,
+                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                    )
+                }
+            }
+        }
     }
+}
+
+private fun <T> getPageWithRoute(route: T): Int {
+    var result = 0
+    for (page in pages) {
+        if (page.route == route) {
+            result = page.page
+        }
+    }
+    return result
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -321,10 +427,376 @@ fun ULBottomBar(
 }
 
 @Composable
-fun EcosedPage(
+fun ULAppsPage(
     modifier: Modifier = Modifier,
-    backToApps: () -> Unit = NoOnClick,
+    popBackStack: () -> Unit = NoOnClick,
+    animateToEcosed: () -> Unit = NoOnClick,
+) {
+    val scrollState = rememberScrollState()
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(state = scrollState),
     ) {
+        Box(
+            modifier = Modifier.padding(
+                start = 30.dp,
+                bottom = 15.dp,
+                top = 30.dp,
+            ),
+        ) {
+            Text(
+                text = "音乐和视频",
+                fontSize = 14.sp,
+                color = Color(
+                    color = 0xFF8E8E9E,
+                ),
+            )
+        }
+        MPPlayer(
+            popBackStack = popBackStack,
+            animateToFlutter = animateToEcosed,
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(
+                    start = 30.dp,
+                    bottom = 15.dp,
+                    top = 30.dp,
+                    end = 30.dp,
+                ),
+        ) {
+            Row {
+                Box(
+                    modifier = Modifier.weight(weight = 1f),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    Text(
+                        text = "最近使用小程序",
+                        fontSize = 14.sp,
+                        color = Color(color = 0xff8E8E9E),
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .weight(weight = 1f)
+                        .wrapContentHeight(align = Alignment.CenterVertically),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "更多",
+                            fontSize = 14.sp,
+                            color = Color(color = 0xff8E8E9E),
+                        )
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                            contentDescription = null,
+                            modifier = Modifier.size(size = 16.dp),
+                            tint = Color(color = 0xff8E8E9E),
+                        )
+                    }
+                }
+            }
+        }
+        AppsGrid(list = miniProgramList)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(
+                    start = 30.dp,
+                    bottom = 15.dp,
+                    top = 30.dp,
+                ),
+            contentAlignment = Alignment.CenterStart,
+        ) {
+            Text(
+                text = "我的小程序",
+                fontSize = 14.sp,
+                color = Color(color = 0xff8E8E9E),
+            )
+        }
+        AppsGrid(
+            modifier = Modifier.padding(bottom = 16.dp),
+            list = miniProgramList,
+        )
+    }
+
+//    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+//        Button(onClick = animateToEcosed) {
+//            Text("EKit")
+//        }
+//    }
+    
+}
+
+@OptIn(ExperimentalCoilApi::class)
+@Composable
+fun MPPlayer(
+    modifier: Modifier = Modifier,
+    popBackStack: () -> Unit = NoOnClick,
+    animateToFlutter: () -> Unit = NoOnClick,
+) {
+    val context: Context = LocalContext.current
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp, end = 20.dp)
+            .height(height = 90.dp),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(weight = 1f),
+        ) {
+            AppItem(
+                modifier = Modifier
+                    .weight(weight = 1f)
+                    .fillMaxSize(),
+                style = AppItemStyle.Image,
+                appIcon = rememberDrawablePainter(
+                    drawable = AppCompatResources.getDrawable(
+                        context,
+                        R.mipmap.ic_launcher,
+                    ),
+                ),
+                appName = "EKit",
+            )
+            AppItem(
+                modifier = Modifier
+                    .weight(weight = 1f)
+                    .fillMaxSize(),
+                onLaunch = popBackStack,
+                style = AppItemStyle.Image,
+                appIcon = rememberDrawablePainter(
+                    drawable = AppCompatResources.getDrawable(
+                        context,
+                        R.mipmap.ic_launcher,
+                    ),
+                ),
+                appName = "EbKit",
+            )
+        }
+        RecentPlayer(
+            modifier = Modifier
+                .weight(weight = 1f)
+                .padding(start = 16.dp)
+                .fillMaxSize(),
+            animateToFlutter = animateToFlutter,
+        )
+    }
+}
+
+@Preview
+@Composable
+fun MPPlayerPreview() {
+    TrebleKitTheme {
+        MPPlayer()
+    }
+}
+
+@Composable
+fun RecentPlayer(
+    modifier: Modifier = Modifier,
+    animateToFlutter: () -> Unit = NoOnClick,
+) {
+    Column(
+        modifier = modifier.wrapContentSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Box(
+            modifier = Modifier
+                .height(height = 60.dp)
+                .fillMaxWidth()
+                .clip(shape = RoundedCornerShape(size = 40.dp))
+                .background(Color(color = 0xFF434056))
+                .clickable(onClick = animateToFlutter),
+            contentAlignment = Alignment.Center
+        ) {
+            Row(
+                modifier = Modifier.wrapContentSize(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.FlutterDash,
+                    contentDescription = null,
+                    modifier = Modifier.size(size = 30.dp),
+                    tint = Color(color = 0xFF8E8E9E)
+                )
+                Text(
+                    text = "暂无内容",
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .padding(start = 10.dp),
+                    fontSize = 16.sp,
+                    color = Color(color = 0xFF8E8E9E),
+                    textAlign = TextAlign.Center,
+                )
+            }
+        }
+        Text(
+            text = "Flutter",
+            fontSize = 15.sp,
+            color = Color.White,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Preview
+@Composable
+fun RecentPlayerPreview() {
+    TrebleKitTheme {
+        RecentPlayer()
+    }
+}
+
+data class MiniProgramItem(
+    /** 名称 */
+    val title: String,
+    /** 图标 */
+    val icon: String,
+)
+
+@OptIn(ExperimentalCoilApi::class)
+@Composable
+fun AppsGrid(
+    modifier: Modifier = Modifier,
+    list: ArrayList<MiniProgramItem>,
+) {
+    LazyVerticalGrid(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(start = 15.dp, end = 15.dp)
+            .height(height = 180.dp),
+        horizontalArrangement = Arrangement.spacedBy(space = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(space = 10.dp),
+        columns = GridCells.Fixed(count = 4),
+        userScrollEnabled = false,
+    ) {
+        items(items = list) { item ->
+            Box {
+                AppItem(
+                    style = AppItemStyle.Image,
+                    appIcon = rememberImagePainter(data = item.icon),
+                    appName = item.title,
+                )
+            }
+        }
+    }
+}
+
+val miniProgramList: ArrayList<MiniProgramItem> = arrayListOf(
+    MiniProgramItem(
+        title = "饿了么",
+        icon = "https://img0.baidu.com/it/u=2625005847,2716895016&fm=253&fmt=auto&app=138&f=JPEG?w=200&h=200"
+    ),
+    MiniProgramItem(
+        title = "美图",
+        icon = "https://img1.baidu.com/it/u=1752963805,4078506746&fm=253&fmt=auto&app=138&f=JPEG?w=200&h=200"
+    ),
+    MiniProgramItem(
+        title = "滴滴",
+        icon = "https://img0.baidu.com/it/u=1068101613,1323308017&fm=253&fmt=auto&app=138&f=PNG?w=200&h=200"
+    ),
+    MiniProgramItem(
+        title = "青橘单车",
+        icon = "https://img0.baidu.com/it/u=195120191,2939897897&fm=253&fmt=auto&app=138&f=PNG?w=190&h=190"
+    ),
+    MiniProgramItem(
+        title = "斗地主",
+        icon = "https://img2.baidu.com/it/u=926635057,1451495262&fm=253&fmt=auto&app=138&f=PNG?w=190&h=190"
+    ),
+    MiniProgramItem(
+        title = "羊城通",
+        icon = "https://img2.baidu.com/it/u=2751300851,4181594410&fm=253&fmt=auto&app=138&f=JPEG?w=200&h=200"
+    ),
+    MiniProgramItem(
+        title = "美图秀秀",
+        icon = "https://img1.baidu.com/it/u=417359459,147216874&fm=253&fmt=auto&app=138&f=PNG?w=200&h=200"
+    ),
+    MiniProgramItem(
+        title = "拼多多",
+        icon = "https://img2.baidu.com/it/u=620052409,134315960&fm=253&fmt=auto&app=138&f=PNG?w=190&h=190"
+    ),
+)
+
+enum class AppItemStyle {
+    Image, Icon,
+}
+
+@Composable
+fun AppItem(
+    modifier: Modifier = Modifier,
+    onLaunch: () -> Unit = NoOnClick,
+    style: AppItemStyle,
+    appIcon: Painter,
+    appName: String,
+) {
+    Column(
+        modifier = modifier.wrapContentSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(size = 60.dp)
+                .clip(shape = RoundedCornerShape(size = 35.dp))
+                .background(color = Color(color = 0xff434056))
+                .clickable(onClick = onLaunch),
+            contentAlignment = Alignment.Center,
+        ) {
+            Image(
+                painter = appIcon,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = when (style) {
+                    AppItemStyle.Image -> Modifier
+                        .fillMaxSize()
+                        .clip(
+                            shape = RoundedCornerShape(
+                                size = 35.dp,
+                            ),
+                        )
+
+                    AppItemStyle.Icon -> Modifier.size(
+                        size = 30.dp,
+                    )
+                }
+            )
+        }
+        Text(
+            text = appName,
+            fontSize = 15.sp,
+            color = Color.White,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AppItemPreview() {
+    TrebleKitTheme {
+        AppItem(
+            style = AppItemStyle.Icon,
+            appIcon = painterResource(id = R.drawable.baseline_preview_24),
+            appName = "Preview",
+        )
+    }
+}
+
+@Composable
+fun ULEKitPage(
+    modifier: Modifier = Modifier,
+    animateToApps: () -> Unit = NoOnClick,
+) {
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -339,8 +811,13 @@ fun EcosedPage(
                 Text(text = "EcosedKit")
             },
             navigationIcon = {
-                IconButton(onClick = backToApps) {
-                    Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+                IconButton(
+                    onClick = animateToApps,
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = null
+                    )
                 }
             }
         )
@@ -355,10 +832,11 @@ fun EcosedPage(
                 ),
             shape = ContinuousRoundedRectangle(size = 16.dp),
         ) {
-            FlutterView(modifier = Modifier.fillMaxSize())
+            FlutterView(
+                modifier = Modifier.fillMaxSize(),
+            )
         }
     }
-
 }
 
 @Preview
