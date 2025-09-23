@@ -1,6 +1,8 @@
 package io.treblekit.app
 
 import android.content.Context
+import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -63,6 +65,8 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -74,6 +78,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource.Companion.SideEffect
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -84,6 +89,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -108,6 +114,27 @@ import kotlinx.serialization.Serializable
 @Composable
 fun ActivityMain(modifier: Modifier = Modifier) {
     var underLayerVisible: Boolean by remember { mutableStateOf(value = false) }
+//    val lifecycleOwner = LocalLifecycleOwner.current as? ComponentActivity
+//    val backCallback = object : OnBackPressedCallback(true) {
+//        override fun handleOnBackPressed() {
+//            // 你的逻辑
+////            popBackStack()
+//            underLayerVisible = false
+//            isEnabled = false // 防止多次触发
+//        }
+//    }
+//
+//    DisposableEffect(Unit) {
+//        if (underLayerVisible) {
+//            lifecycleOwner?.onBackPressedDispatcher?.addCallback(
+//                onBackPressedCallback = backCallback,
+//            )
+//        }
+//
+//        onDispose {
+//            backCallback.remove()
+//        } // 清理回调以避免内存泄漏
+//    }
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
@@ -118,7 +145,8 @@ fun ActivityMain(modifier: Modifier = Modifier) {
             },
         )
         AnimatedVisibility(
-            visible = !underLayerVisible, modifier = Modifier.fillMaxSize()
+            visible = !underLayerVisible,
+            modifier = Modifier.fillMaxSize(),
         ) {
             NavigationRoot(
                 modifier = Modifier.fillMaxSize(),
@@ -185,9 +213,11 @@ fun UnderLayer(
     ) { innerPadding ->
         HorizontalPager(
             state = pageState,
-            modifier = Modifier.padding(
-                paddingValues = innerPadding,
-            ),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    paddingValues = innerPadding,
+                ),
             userScrollEnabled = false,
         ) { page ->
             when (pages[page].route) {
@@ -204,7 +234,7 @@ fun UnderLayer(
                     },
                 )
 
-                EKitPage  -> ULEKitPage(
+                EKitPage -> ULEKitPage(
                     animateToApps = {
                         coroutineScope.launch {
                             pageState.animateScrollToPage(
@@ -532,7 +562,7 @@ fun ULAppsPage(
 //            Text("EKit")
 //        }
 //    }
-    
+
 }
 
 @OptIn(ExperimentalCoilApi::class)
@@ -558,6 +588,7 @@ fun MPPlayer(
                 modifier = Modifier
                     .weight(weight = 1f)
                     .fillMaxSize(),
+                onLaunch = popBackStack,
                 style = AppItemStyle.Image,
                 appIcon = rememberDrawablePainter(
                     drawable = AppCompatResources.getDrawable(
@@ -565,13 +596,13 @@ fun MPPlayer(
                         R.mipmap.ic_launcher,
                     ),
                 ),
-                appName = "EKit",
+                appName = "TrebleKit",
             )
             AppItem(
                 modifier = Modifier
                     .weight(weight = 1f)
                     .fillMaxSize(),
-                onLaunch = popBackStack,
+                onLaunch = {},
                 style = AppItemStyle.Image,
                 appIcon = rememberDrawablePainter(
                     drawable = AppCompatResources.getDrawable(
@@ -640,7 +671,7 @@ fun RecentPlayer(
             }
         }
         Text(
-            text = "Flutter",
+            text = "Ecosed",
             fontSize = 15.sp,
             color = Color.White,
             textAlign = TextAlign.Center,
@@ -797,6 +828,22 @@ fun ULEKitPage(
     modifier: Modifier = Modifier,
     animateToApps: () -> Unit = NoOnClick,
 ) {
+//    val lifecycleOwner = LocalLifecycleOwner.current as? ComponentActivity
+//    val backCallback = object : OnBackPressedCallback(true) {
+//        override fun handleOnBackPressed() {
+//            // 你的逻辑
+//            animateToApps()
+//            isEnabled = false // 防止多次触发
+//        }
+//    }
+//    DisposableEffect(Unit) {
+//        lifecycleOwner?.onBackPressedDispatcher?.addCallback(
+//            onBackPressedCallback = backCallback,
+//        )
+//        onDispose {
+//            backCallback.remove()
+//        } // 清理回调以避免内存泄漏
+//    }
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
