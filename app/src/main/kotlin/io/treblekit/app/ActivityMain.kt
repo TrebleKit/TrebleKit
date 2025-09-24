@@ -37,6 +37,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FlutterDash
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
@@ -180,7 +181,7 @@ fun UnderLayer(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
-            ULTopBar()
+            ULTopBar(popBackStack = popBackStack)
         },
         bottomBar = {
             ULBottomBar(popBackStack = popBackStack)
@@ -263,7 +264,6 @@ fun ULActionBar(
     modifier: Modifier = Modifier,
     title: @Composable () -> Unit = {},
     navigationIcon: @Composable () -> Unit = {},
-    actions: @Composable RowScope.() -> Unit = {},
 ) {
     Surface(
         modifier = modifier
@@ -278,70 +278,10 @@ fun ULActionBar(
                 .fillMaxWidth()
                 .wrapContentHeight(),
             navigationIcon = navigationIcon,
-            actions = actions,
-            windowInsets = WindowInsets(),
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent,
-            ),
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ULTopBar(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-    ) {
-        CenterAlignedTopAppBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            title = {
-                Text(
-                    text = "Under",
-                    color = Color.White,
-                )
-            },
-            navigationIcon = {
-                Box(
-                    modifier = Modifier
-                        .padding(start = CapsuleEdgePadding)
-                        .width(width = CapsuleWidth)
-                        .height(height = CapsuleHeight)
-                        .clip(shape = ContinuousCapsule)
-                        .background(color = Color(color = 0xff434056))
-                        .clickable(onClick = {}),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Row(
-                        modifier = Modifier.wrapContentSize(),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Search,
-                            contentDescription = null,
-                            modifier = Modifier.size(size = 20.dp),
-                            tint = Color(color = 0xff8E8E9E)
-                        )
-                        Text(
-                            text = "搜索",
-                            modifier = Modifier
-                                .wrapContentSize()
-                                .padding(start = 6.dp),
-                            fontSize = 13.sp,
-                            color = Color(color = 0xff8E8E9E),
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-                }
-            },
             actions = {
                 Row(
                     modifier = Modifier
-                        .padding(end = CapsuleEdgePadding)
+                        .padding(end = CapsuleEdgePadding - 4.dp)
                         .height(height = CapsuleHeight)
                         .width(width = CapsuleWidth)
                         .clip(shape = ContinuousCapsule)
@@ -383,6 +323,55 @@ fun ULTopBar(modifier: Modifier = Modifier) {
                     }
                 }
             },
+            windowInsets = WindowInsets(),
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+            ),
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ULTopBar(
+    modifier: Modifier = Modifier,
+    popBackStack: () -> Unit = NoOnClick,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+    ) {
+        CenterAlignedTopAppBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            title = {
+                Text(
+                    text = "应用",
+                    color = Color.White,
+                )
+            },
+            navigationIcon = {
+                IconButton(
+                    onClick = popBackStack,
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = null,
+                    )
+                }
+            },
+            actions = {
+                IconButton(
+                    onClick = NoOnClick,
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.MoreVert,
+                        contentDescription = null,
+                    )
+                }
+            },
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                 containerColor = Color.Transparent,
             ),
@@ -390,7 +379,9 @@ fun ULTopBar(modifier: Modifier = Modifier) {
         HorizontalDivider(
             modifier = Modifier.fillMaxWidth(),
             thickness = 0.5.dp,
-            color = Color(color = 0x22000000)
+            color = Color.Black.copy(
+                alpha = 0.2f
+            )
         )
     }
 }
@@ -455,211 +446,149 @@ fun ULAppsPage(
             .fillMaxSize()
             .verticalScroll(state = scrollState),
     ) {
-        Box(
+        Text(
+            text = "核心服务",
             modifier = Modifier.padding(
                 start = 30.dp,
-                bottom = 15.dp,
                 top = 30.dp,
+                end = 30.dp,
+                bottom = 15.dp,
             ),
-        ) {
-            Text(
-                text = "核心服务",
-                fontSize = 14.sp,
-                color = Color(
-                    color = 0xFF8E8E9E,
-                ),
-            )
-        }
+            fontSize = 14.sp,
+            color = Color(
+                color = 0xFF8E8E9E,
+            ),
+        )
         MPPlayer(
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp),
             popBackStack = popBackStack,
             animateToFlutter = animateToEcosed,
         )
-        Box(
-            modifier = Modifier.padding(
-                start = 30.dp,
-                bottom = 15.dp,
-                top = 30.dp,
-            ),
-        ) {
-            Text(
-                text = "互联互通",
-                fontSize = 14.sp,
-                color = Color(
-                    color = 0xFF8E8E9E,
-                ),
-            )
-        }
-
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .padding(
-                    start = 20.dp, top = 0.dp, end = 20.dp, bottom = 15.dp
+                    start = 16.dp, top = 15.dp, end = 16.dp, bottom = 15.dp
                 ),
             shape = ContinuousRoundedRectangle(size = 16.dp),
             color = Color(color = 0xFF434056)
         ) {
-            Row(
+            Column(
                 modifier = Modifier.padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(space = 10.dp),
             ) {
-                Column(
-                    modifier = modifier.wrapContentSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(size = 40.dp)
-                            .clip(shape = RoundedCornerShape(size = 35.dp))
-                            .background(color = Color(color = 0xFF8E8E9E))
-                            .clickable(onClick = {}),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Add,
-                            contentDescription = null,
-                        )
-                    }
+                Row {
                     Text(
-                        text = "app",
-                        fontSize = 15.sp,
-                        color = Color.White,
-                        textAlign = TextAlign.Center,
-//                            modifier = Modifier.fillMaxWidth()
+                        text = "互联互通",
+                        fontSize = 14.sp,
+                        color = Color(
+                            color = 0xFF8E8E9E,
+                        ),
                     )
                 }
-                Column(
-                    modifier = modifier.wrapContentSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                Row(
+                    modifier = Modifier,
+                    horizontalArrangement = Arrangement.spacedBy(space = 10.dp),
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .size(size = 40.dp)
-                            .clip(shape = RoundedCornerShape(size = 35.dp))
-                            .background(color = Color(color = 0xFF8E8E9E))
-                            .clickable(onClick = {}),
-                        contentAlignment = Alignment.Center,
+                    Column(
+                        modifier = modifier.wrapContentSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.Add,
-                            contentDescription = null,
+                        Box(
+                            modifier = Modifier
+                                .size(size = 40.dp)
+                                .clip(shape = RoundedCornerShape(size = 35.dp))
+                                .background(color = Color(color = 0xFF8E8E9E))
+                                .clickable(onClick = {}),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Add,
+                                contentDescription = null,
+                            )
+                        }
+                        Text(
+                            text = "app",
+                            fontSize = 15.sp,
+                            color = Color.White,
+                            textAlign = TextAlign.Center,
                         )
                     }
-                    Text(
-                        text = "app",
-                        fontSize = 15.sp,
-                        color = Color.White,
-                        textAlign = TextAlign.Center,
-//                            modifier = Modifier.fillMaxWidth()
-                    )
-                }
-                Column(
-                    modifier = modifier.wrapContentSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(size = 40.dp)
-                            .clip(shape = RoundedCornerShape(size = 35.dp))
-                            .background(color = Color(color = 0xFF8E8E9E))
-                            .clickable(onClick = {}),
-                        contentAlignment = Alignment.Center,
+                    Column(
+                        modifier = modifier.wrapContentSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.Add,
-                            contentDescription = null,
+                        Box(
+                            modifier = Modifier
+                                .size(size = 40.dp)
+                                .clip(shape = RoundedCornerShape(size = 35.dp))
+                                .background(color = Color(color = 0xFF8E8E9E))
+                                .clickable(onClick = {}),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Add,
+                                contentDescription = null,
+                            )
+                        }
+                        Text(
+                            text = "app",
+                            fontSize = 15.sp,
+                            color = Color.White,
+                            textAlign = TextAlign.Center,
                         )
                     }
-                    Text(
-                        text = "app",
-                        fontSize = 15.sp,
-                        color = Color.White,
-                        textAlign = TextAlign.Center,
-//                            modifier = Modifier.fillMaxWidth()
-                    )
-                }
+                    Column(
+                        modifier = modifier.wrapContentSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(size = 40.dp)
+                                .clip(shape = RoundedCornerShape(size = 35.dp))
+                                .background(color = Color(color = 0xFF8E8E9E))
+                                .clickable(onClick = {}),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Add,
+                                contentDescription = null,
+                            )
+                        }
+                        Text(
+                            text = "app",
+                            fontSize = 15.sp,
+                            color = Color.White,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
 
 
+                }
             }
         }
-
-//        Box(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .wrapContentHeight()
-//                .padding(
-//                    start = 30.dp,
-//                    bottom = 15.dp,
-//                    top = 30.dp,
-//                    end = 30.dp,
-//                ),
-//        ) {
-//            Row {
-//                Box(
-//                    modifier = Modifier.weight(weight = 1f),
-//                    contentAlignment = Alignment.CenterStart
-//                ) {
-//                    Text(
-//                        text = "最近使用小程序",
-//                        fontSize = 14.sp,
-//                        color = Color(color = 0xff8E8E9E),
-//                    )
-//                }
-//                Box(
-//                    modifier = Modifier
-//                        .weight(weight = 1f)
-//                        .wrapContentHeight(align = Alignment.CenterVertically),
-//                    contentAlignment = Alignment.CenterEnd
-//                ) {
-//                    Row(
-//                        verticalAlignment = Alignment.CenterVertically
-//                    ) {
-//                        Text(
-//                            text = "更多",
-//                            fontSize = 14.sp,
-//                            color = Color(color = 0xff8E8E9E),
-//                        )
-//                        Icon(
-//                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-//                            contentDescription = null,
-//                            modifier = Modifier.size(size = 16.dp),
-//                            tint = Color(color = 0xff8E8E9E),
-//                        )
-//                    }
-//                }
-//            }
-//        }
-//        AppsGrid(list = miniProgramList)
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(
-                    start = 30.dp,
-                    bottom = 15.dp,
-                    top = 30.dp,
-                ),
-            contentAlignment = Alignment.CenterStart,
-        ) {
-            Text(
-                text = "常用应用",
-                fontSize = 14.sp,
-                color = Color(color = 0xff8E8E9E),
-            )
-        }
+        Text(
+            text = "常用应用",
+            modifier = Modifier.padding(
+                start = 30.dp,
+                top = 30.dp,
+                end = 30.dp,
+                bottom = 15.dp,
+            ),
+            fontSize = 14.sp,
+            color = Color(
+                color = 0xFF8E8E9E,
+            ),
+        )
         AppsGrid(
-            modifier = Modifier.padding(bottom = 16.dp),
+            modifier = Modifier.padding(
+                start = 16.dp,
+                end = 16.dp,
+                bottom = 16.dp,
+            ),
             list = miniProgramList,
         )
     }
-
-//    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-//        Button(onClick = animateToEcosed) {
-//            Text("EKit")
-//        }
-//    }
-
 }
 
 @OptIn(ExperimentalCoilApi::class)
@@ -673,7 +602,6 @@ fun MPPlayer(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 20.dp, end = 20.dp)
             .height(height = 90.dp),
     ) {
         Row(
@@ -801,7 +729,6 @@ fun AppsGrid(
     LazyVerticalGrid(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 15.dp, end = 15.dp)
             .height(height = 180.dp),
         horizontalArrangement = Arrangement.spacedBy(space = 10.dp),
         verticalArrangement = Arrangement.spacedBy(space = 10.dp),
