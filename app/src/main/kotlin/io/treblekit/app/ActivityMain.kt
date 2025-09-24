@@ -1,8 +1,6 @@
 package io.treblekit.app
 
 import android.content.Context
-import androidx.activity.ComponentActivity
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -24,7 +22,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -35,8 +32,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Adb
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FlutterDash
@@ -48,7 +43,6 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -68,10 +62,6 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -83,10 +73,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource.Companion.SideEffect
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -94,7 +82,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -113,6 +100,7 @@ import io.treblekit.app.ui.theme.CapsuleHeight
 import io.treblekit.app.ui.theme.CapsuleIndent
 import io.treblekit.app.ui.theme.CapsuleWidth
 import io.treblekit.app.ui.theme.TrebleKitTheme
+import io.treblekit.app.ui.theme.UnderTheme
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
@@ -123,21 +111,25 @@ fun ActivityMain(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
-        UnderLayer(
-            popBackStack = {
-                underLayerVisible = false
-            },
-        )
-        AnimatedVisibility(
-            visible = !underLayerVisible,
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            NavigationRoot(
-                modifier = Modifier.fillMaxSize(),
-                showUnderLayer = {
-                    underLayerVisible = true
+        UnderTheme {
+            UnderLayer(
+                popBackStack = {
+                    underLayerVisible = false
                 },
             )
+        }
+        TrebleKitTheme {
+            AnimatedVisibility(
+                visible = !underLayerVisible,
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                NavigationRoot(
+                    modifier = Modifier.fillMaxSize(),
+                    showUnderLayer = {
+                        underLayerVisible = true
+                    },
+                )
+            }
         }
     }
 }
@@ -277,7 +269,7 @@ fun ULActionBar(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight(),
-        shape = MaterialTheme.shapes.medium,
+        shape = ContinuousRoundedRectangle(size = 16.dp),
         color = MaterialTheme.colorScheme.primaryContainer,
     ) {
         TopAppBar(
@@ -433,8 +425,8 @@ fun ULBottomBar(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 text = {
-                Text(text = "返回")
-            },
+                    Text(text = "返回")
+                },
                 icon = {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -443,6 +435,7 @@ fun ULBottomBar(
                 },
                 onClick = popBackStack,
                 modifier = Modifier.wrapContentSize(),
+                shape = ContinuousRoundedRectangle(16.dp),
                 elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
             )
         },
@@ -498,9 +491,12 @@ fun ULAppsPage(
         }
 
         Surface(
-            modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(
-                start = 20.dp, top = 0.dp, end = 20.dp, bottom = 15.dp
-            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(
+                    start = 20.dp, top = 0.dp, end = 20.dp, bottom = 15.dp
+                ),
             shape = ContinuousRoundedRectangle(size = 16.dp),
             color = Color(color = 0xFF434056)
         ) {
@@ -934,21 +930,24 @@ fun ULEKitPage(
     ) {
         ULActionBar(
             modifier = Modifier.padding(
-            start = 16.dp,
-            top = 16.dp,
-            end = 16.dp,
-            bottom = 8.dp,
-        ), title = {
-            Text(text = "EcosedKit")
-        }, navigationIcon = {
-            IconButton(
-                onClick = animateToApps,
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null
-                )
-            }
-        })
+                start = 16.dp,
+                top = 16.dp,
+                end = 16.dp,
+                bottom = 8.dp,
+            ),
+            title = {
+                Text(text = "EcosedKit")
+            },
+            navigationIcon = {
+                IconButton(
+                    onClick = animateToApps,
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null
+                    )
+                }
+            },
+        )
         Surface(
             modifier = Modifier
                 .fillMaxSize()

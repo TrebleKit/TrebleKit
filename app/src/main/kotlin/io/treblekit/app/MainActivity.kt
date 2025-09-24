@@ -60,9 +60,7 @@ class MainActivity : AppCompatActivity(), IViewFactory, FlutterEngineConfigurato
         }
         mFlutterFragment = loadFlutterFragment()
         setContent {
-            TrebleKitTheme {
-                ActivityMain()
-            }
+            ActivityMain()
         }
     }
 
@@ -121,8 +119,6 @@ class MainActivity : AppCompatActivity(), IViewFactory, FlutterEngineConfigurato
     )
     @Composable
     private fun MainActivityPreview() {
-        TrebleKitTheme {
-            ActivityMain()
-        }
+        ActivityMain()
     }
 }
