@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:freefeos/freefeos.dart';
 import 'package:multi_builder/multi_builder.dart';
 
+import 'capsule_placeholder.dart';
 import 'theme.dart';
 
 void main() => runApp(const MyApp());
@@ -32,37 +33,63 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: Colors.blue,
-        // title: Text('TrebleKit'),
+        title: Text('EcosedKit'),
+        actions: const [CapsulePlaceholder()],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+      body: Column(children: [Header(), StateCard()]),
+    );
+  }
+}
+
+class Header extends StatelessWidget {
+  const Header({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 30),
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.asset('assets/logo.png', width: 56),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 16),
+            child: Text(
+              'EcosedKit',
+              style: Theme.of(context).textTheme.titleLarge,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class StateCard extends StatelessWidget {
+  const StateCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.all(16),
+      color: Theme.of(context).colorScheme.primaryContainer,
+      child: ListTile(
+        leading: Icon(Icons.check_circle_outline),
+        title: Text('一切正常'),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('AppID: xxxxxx'),
+            Text('版本: 1.0.0'),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
       ),
     );
   }

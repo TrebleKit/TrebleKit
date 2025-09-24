@@ -12,12 +12,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
@@ -33,9 +35,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FlutterDash
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.KeyboardCommandKey
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
@@ -78,6 +82,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -181,10 +188,30 @@ fun UnderLayer(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
-            ULTopBar(popBackStack = popBackStack)
+            ULTopBar()
         },
         bottomBar = {
-            ULBottomBar(popBackStack = popBackStack)
+            ULBottomBar(
+                popBackStack = popBackStack,
+                animateToApps = {
+                    coroutineScope.launch {
+                        pageState.animateScrollToPage(
+                            page = getPageWithRoute(
+                                route = AppsPage,
+                            ),
+                        )
+                    }
+                },
+                animateToEcosed = {
+                    coroutineScope.launch {
+                        pageState.animateScrollToPage(
+                            page = getPageWithRoute(
+                                route = EKitPage,
+                            ),
+                        )
+                    }
+                },
+            )
         },
         containerColor = Color(color = 0xff1B1B2B),
     ) { innerPadding ->
@@ -268,7 +295,7 @@ fun ULActionBar(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .wrapContentHeight(),
+            .height(height = 56.dp),
         shape = ContinuousRoundedRectangle(size = 16.dp),
         color = MaterialTheme.colorScheme.primaryContainer,
     ) {
@@ -279,9 +306,78 @@ fun ULActionBar(
                 .wrapContentHeight(),
             navigationIcon = navigationIcon,
             actions = {
+                IconButton(onClick = NoOnClick) {
+                    Icon(
+                        imageVector = Icons.Filled.MoreVert,
+                        contentDescription = null,
+                    )
+                }
+            },
+            windowInsets = WindowInsets(),
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+            ),
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ULTopBar(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+    ) {
+        CenterAlignedTopAppBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            title = {
+                Text(
+                    text = "应用",
+                    color = Color.White,
+                )
+            },
+            navigationIcon = {
+                Box(
+                    modifier = Modifier
+                        .padding(start = CapsuleEdgePadding)
+                        .width(width = CapsuleWidth)
+                        .height(height = CapsuleHeight)
+                        .clip(shape = ContinuousCapsule)
+                        .background(color = Color(color = 0xff434056))
+                        .clickable(onClick = {}),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Row(
+                        modifier = Modifier.wrapContentSize(),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = null,
+                            modifier = Modifier.size(size = 20.dp),
+                            tint = Color(color = 0xff8E8E9E)
+                        )
+                        Text(
+                            text = "搜索",
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(start = 6.dp),
+                            fontSize = 13.sp,
+                            color = Color(color = 0xff8E8E9E),
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                }
+            },
+            actions = {
                 Row(
                     modifier = Modifier
-                        .padding(end = CapsuleEdgePadding - 4.dp)
+                        .padding(end = CapsuleEdgePadding)
                         .height(height = CapsuleHeight)
                         .width(width = CapsuleWidth)
                         .clip(shape = ContinuousCapsule)
@@ -323,55 +419,6 @@ fun ULActionBar(
                     }
                 }
             },
-            windowInsets = WindowInsets(),
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent,
-            ),
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ULTopBar(
-    modifier: Modifier = Modifier,
-    popBackStack: () -> Unit = NoOnClick,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-    ) {
-        CenterAlignedTopAppBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            title = {
-                Text(
-                    text = "应用",
-                    color = Color.White,
-                )
-            },
-            navigationIcon = {
-                IconButton(
-                    onClick = popBackStack,
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Close,
-                        contentDescription = null,
-                    )
-                }
-            },
-            actions = {
-                IconButton(
-                    onClick = NoOnClick,
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.MoreVert,
-                        contentDescription = null,
-                    )
-                }
-            },
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                 containerColor = Color.Transparent,
             ),
@@ -390,6 +437,8 @@ fun ULTopBar(
 fun ULBottomBar(
     modifier: Modifier = Modifier,
     popBackStack: () -> Unit = NoOnClick,
+    animateToApps: () -> Unit = {},
+    animateToEcosed: () -> Unit = {},
 ) {
     BottomAppBar(
         modifier = modifier
@@ -401,9 +450,14 @@ fun ULBottomBar(
                     topEnd = 16.dp,
                 ),
             ),
+        containerColor = Color(color = 0xff787493),
         actions = {
             Text(
-                modifier = Modifier.padding(start = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(start = 16.dp)
+                    .weight(weight = 1f),
                 text = stringResource(id = R.string.app_name),
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,
@@ -414,23 +468,85 @@ fun ULBottomBar(
             )
         },
         floatingActionButton = {
-            ExtendedFloatingActionButton(
-                text = {
-                    Text(text = "返回")
-                },
-                icon = {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = null,
-                    )
-                },
-                onClick = popBackStack,
+            Row {
+                ULNavBlock(
+                    animateToApps = animateToApps,
+                    animateToEcosed = animateToEcosed,
+                )
+                ULPopFAB(
+                    popBackStack = popBackStack,
+                )
+            }
+        }
+    )
+}
+
+@Composable
+fun ULNavBlock(
+    modifier: Modifier = Modifier,
+    animateToApps: () -> Unit = {},
+    animateToEcosed: () -> Unit = {},
+) {
+    Surface(
+        modifier = modifier
+            .wrapContentSize()
+            .sizeIn(minWidth = 80.dp)
+            .padding(end = 4.dp),
+        shape = ContinuousRoundedRectangle(size = 16.dp),
+        color = MaterialTheme.colorScheme.primaryContainer,
+    ) {
+        Row(
+            modifier = Modifier
+                .wrapContentSize()
+                .defaultMinSize(minHeight = 56.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            IconButton(
+                onClick = animateToApps,
                 modifier = Modifier.wrapContentSize(),
-                shape = ContinuousRoundedRectangle(16.dp),
-                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Apps,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+            }
+            IconButton(
+                onClick = animateToEcosed,
+                modifier = Modifier.wrapContentSize(),
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.KeyboardCommandKey,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ULPopFAB(
+    modifier: Modifier = Modifier,
+    popBackStack: () -> Unit = NoOnClick,
+) {
+    ExtendedFloatingActionButton(
+        text = {
+            Text(text = "返回")
+        },
+        icon = {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = null,
             )
         },
-        containerColor = Color(color = 0xff787493),
+        onClick = popBackStack,
+        modifier = modifier
+            .wrapContentSize()
+            .padding(start = 4.dp),
+        shape = ContinuousRoundedRectangle(size = 16.dp),
+        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
     )
 }
 

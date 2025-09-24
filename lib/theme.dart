@@ -120,6 +120,7 @@ class MaterialTheme {
     colorScheme: colorScheme,
     canvasColor: colorScheme.surface,
     appBarTheme: AppBarTheme(
+      centerTitle: true,
       systemOverlayStyle: SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.transparent,
         systemNavigationBarDividerColor: Colors.transparent,
