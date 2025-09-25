@@ -1,13 +1,12 @@
 package io.treblekit.app
 
-import android.app.Application
 import com.google.android.material.color.DynamicColors
+import io.treblekit.app.hybrid.HybridApplication
 
-class MainApp : Application() {
+class MainApp : HybridApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        loadFlutter()
         DynamicColors.applyToActivitiesIfAvailable(this@MainApp)
     }
 }

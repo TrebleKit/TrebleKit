@@ -1,4 +1,4 @@
-package io.treblekit.app
+package io.treblekit.app.ui
 
 import android.content.Context
 import androidx.appcompat.content.res.AppCompatResources
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -80,11 +79,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -103,18 +100,27 @@ import coil.compose.rememberImagePainter
 import com.google.accompanist.imageloading.rememberDrawablePainter
 import com.kyant.capsule.ContinuousCapsule
 import com.kyant.capsule.ContinuousRoundedRectangle
+import io.treblekit.app.R
+import io.treblekit.app.hybrid.FlutterView
 import io.treblekit.app.ui.theme.CapsuleEdgePadding
 import io.treblekit.app.ui.theme.CapsuleHeight
 import io.treblekit.app.ui.theme.CapsuleIndent
 import io.treblekit.app.ui.theme.CapsuleWidth
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.theme.UnderTheme
+import io.treblekit.app.ui.utils.NoOnClick
+import io.treblekit.app.ui.utils.SystemBarAdapter
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Composable
 fun ActivityMain(modifier: Modifier = Modifier) {
-    var underLayerVisible: Boolean by remember { mutableStateOf(value = false) }
+    var underLayerVisible: Boolean by remember {
+        return@remember mutableStateOf(value = false)
+    }
+    SystemBarAdapter(
+        isLight = !underLayerVisible,
+    )
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
@@ -267,9 +273,25 @@ fun UnderLayer(
 
 @Preview
 @Composable
-fun UnderLayerPreview() {
-    TrebleKitTheme {
-        UnderLayer()
+fun UnderLayerAppsPreview() {
+    UnderTheme {
+        UnderLayer(
+            initialPage = getPageWithRoute(
+                route = AppsPage,
+            ),
+        )
+    }
+}
+
+@Preview
+@Composable
+fun UnderLayerEKitPreview() {
+    UnderTheme {
+        UnderLayer(
+            initialPage = getPageWithRoute(
+                route = EKitPage,
+            ),
+        )
     }
 }
 
@@ -963,11 +985,16 @@ private fun AppItemPreview() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ULEKitPage(
     modifier: Modifier = Modifier,
     animateToApps: () -> Unit = NoOnClick,
 ) {
+    val inspection: Boolean = LocalInspectionMode.current
+    val inspectionModeText: String = stringResource(
+        id = R.string.inspection_mode_text,
+    )
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -1002,9 +1029,31 @@ fun ULEKitPage(
                 ),
             shape = ContinuousRoundedRectangle(size = 16.dp),
         ) {
-            FlutterView(
-                modifier = Modifier.fillMaxSize(),
-            )
+            if (!inspection) {
+                FlutterView(
+                    modifier = Modifier.fillMaxSize(),
+                )
+            } else {
+                Scaffold(
+                    contentWindowInsets = WindowInsets(),
+                    topBar = {
+                        CenterAlignedTopAppBar(
+                            title = {
+                                Text("EcosedKit")
+                            },
+                        )
+                    }
+                ) { innerPadding ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues = innerPadding),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(text = inspectionModeText)
+                    }
+                }
+            }
         }
     }
 }
@@ -1148,5 +1197,13 @@ fun HomeDestination(
                 Text("Under")
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun HomeDestinationPreview() {
+    TrebleKitTheme {
+        HomeDestination()
     }
 }

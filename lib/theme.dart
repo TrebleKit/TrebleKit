@@ -122,13 +122,7 @@ class MaterialTheme {
     appBarTheme: AppBarTheme(
       centerTitle: true,
       systemOverlayStyle: SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.transparent,
-        systemNavigationBarDividerColor: Colors.transparent,
-        systemNavigationBarIconBrightness: Brightness.dark,
         systemNavigationBarContrastEnforced: false,
-        statusBarColor: Colors.transparent,
-        statusBarBrightness: Brightness.light,
-        statusBarIconBrightness: Brightness.dark,
         systemStatusBarContrastEnforced: false,
       ),
     ),
