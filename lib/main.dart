@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:freefeos/freefeos.dart';
 import 'package:multi_builder/multi_builder.dart';
+import 'package:treblekit/platform_image.dart';
 
 import 'capsule_placeholder.dart';
 import 'theme.dart';
@@ -54,9 +55,14 @@ class Header extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 16, horizontal: 30),
       child: Row(
         children: [
+          //Image.asset('assets/logo.png', width: 56)
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset('assets/logo.png', width: 56),
+            child: SizedBox(
+              width: 56,
+              height: 56,
+              child: MipmapImage(name: 'ic_launcher'),
+            ),
           ),
           Padding(
             padding: EdgeInsets.only(left: 16),

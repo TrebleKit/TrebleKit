@@ -5,6 +5,8 @@ import io.treblekit.app.base.BaseApplication
 abstract class HybridApplication : BaseApplication() {
     override fun onCreate() {
         super.onCreate()
-        loadFlutter()
+        loadFlutter().apply {
+            plugins.add(PlatformImagePlugin())
+        }
     }
 }

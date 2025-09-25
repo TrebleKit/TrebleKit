@@ -24,5 +24,3 @@ flutter:
   module:
     androidX: true
     androidPackage: io.treblekit.flutter
-  assets:
-    - assets/logo.png
