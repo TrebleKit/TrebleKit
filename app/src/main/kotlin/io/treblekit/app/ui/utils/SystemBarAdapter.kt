@@ -8,7 +8,6 @@ import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.core.view.WindowInsetsControllerCompat
 import io.treblekit.app.hybrid.FlutterUiController
-import io.treblekit.app.hybrid.sendData
 
 @Composable
 @NonRestartableComposable
