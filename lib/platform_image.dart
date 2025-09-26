@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 class FlutterPlatformImage {
   static const MethodChannel _channel = MethodChannel(
-    "flutter_platform_image",
+    "platform_resources",
   );
 
   static Future<Uint8List?> drawableMipmap(String name, bool isDrawable) async {

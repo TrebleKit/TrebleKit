@@ -6,7 +6,7 @@ abstract class HybridApplication : BaseApplication() {
     override fun onCreate() {
         super.onCreate()
         loadFlutter().apply {
-            plugins.add(PlatformImagePlugin())
+            plugins.add(PlatformResources())
             plugins.add(AndroidToFlutter())
         }
     }

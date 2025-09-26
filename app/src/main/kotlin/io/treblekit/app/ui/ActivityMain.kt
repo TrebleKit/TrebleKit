@@ -1,8 +1,8 @@
 package io.treblekit.app.ui
 
+//import io.treblekit.app.ui.theme.UnderTheme
 import android.content.Context
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,6 +34,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FlutterDash
@@ -45,6 +46,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.twotone.Home
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -67,10 +69,7 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -107,45 +106,49 @@ import io.treblekit.app.ui.theme.CapsuleHeight
 import io.treblekit.app.ui.theme.CapsuleIndent
 import io.treblekit.app.ui.theme.CapsuleWidth
 import io.treblekit.app.ui.theme.TrebleKitTheme
-import io.treblekit.app.ui.theme.UnderTheme
 import io.treblekit.app.ui.utils.NoOnClick
-import io.treblekit.app.ui.utils.SystemBarAdapter
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Composable
 fun ActivityMain(modifier: Modifier = Modifier) {
-    var underLayerVisible: Boolean by remember {
-        return@remember mutableStateOf(value = false)
+    TrebleKitTheme {
+        UnderLayer(
+            popBackStack = {},
+        )
     }
-    SystemBarAdapter(
-        isLight = !underLayerVisible,
-    )
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        UnderTheme {
-            UnderLayer(
-                popBackStack = {
-                    underLayerVisible = false
-                },
-            )
-        }
-        TrebleKitTheme {
-            AnimatedVisibility(
-                visible = !underLayerVisible,
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                NavigationRoot(
-                    modifier = Modifier.fillMaxSize(),
-                    showUnderLayer = {
-                        underLayerVisible = true
-                    },
-                )
-            }
-        }
-    }
+
+//    var underLayerVisible: Boolean by remember {
+//        return@remember mutableStateOf(value = false)
+//    }
+////    SystemBarAdapter(
+////        isLight = !underLayerVisible,
+////    )
+//    Box(
+//        modifier = modifier.fillMaxSize(),
+//        contentAlignment = Alignment.Center,
+//    ) {
+//        UnderTheme {
+//            UnderLayer(
+//                popBackStack = {
+//                    underLayerVisible = false
+//                },
+//            )
+//        }
+//        TrebleKitTheme {
+//            AnimatedVisibility(
+//                visible = !underLayerVisible,
+//                modifier = Modifier.fillMaxSize(),
+//            ) {
+//                NavigationRoot(
+//                    modifier = Modifier.fillMaxSize(),
+//                    showUnderLayer = {
+//                        underLayerVisible = true
+//                    },
+//                )
+//            }
+//        }
+//    }
 }
 
 @Preview
@@ -274,7 +277,7 @@ fun UnderLayer(
 @Preview
 @Composable
 fun UnderLayerAppsPreview() {
-    UnderTheme {
+    TrebleKitTheme {
         UnderLayer(
             initialPage = getPageWithRoute(
                 route = AppsPage,
@@ -286,7 +289,7 @@ fun UnderLayerAppsPreview() {
 @Preview
 @Composable
 fun UnderLayerEKitPreview() {
-    UnderTheme {
+    TrebleKitTheme {
         UnderLayer(
             initialPage = getPageWithRoute(
                 route = EKitPage,
@@ -359,7 +362,7 @@ fun ULTopBar(
                 .wrapContentHeight(),
             title = {
                 Text(
-                    text = "应用",
+                    text = stringResource(id = R.string.app_name),
                     color = Color.White,
                 )
             },
@@ -474,13 +477,19 @@ fun ULBottomBar(
             ),
         containerColor = Color(color = 0xff787493),
         actions = {
+            IconButton(onClick = NoOnClick) {
+                Icon(
+                    imageVector = Icons.Filled.Android,
+                    contentDescription = null,
+                    tint = Color.Green
+                )
+            }
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight()
-                    .padding(start = 16.dp)
-                    .weight(weight = 1f),
-                text = stringResource(id = R.string.app_name),
+                    .wrapContentHeight(),
+//                    .padding(start = 16.dp),
+                text = "Android",
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -559,7 +568,7 @@ fun ULPopFAB(
         },
         icon = {
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                imageVector = Icons.TwoTone.Home,
                 contentDescription = null,
             )
         },

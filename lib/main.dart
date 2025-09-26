@@ -11,14 +11,13 @@ import 'theme.dart';
 
 void main() => TrebleRunnable()();
 
-
 class AndroidToFlutter {
-  final EventChannel eventStream = const EventChannel("android_to_flutter");
+  final EventChannel _eventStream = const EventChannel("android_to_flutter");
 
   StreamSubscription<dynamic> listenNativeData({
     required Function(String data) callback,
   }) {
-    return eventStream.receiveBroadcastStream().listen((dynamic event) {
+    return _eventStream.receiveBroadcastStream().listen((dynamic event) {
       if (event is Map && event["type"] != null) {
         switch (event["type"]) {
           case "takeString":
@@ -36,91 +35,41 @@ class AndroidToFlutter {
 }
 
 class TrebleRunnable {
-
   void call() {
     runApp(const TrebleKitApp());
   }
 }
 
-class TrebleKitApp extends StatefulWidget {
+class TrebleKitApp extends StatelessWidget {
   const TrebleKitApp({super.key});
 
-  @override
-  State<TrebleKitApp> createState() => _TrebleKitAppState();
-}
-
-class _TrebleKitAppState extends State<TrebleKitApp> {
   final MaterialTheme theme = const MaterialTheme();
 
-  bool isLight = true;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    debugPrint('didChangeDependencies');
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    AndroidToFlutter().listenNativeData(callback: (data){
-      debugPrint(data);
-      if (data == 'dark_icon') {
-        setState(() {
-          isLight = false;
-        });
-      } else if (data == 'light_icon') {
-        setState(() {
-          isLight = true;
-        });
-      }
-    });
-  }
-
-  Brightness get getBrightness {
-    if (isLight) {
-      return Brightness.light;
-    } else {
-      return Brightness.dark;
-    }
-  }
-
-  ThemeData getTheme(Brightness brightness) {
-    ThemeData origin;
-
-    if (brightness == Brightness.light) {
-      origin = theme.light();
-    } else {
-      origin = theme.dark();
-    }
-
-    ThemeData now = origin.copyWith(
+  ThemeData getTheme(ThemeData origin) {
+    return origin.copyWith(
       appBarTheme: AppBarTheme(
         centerTitle: true,
         systemOverlayStyle: SystemUiOverlayStyle(
           systemNavigationBarColor: Colors.transparent,
           systemNavigationBarDividerColor: Colors.transparent,
-          systemNavigationBarIconBrightness: getBrightness,
+          systemNavigationBarIconBrightness: Brightness.light,
           systemNavigationBarContrastEnforced: false,
           statusBarColor: Colors.transparent,
-          statusBarBrightness: getBrightness,
-          statusBarIconBrightness: getBrightness,
+          statusBarBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.light,
           systemStatusBarContrastEnforced: false,
         ),
       ),
     );
-
-    return now;
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'TrebleKit',
-      theme: getTheme(Brightness.light),
-      darkTheme: getTheme(Brightness.dark),
+      theme: getTheme(theme.light()),
+      darkTheme: getTheme(theme.dark()),
+      // themeMode: ThemeMode.dark,
       builder: <TransitionBuilder>[FreeFEOS.builder].toBuilder,
       home: const MyHomePage(),
       debugShowCheckedModeBanner: false,
