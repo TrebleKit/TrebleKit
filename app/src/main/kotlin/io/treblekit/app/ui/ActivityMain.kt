@@ -481,7 +481,7 @@ fun ULBottomBar(
                 Icon(
                     imageVector = Icons.Filled.Android,
                     contentDescription = null,
-                    tint = Color.Green
+                    tint = Color(color = 0xFF3EDC87)
                 )
             }
             Text(
