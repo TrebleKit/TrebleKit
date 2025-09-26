@@ -118,7 +118,6 @@ fun TrebleKitTheme(
 fun UnderTheme(content: @Composable () -> Unit) {
     TrebleKitTheme(
         darkTheme = true,
-        dynamicColor = false,
-        content = content
+        content = content,
     )
 }

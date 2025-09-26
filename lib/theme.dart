@@ -119,12 +119,5 @@ class MaterialTheme {
     brightness: colorScheme.brightness,
     colorScheme: colorScheme,
     canvasColor: colorScheme.surface,
-    appBarTheme: AppBarTheme(
-      centerTitle: true,
-      systemOverlayStyle: SystemUiOverlayStyle(
-        systemNavigationBarContrastEnforced: false,
-        systemStatusBarContrastEnforced: false,
-      ),
-    ),
   );
 }

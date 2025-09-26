@@ -7,6 +7,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.core.view.WindowInsetsControllerCompat
+import io.treblekit.app.hybrid.FlutterUiController
+import io.treblekit.app.hybrid.sendData
 
 @Composable
 @NonRestartableComposable
@@ -21,6 +23,9 @@ fun SystemBarAdapter(isLight: Boolean) {
             ).apply {
                 isAppearanceLightStatusBars = isLight
                 isAppearanceLightNavigationBars = isLight
+            }
+            FlutterUiController().apply {
+                isAppearanceLightSystemBars(isLight = isLight)
             }
         }
     }

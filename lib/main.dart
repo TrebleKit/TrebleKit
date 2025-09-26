@@ -1,24 +1,126 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:freefeos/freefeos.dart';
 import 'package:multi_builder/multi_builder.dart';
-import 'package:treblekit/platform_image.dart';
 
 import 'capsule_placeholder.dart';
+import 'platform_image.dart';
 import 'theme.dart';
 
-void main() => runApp(const MyApp());
+void main() => TrebleRunnable()();
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
 
+class AndroidToFlutter {
+  final EventChannel eventStream = const EventChannel("android_to_flutter");
+
+  StreamSubscription<dynamic> listenNativeData({
+    required Function(String data) callback,
+  }) {
+    return eventStream.receiveBroadcastStream().listen((dynamic event) {
+      if (event is Map && event["type"] != null) {
+        switch (event["type"]) {
+          case "takeString":
+            callback(event["data"]);
+            break;
+          default:
+            debugPrint("未知事件类型: ${event["type"]}");
+            break;
+        }
+      } else {
+        debugPrint("未知事件: $event");
+      }
+    }, onError: (error) => debugPrint(error.toString()));
+  }
+}
+
+class TrebleRunnable {
+
+  void call() {
+    runApp(const TrebleKitApp());
+  }
+}
+
+class TrebleKitApp extends StatefulWidget {
+  const TrebleKitApp({super.key});
+
+  @override
+  State<TrebleKitApp> createState() => _TrebleKitAppState();
+}
+
+class _TrebleKitAppState extends State<TrebleKitApp> {
   final MaterialTheme theme = const MaterialTheme();
+
+  bool isLight = true;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    debugPrint('didChangeDependencies');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    AndroidToFlutter().listenNativeData(callback: (data){
+      debugPrint(data);
+      if (data == 'dark_icon') {
+        setState(() {
+          isLight = false;
+        });
+      } else if (data == 'light_icon') {
+        setState(() {
+          isLight = true;
+        });
+      }
+    });
+  }
+
+  Brightness get getBrightness {
+    if (isLight) {
+      return Brightness.light;
+    } else {
+      return Brightness.dark;
+    }
+  }
+
+  ThemeData getTheme(Brightness brightness) {
+    ThemeData origin;
+
+    if (brightness == Brightness.light) {
+      origin = theme.light();
+    } else {
+      origin = theme.dark();
+    }
+
+    ThemeData now = origin.copyWith(
+      appBarTheme: AppBarTheme(
+        centerTitle: true,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          systemNavigationBarColor: Colors.transparent,
+          systemNavigationBarDividerColor: Colors.transparent,
+          systemNavigationBarIconBrightness: getBrightness,
+          systemNavigationBarContrastEnforced: false,
+          statusBarColor: Colors.transparent,
+          statusBarBrightness: getBrightness,
+          statusBarIconBrightness: getBrightness,
+          systemStatusBarContrastEnforced: false,
+        ),
+      ),
+    );
+
+    return now;
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'TrebleKit',
-      theme: theme.light(),
-      darkTheme: theme.dark(),
+      theme: getTheme(Brightness.light),
+      darkTheme: getTheme(Brightness.dark),
       builder: <TransitionBuilder>[FreeFEOS.builder].toBuilder,
       home: const MyHomePage(),
       debugShowCheckedModeBanner: false,
@@ -90,10 +192,7 @@ class StateCard extends StatelessWidget {
         title: Text('一切正常'),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('AppID: xxxxxx'),
-            Text('版本: 1.0.0'),
-          ],
+          children: [Text('AppID: xxxxxx'), Text('版本: 1.0.0')],
         ),
         contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
       ),
