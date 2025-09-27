@@ -86,6 +86,7 @@ import com.kyant.capsule.ContinuousRoundedRectangle
 import io.treblekit.app.R
 import io.treblekit.app.hybrid.FlutterView
 import io.treblekit.app.ui.theme.AndroidGreen
+import io.treblekit.app.ui.theme.AppBackground
 import io.treblekit.app.ui.theme.CapsuleEdgePadding
 import io.treblekit.app.ui.theme.CapsuleHeight
 import io.treblekit.app.ui.theme.CapsuleIndent
@@ -179,7 +180,7 @@ fun UnderLayer(modifier: Modifier = Modifier) {
                 },
             )
         },
-        containerColor = Color(color = 0xff1B1B2B),
+        containerColor = AppBackground,
     ) { innerPadding ->
         HorizontalPager(
             state = pageState,
@@ -201,7 +202,7 @@ fun UnderLayer(modifier: Modifier = Modifier) {
                 )
 
                 EcosedKitPage -> EcosedKitPage(
-                    animateToApps = {
+                    animateToDashboard = {
                         coroutineScope.launch {
                             pageState.animateToRoute(
                                 route = DashboardPage
@@ -501,7 +502,7 @@ fun DashboardPage(
                     horizontalArrangement = Arrangement.spacedBy(space = 10.dp),
                 ) {
                     Column(
-                        modifier = modifier.wrapContentSize(),
+                        modifier = Modifier.wrapContentSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Box(
@@ -525,7 +526,7 @@ fun DashboardPage(
                         )
                     }
                     Column(
-                        modifier = modifier.wrapContentSize(),
+                        modifier = Modifier.wrapContentSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Box(
@@ -549,7 +550,7 @@ fun DashboardPage(
                         )
                     }
                     Column(
-                        modifier = modifier.wrapContentSize(),
+                        modifier = Modifier.wrapContentSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Box(
@@ -597,6 +598,18 @@ fun DashboardPage(
                 bottom = 16.dp,
             ),
             list = miniProgramList,
+        )
+    }
+}
+
+@Preview
+@Composable
+fun DashboardPagePreview() {
+    TrebleKitTheme {
+        DashboardPage(
+            modifier = Modifier.background(
+                color = AppBackground
+            )
         )
     }
 }
@@ -860,7 +873,7 @@ private fun AppItemPreview() {
 @Composable
 fun EcosedKitPage(
     modifier: Modifier = Modifier,
-    animateToApps: () -> Unit = NoOnClick,
+    animateToDashboard: () -> Unit = NoOnClick,
 ) {
     val inspection: Boolean = LocalInspectionMode.current
     val inspectionModeText: String = stringResource(
@@ -881,7 +894,7 @@ fun EcosedKitPage(
             },
             navigationIcon = {
                 IconButton(
-                    onClick = animateToApps,
+                    onClick = animateToDashboard,
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null
@@ -906,13 +919,15 @@ fun EcosedKitPage(
                 )
             } else {
                 Scaffold(
-                    contentWindowInsets = WindowInsets(), topBar = {
+                    contentWindowInsets = WindowInsets(),
+                    topBar = {
                         CenterAlignedTopAppBar(
                             title = {
                                 Text("EcosedKit")
                             },
                         )
-                    }) { innerPadding ->
+                    },
+                ) { innerPadding ->
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -924,5 +939,17 @@ fun EcosedKitPage(
                 }
             }
         }
+    }
+}
+
+@Preview(locale = "zh-rCN")
+@Composable
+fun EcosedKitPagePreview() {
+    TrebleKitTheme {
+        EcosedKitPage(
+            modifier = Modifier.background(
+                color = AppBackground
+            )
+        )
     }
 }
