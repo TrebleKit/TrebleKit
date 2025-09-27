@@ -1,6 +1,7 @@
 package io.treblekit.app.ui
 
 import android.content.Context
+import android.os.Build
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -43,6 +44,7 @@ import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.twotone.Home
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -55,12 +57,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -85,6 +91,7 @@ import com.kyant.capsule.ContinuousCapsule
 import com.kyant.capsule.ContinuousRoundedRectangle
 import io.treblekit.app.R
 import io.treblekit.app.hybrid.FlutterView
+import io.treblekit.app.ui.page.EcosedKitPage
 import io.treblekit.app.ui.theme.AndroidGreen
 import io.treblekit.app.ui.theme.AppBackground
 import io.treblekit.app.ui.theme.CapsuleEdgePadding
@@ -108,12 +115,16 @@ private fun ActivityMainPreview() {
     ActivityMain()
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UnderLayer(modifier: Modifier = Modifier) {
+    val coroutineScope = rememberCoroutineScope()
     val pageState = rememberPagerState(
         pageCount = { appDestination.size },
     )
-    val coroutineScope = rememberCoroutineScope()
+    var showDialog by remember {
+        mutableStateOf(value = false)
+    }
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -134,9 +145,36 @@ fun UnderLayer(modifier: Modifier = Modifier) {
                 actions = {
                     IconButton(
                         onClick = {
-
+                            showDialog = true
                         },
                     ) {
+                        if (showDialog) AlertDialog(
+                            onDismissRequest = {
+                                showDialog = false
+                            },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        showDialog = false
+                                    },
+                                ) {
+                                    Text(text = "确定")
+                                }
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.Filled.Android,
+                                    contentDescription = null,
+                                )
+                            },
+                            iconContentColor = AndroidGreen,
+                            title = {
+                                Text(text = "Android")
+                            },
+                            text = {
+                                Text(text = "Android API ${Build.VERSION.SDK_INT}")
+                            },
+                        )
                         Icon(
                             imageVector = Icons.Filled.Android,
                             contentDescription = null,
@@ -158,23 +196,13 @@ fun UnderLayer(modifier: Modifier = Modifier) {
                 },
                 floatingActionButton = {
                     Row {
-                        NavBlock(pageState = pageState)
-                        ExtendedFloatingActionButton(
-                            text = {
-                                Text(text = "返回")
-                            },
-                            icon = {
-                                Icon(
-                                    imageVector = Icons.TwoTone.Home,
-                                    contentDescription = null,
-                                )
-                            },
-                            onClick = {},
-                            modifier = modifier
-                                .wrapContentSize()
-                                .padding(start = 4.dp),
-                            shape = ContinuousRoundedRectangle(size = 16.dp),
-                            elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                        NavBlock(
+                            modifier = Modifier.padding(end = 4.dp),
+                            pageState = pageState,
+                        )
+                        HomeFAB(
+                            modifier = Modifier.padding(start = 4.dp),
+                            popBackStack = {},
                         )
                     }
                 },
@@ -243,8 +271,7 @@ fun NavBlock(
     Surface(
         modifier = modifier
             .wrapContentSize()
-            .sizeIn(minWidth = 80.dp)
-            .padding(end = 4.dp),
+            .sizeIn(minWidth = 80.dp),
         shape = ContinuousRoundedRectangle(size = 16.dp),
         color = MaterialTheme.colorScheme.primaryContainer,
     ) {
@@ -295,6 +322,38 @@ fun NavBlock(
 fun NavBlockPreview() {
     TrebleKitTheme {
         NavBlock()
+    }
+}
+
+@Composable
+fun HomeFAB(
+    modifier: Modifier = Modifier,
+    popBackStack: () -> Unit = NoOnClick,
+) {
+    ExtendedFloatingActionButton(
+        text = {
+            Text(text = "返回")
+        },
+        icon = {
+            Icon(
+                imageVector = Icons.TwoTone.Home,
+                contentDescription = null,
+            )
+        },
+        onClick = popBackStack,
+        modifier = modifier
+            .wrapContentSize()
+            ,
+        shape = ContinuousRoundedRectangle(size = 16.dp),
+        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+    )
+}
+
+@Preview
+@Composable
+fun HomeFABPreview() {
+    TrebleKitTheme {
+        HomeFAB()
     }
 }
 
@@ -865,91 +924,6 @@ private fun AppItemPreview() {
             style = AppItemStyle.Icon,
             appIcon = painterResource(id = R.drawable.baseline_preview_24),
             appName = "Preview",
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun EcosedKitPage(
-    modifier: Modifier = Modifier,
-    animateToDashboard: () -> Unit = NoOnClick,
-) {
-    val inspection: Boolean = LocalInspectionMode.current
-    val inspectionModeText: String = stringResource(
-        id = R.string.inspection_mode_text,
-    )
-    Column(
-        modifier = modifier.fillMaxSize(),
-    ) {
-        ULActionBar(
-            modifier = Modifier.padding(
-                start = 16.dp,
-                top = 16.dp,
-                end = 16.dp,
-                bottom = 8.dp,
-            ),
-            title = {
-                Text(text = "EcosedKit")
-            },
-            navigationIcon = {
-                IconButton(
-                    onClick = animateToDashboard,
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null
-                    )
-                }
-            },
-        )
-        Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    start = 16.dp,
-                    top = 8.dp,
-                    end = 16.dp,
-                    bottom = 16.dp,
-                ),
-            shape = ContinuousRoundedRectangle(size = 16.dp),
-        ) {
-            if (!inspection) {
-                FlutterView(
-                    modifier = Modifier.fillMaxSize(),
-                )
-            } else {
-                Scaffold(
-                    contentWindowInsets = WindowInsets(),
-                    topBar = {
-                        CenterAlignedTopAppBar(
-                            title = {
-                                Text("EcosedKit")
-                            },
-                        )
-                    },
-                ) { innerPadding ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(paddingValues = innerPadding),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(text = inspectionModeText)
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Preview(locale = "zh-rCN")
-@Composable
-fun EcosedKitPagePreview() {
-    TrebleKitTheme {
-        EcosedKitPage(
-            modifier = Modifier.background(
-                color = AppBackground
-            )
         )
     }
 }
