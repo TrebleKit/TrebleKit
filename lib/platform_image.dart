@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class FlutterPlatformImage {
-  static const MethodChannel _channel = MethodChannel(
-    "platform_resources",
-  );
+class PlatformResources {
+  const PlatformResources();
 
-  static Future<Uint8List?> drawableMipmap(String name, bool isDrawable) async {
-    return await _channel.invokeMethod("drawableMipmap", {
+  static const MethodChannel _channel = MethodChannel("platform_resources");
+
+  Future<Uint8List?> drawableMipmap(String name, bool isDrawable) async {
+    return await _channel.invokeMethod<Uint8List>("drawableMipmap", {
       "name": name,
       "is_drawable": isDrawable,
     });
@@ -22,7 +22,6 @@ class BasePlatformImage extends StatefulWidget {
   });
 
   final String name;
-
   final bool isDrawable;
 
   @override
@@ -30,23 +29,25 @@ class BasePlatformImage extends StatefulWidget {
 }
 
 class _BasePlatformImageState extends State<BasePlatformImage> {
+  _BasePlatformImageState();
+
+  final PlatformResources platformResources = const PlatformResources();
+
+  // 图片数据
   Uint8List? image;
 
   @override
   void initState() {
     super.initState();
-    getDrawableMipmap();
-  }
-
-  Future<void> getDrawableMipmap() async {
-    FlutterPlatformImage.drawableMipmap(widget.name, widget.isDrawable)
+    platformResources
+        .drawableMipmap(widget.name, widget.isDrawable)
         .then((value) => setState(() => image = value))
         .catchError((error) => debugPrint(error));
   }
 
   @override
   Widget build(BuildContext context) {
-    return image == null ? Container() : Image.memory(image!);
+    return image != null ? Image.memory(image!) : const Placeholder();
   }
 }
 
@@ -69,5 +70,14 @@ class MipmapImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BasePlatformImage(name: name, isDrawable: false);
+  }
+}
+
+class EcosedKitLogo extends StatelessWidget {
+  const EcosedKitLogo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }

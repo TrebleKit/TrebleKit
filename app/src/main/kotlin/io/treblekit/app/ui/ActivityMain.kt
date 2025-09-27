@@ -1,6 +1,5 @@
 package io.treblekit.app.ui
 
-//import io.treblekit.app.ui.theme.UnderTheme
 import android.content.Context
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.Image
@@ -35,18 +34,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Android
-import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FlutterDash
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.KeyboardCommandKey
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.twotone.Dashboard
 import androidx.compose.material.icons.twotone.Home
+import androidx.compose.material.icons.twotone.KeyboardCommandKey
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -462,8 +461,8 @@ fun ULTopBar(
 fun ULBottomBar(
     modifier: Modifier = Modifier,
     popBackStack: () -> Unit = NoOnClick,
-    animateToApps: () -> Unit = {},
-    animateToEcosed: () -> Unit = {},
+    animateToApps: () -> Unit = NoOnClick,
+    animateToEcosed: () -> Unit = NoOnClick,
 ) {
     BottomAppBar(
         modifier = modifier
@@ -477,7 +476,11 @@ fun ULBottomBar(
             ),
         containerColor = Color(color = 0xff787493),
         actions = {
-            IconButton(onClick = NoOnClick) {
+            IconButton(
+                onClick = {
+
+                },
+            ) {
                 Icon(
                     imageVector = Icons.Filled.Android,
                     contentDescription = null,
@@ -488,7 +491,6 @@ fun ULBottomBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
-//                    .padding(start = 16.dp),
                 text = "Android",
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,
@@ -515,8 +517,8 @@ fun ULBottomBar(
 @Composable
 fun ULNavBlock(
     modifier: Modifier = Modifier,
-    animateToApps: () -> Unit = {},
-    animateToEcosed: () -> Unit = {},
+    animateToApps: () -> Unit = NoOnClick,
+    animateToEcosed: () -> Unit = NoOnClick,
 ) {
     Surface(
         modifier = modifier
@@ -538,7 +540,7 @@ fun ULNavBlock(
                 modifier = Modifier.wrapContentSize(),
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Apps,
+                    imageVector = Icons.TwoTone.Dashboard,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
@@ -548,7 +550,7 @@ fun ULNavBlock(
                 modifier = Modifier.wrapContentSize(),
             ) {
                 Icon(
-                    imageVector = Icons.Filled.KeyboardCommandKey,
+                    imageVector = Icons.TwoTone.KeyboardCommandKey,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
