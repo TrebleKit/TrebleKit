@@ -12,48 +12,69 @@ import io.flutter.plugin.common.MethodChannel
 import java.io.ByteArrayOutputStream
 
 class PlatformResources : FlutterPlugin, MethodChannel.MethodCallHandler {
-    private var channel: MethodChannel? = null
-    private var context: Context? = null
 
-    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        context = flutterPluginBinding.applicationContext
-        channel =
-            MethodChannel(flutterPluginBinding.binaryMessenger, "platform_resources")
-        channel?.setMethodCallHandler(this)
+    /** 方法通道 */
+    private lateinit var mChannel: MethodChannel
+
+    /** 应用程序上下文 */
+    private lateinit var mContext: Context
+
+    override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        mContext = binding.applicationContext
+        mChannel = MethodChannel(binding.binaryMessenger, PLATFORM_RESOURCES_CHANNEL)
+        mChannel.setMethodCallHandler(this)
     }
 
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        mChannel.setMethodCallHandler(null)
+    }
+
+    /**
+     * 方法调用
+     */
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-        if (context == null) return
         when (call.method) {
             "drawableMipmap" -> {
                 val name: String? = call.argument("name")
                 val isDrawable: Boolean = call.argument("is_drawable") ?: false
-                val id: Int? = context?.resources?.getIdentifier(
+                val id: Int? = mContext.resources?.getIdentifier(
                     name,
                     if (isDrawable) "drawable" else "mipmap",
-                    context?.packageName
+                    mContext.packageName,
                 )
-                val drawable: Drawable? = ContextCompat.getDrawable(context!!, id!!)
+                val drawable: Drawable? = ContextCompat.getDrawable(mContext, id!!)
                 val byteArray = drawableToByteArray(drawable)
                 result.success(byteArray)
             }
+
             else -> result.notImplemented()
         }
     }
 
-    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        channel?.setMethodCallHandler(null)
+    /**
+     * 绘制Drawable为PNG格式二进制数据
+     */
+    private fun drawableToByteArray(drawable: Drawable?): ByteArray {
+        if (drawable != null) {
+            val bitmap = createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
+            val canvas = Canvas(bitmap)
+            drawable.setBounds(0, 0, canvas.width, canvas.height)
+            drawable.draw(canvas)
+            val stream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+            return stream.toByteArray()
+        } else {
+            return ByteArray(size = 0)
+        }
     }
 
-    private fun drawableToByteArray(drawable: Drawable?): ByteArray {
-        if (drawable == null) return ByteArray(size = 0)
-        val bitmap = createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
-        val canvas = Canvas(bitmap)
-        drawable.setBounds(0, 0, canvas.width, canvas.height)
-        drawable.draw(canvas)
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-        return stream.toByteArray()
+    /**
+     * 伴生对象
+     */
+    private companion object {
+
+        /** 平台资源插件通道名称 */
+        const val PLATFORM_RESOURCES_CHANNEL: String = "platform_resources"
     }
 }
 
