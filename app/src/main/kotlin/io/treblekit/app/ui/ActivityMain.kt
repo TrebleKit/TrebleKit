@@ -110,59 +110,27 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Composable
-fun ActivityMain(modifier: Modifier = Modifier) {
+fun ActivityMain() {
     TrebleKitTheme {
         UnderLayer(
             popBackStack = {},
         )
     }
-
-//    var underLayerVisible: Boolean by remember {
-//        return@remember mutableStateOf(value = false)
-//    }
-////    SystemBarAdapter(
-////        isLight = !underLayerVisible,
-////    )
-//    Box(
-//        modifier = modifier.fillMaxSize(),
-//        contentAlignment = Alignment.Center,
-//    ) {
-//        UnderTheme {
-//            UnderLayer(
-//                popBackStack = {
-//                    underLayerVisible = false
-//                },
-//            )
-//        }
-//        TrebleKitTheme {
-//            AnimatedVisibility(
-//                visible = !underLayerVisible,
-//                modifier = Modifier.fillMaxSize(),
-//            ) {
-//                NavigationRoot(
-//                    modifier = Modifier.fillMaxSize(),
-//                    showUnderLayer = {
-//                        underLayerVisible = true
-//                    },
-//                )
-//            }
-//        }
-//    }
 }
 
 @Preview
 @Composable
-fun ActivityMainPreview() {
-    TrebleKitTheme {
-        ActivityMain()
-    }
+private fun ActivityMainPreview() {
+    ActivityMain()
 }
 
-@Serializable
-data object AppsPage
+
 
 @Serializable
-data object EKitPage
+data object DashboardPage
+
+@Serializable
+data object EcosedKitPage
 
 private data class MPPage<T>(
     val page: Int,
@@ -172,11 +140,11 @@ private data class MPPage<T>(
 private val pages = arrayListOf(
     MPPage(
         page = 0,
-        route = AppsPage,
+        route = DashboardPage,
     ),
     MPPage(
         page = 1,
-        route = EKitPage,
+        route = EcosedKitPage,
     ),
 )
 
@@ -185,7 +153,7 @@ fun UnderLayer(
     modifier: Modifier = Modifier,
     popBackStack: () -> Unit = NoOnClick,
     initialPage: Int = getPageWithRoute(
-        route = AppsPage,
+        route = DashboardPage,
     ),
 ) {
     val pageState = rememberPagerState(
@@ -205,7 +173,7 @@ fun UnderLayer(
                     coroutineScope.launch {
                         pageState.animateScrollToPage(
                             page = getPageWithRoute(
-                                route = AppsPage,
+                                route = DashboardPage,
                             ),
                         )
                     }
@@ -214,7 +182,7 @@ fun UnderLayer(
                     coroutineScope.launch {
                         pageState.animateScrollToPage(
                             page = getPageWithRoute(
-                                route = EKitPage,
+                                route = EcosedKitPage,
                             ),
                         )
                     }
@@ -233,25 +201,25 @@ fun UnderLayer(
             userScrollEnabled = false,
         ) { page ->
             when (pages[page].route) {
-                AppsPage -> ULAppsPage(
+                DashboardPage -> ULAppsPage(
                     popBackStack = popBackStack,
                     animateToEcosed = {
                         coroutineScope.launch {
                             pageState.animateScrollToPage(
                                 page = getPageWithRoute(
-                                    route = EKitPage,
+                                    route = EcosedKitPage,
                                 ),
                             )
                         }
                     },
                 )
 
-                EKitPage -> ULEKitPage(
+                EcosedKitPage -> ULEKitPage(
                     animateToApps = {
                         coroutineScope.launch {
                             pageState.animateScrollToPage(
                                 page = getPageWithRoute(
-                                    route = AppsPage,
+                                    route = DashboardPage,
                                 ),
                             )
                         }
@@ -279,7 +247,7 @@ fun UnderLayerAppsPreview() {
     TrebleKitTheme {
         UnderLayer(
             initialPage = getPageWithRoute(
-                route = AppsPage,
+                route = DashboardPage,
             ),
         )
     }
@@ -291,7 +259,7 @@ fun UnderLayerEKitPreview() {
     TrebleKitTheme {
         UnderLayer(
             initialPage = getPageWithRoute(
-                route = EKitPage,
+                route = EcosedKitPage,
             ),
         )
     }
