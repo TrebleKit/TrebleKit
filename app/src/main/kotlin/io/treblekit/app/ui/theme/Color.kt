@@ -37,3 +37,6 @@ val surfaceContainerLowDark: Color = Color(color = 0xFF191C20)
 val surfaceContainerDark: Color = Color(color = 0xFF1D2024)
 val surfaceContainerHighDark: Color = Color(color = 0xFF272A2F)
 val surfaceContainerHighestDark: Color = Color(color = 0xFF32353A)
+
+
+val AndroidGreen: Color = Color(color = 0xFF3EDC87)

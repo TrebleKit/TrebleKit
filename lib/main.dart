@@ -112,7 +112,7 @@ class Header extends StatelessWidget {
             child: SizedBox(
               width: 56,
               height: 56,
-              child: MipmapImage(name: 'ic_launcher'),
+              child: MipmapImage(name: 'ic_ecosedkit'),
             ),
           ),
           Padding(

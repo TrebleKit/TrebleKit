@@ -2,6 +2,8 @@ package io.treblekit.app.ui
 
 import android.content.Context
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,6 +28,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,18 +39,11 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FlutterDash
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.twotone.Dashboard
 import androidx.compose.material.icons.twotone.Home
-import androidx.compose.material.icons.twotone.KeyboardCommandKey
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -62,19 +58,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.VerticalDivider
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -83,16 +75,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import androidx.window.core.layout.WindowWidthSizeClass
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.accompanist.imageloading.rememberDrawablePainter
@@ -100,6 +85,7 @@ import com.kyant.capsule.ContinuousCapsule
 import com.kyant.capsule.ContinuousRoundedRectangle
 import io.treblekit.app.R
 import io.treblekit.app.hybrid.FlutterView
+import io.treblekit.app.ui.theme.AndroidGreen
 import io.treblekit.app.ui.theme.CapsuleEdgePadding
 import io.treblekit.app.ui.theme.CapsuleHeight
 import io.treblekit.app.ui.theme.CapsuleIndent
@@ -107,14 +93,11 @@ import io.treblekit.app.ui.theme.CapsuleWidth
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.utils.NoOnClick
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
 
 @Composable
 fun ActivityMain() {
     TrebleKitTheme {
-        UnderLayer(
-            popBackStack = {},
-        )
+        UnderLayer()
     }
 }
 
@@ -124,41 +107,10 @@ private fun ActivityMainPreview() {
     ActivityMain()
 }
 
-
-
-@Serializable
-data object DashboardPage
-
-@Serializable
-data object EcosedKitPage
-
-private data class MPPage<T>(
-    val page: Int,
-    val route: T,
-)
-
-private val pages = arrayListOf(
-    MPPage(
-        page = 0,
-        route = DashboardPage,
-    ),
-    MPPage(
-        page = 1,
-        route = EcosedKitPage,
-    ),
-)
-
 @Composable
-fun UnderLayer(
-    modifier: Modifier = Modifier,
-    popBackStack: () -> Unit = NoOnClick,
-    initialPage: Int = getPageWithRoute(
-        route = DashboardPage,
-    ),
-) {
+fun UnderLayer(modifier: Modifier = Modifier) {
     val pageState = rememberPagerState(
-        initialPage = initialPage,
-        pageCount = { pages.size },
+        pageCount = { appDestination.size },
     )
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
@@ -167,23 +119,61 @@ fun UnderLayer(
             ULTopBar()
         },
         bottomBar = {
-            ULBottomBar(
-                popBackStack = popBackStack,
-                animateToApps = {
-                    coroutineScope.launch {
-                        pageState.animateScrollToPage(
-                            page = getPageWithRoute(
-                                route = DashboardPage,
-                            ),
+            BottomAppBar(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .clip(
+                        shape = ContinuousRoundedRectangle(
+                            topStart = 16.dp,
+                            topEnd = 16.dp,
+                        ),
+                    ),
+                containerColor = Color(color = 0xff787493),
+                actions = {
+                    IconButton(
+                        onClick = {
+
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Android,
+                            contentDescription = null,
+                            tint = AndroidGreen,
                         )
                     }
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                        text = "Android",
+                        style = MaterialTheme.typography.titleMedium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Left,
+                    )
                 },
-                animateToEcosed = {
-                    coroutineScope.launch {
-                        pageState.animateScrollToPage(
-                            page = getPageWithRoute(
-                                route = EcosedKitPage,
-                            ),
+                floatingActionButton = {
+                    Row {
+                        NavBlock(pageState = pageState)
+                        ExtendedFloatingActionButton(
+                            text = {
+                                Text(text = "返回")
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.TwoTone.Home,
+                                    contentDescription = null,
+                                )
+                            },
+                            onClick = {},
+                            modifier = modifier
+                                .wrapContentSize()
+                                .padding(start = 4.dp),
+                            shape = ContinuousRoundedRectangle(size = 16.dp),
+                            elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
                         )
                     }
                 },
@@ -195,32 +185,26 @@ fun UnderLayer(
             state = pageState,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(
-                    paddingValues = innerPadding,
-                ),
+                .padding(paddingValues = innerPadding),
             userScrollEnabled = false,
         ) { page ->
-            when (pages[page].route) {
-                DashboardPage -> ULAppsPage(
-                    popBackStack = popBackStack,
+            when (appDestination[page].route) {
+                DashboardPage -> DashboardPage(
+                    popBackStack = {},
                     animateToEcosed = {
                         coroutineScope.launch {
-                            pageState.animateScrollToPage(
-                                page = getPageWithRoute(
-                                    route = EcosedKitPage,
-                                ),
+                            pageState.animateToRoute(
+                                route = EcosedKitPage
                             )
                         }
                     },
                 )
 
-                EcosedKitPage -> ULEKitPage(
+                EcosedKitPage -> EcosedKitPage(
                     animateToApps = {
                         coroutineScope.launch {
-                            pageState.animateScrollToPage(
-                                page = getPageWithRoute(
-                                    route = DashboardPage,
-                                ),
+                            pageState.animateToRoute(
+                                route = DashboardPage
                             )
                         }
                     },
@@ -243,37 +227,74 @@ fun UnderLayer(
 
 @Preview
 @Composable
-fun UnderLayerAppsPreview() {
+fun UnderLayerPreview() {
     TrebleKitTheme {
-        UnderLayer(
-            initialPage = getPageWithRoute(
-                route = DashboardPage,
-            ),
-        )
+        UnderLayer()
+    }
+}
+
+@Composable
+fun NavBlock(
+    modifier: Modifier = Modifier,
+    pageState: PagerState? = null,
+) {
+    val coroutineScope = rememberCoroutineScope()
+    Surface(
+        modifier = modifier
+            .wrapContentSize()
+            .sizeIn(minWidth = 80.dp)
+            .padding(end = 4.dp),
+        shape = ContinuousRoundedRectangle(size = 16.dp),
+        color = MaterialTheme.colorScheme.primaryContainer,
+    ) {
+        Row(
+            modifier = Modifier
+                .wrapContentSize()
+                .defaultMinSize(minHeight = 56.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            appDestination.forEach { page ->
+                val isCurrent = pageState?.isCurrentDestination(page = page.route)
+                IconButton(
+                    onClick = {
+                        if (isCurrent == false) coroutineScope.launch {
+                            pageState.animateToRoute(route = page.route)
+                        }
+                    },
+                    modifier = Modifier.wrapContentSize(),
+                ) {
+                    val iconAlpha: Float by animateFloatAsState(
+                        targetValue = if (isCurrent == true) 1f else 0.5f,
+                        animationSpec = spring(
+                            dampingRatio = 0.8f,
+                            stiffness = 200f,
+                        ),
+                    )
+                    Icon(
+                        imageVector = if (isCurrent == true) {
+                            page.selectedIcon
+                        } else {
+                            page.icon
+                        },
+                        contentDescription = null,
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .alpha(alpha = iconAlpha),
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    )
+                }
+            }
+        }
     }
 }
 
 @Preview
 @Composable
-fun UnderLayerEKitPreview() {
+fun NavBlockPreview() {
     TrebleKitTheme {
-        UnderLayer(
-            initialPage = getPageWithRoute(
-                route = EcosedKitPage,
-            ),
-        )
+        NavBlock()
     }
-}
-
-
-private fun <T> getPageWithRoute(route: T): Int {
-    var result = 0
-    for (page in pages) {
-        if (page.route == route) {
-            result = page.page
-        }
-    }
-    return result
 }
 
 
@@ -416,9 +437,7 @@ fun ULTopBar(
             ),
         )
         HorizontalDivider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 0.5.dp,
-            color = Color.Black.copy(
+            modifier = Modifier.fillMaxWidth(), thickness = 0.5.dp, color = Color.Black.copy(
                 alpha = 0.2f
             )
         )
@@ -426,133 +445,7 @@ fun ULTopBar(
 }
 
 @Composable
-fun ULBottomBar(
-    modifier: Modifier = Modifier,
-    popBackStack: () -> Unit = NoOnClick,
-    animateToApps: () -> Unit = NoOnClick,
-    animateToEcosed: () -> Unit = NoOnClick,
-) {
-    BottomAppBar(
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .clip(
-                shape = ContinuousRoundedRectangle(
-                    topStart = 16.dp,
-                    topEnd = 16.dp,
-                ),
-            ),
-        containerColor = Color(color = 0xff787493),
-        actions = {
-            IconButton(
-                onClick = {
-
-                },
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Android,
-                    contentDescription = null,
-                    tint = Color(color = 0xFF3EDC87)
-                )
-            }
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                text = "Android",
-                style = MaterialTheme.typography.titleMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                color = Color.White,
-                fontSize = 16.sp,
-                textAlign = TextAlign.Left,
-            )
-        },
-        floatingActionButton = {
-            Row {
-                ULNavBlock(
-                    animateToApps = animateToApps,
-                    animateToEcosed = animateToEcosed,
-                )
-                ULPopFAB(
-                    popBackStack = popBackStack,
-                )
-            }
-        }
-    )
-}
-
-@Composable
-fun ULNavBlock(
-    modifier: Modifier = Modifier,
-    animateToApps: () -> Unit = NoOnClick,
-    animateToEcosed: () -> Unit = NoOnClick,
-) {
-    Surface(
-        modifier = modifier
-            .wrapContentSize()
-            .sizeIn(minWidth = 80.dp)
-            .padding(end = 4.dp),
-        shape = ContinuousRoundedRectangle(size = 16.dp),
-        color = MaterialTheme.colorScheme.primaryContainer,
-    ) {
-        Row(
-            modifier = Modifier
-                .wrapContentSize()
-                .defaultMinSize(minHeight = 56.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            IconButton(
-                onClick = animateToApps,
-                modifier = Modifier.wrapContentSize(),
-            ) {
-                Icon(
-                    imageVector = Icons.TwoTone.Dashboard,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                )
-            }
-            IconButton(
-                onClick = animateToEcosed,
-                modifier = Modifier.wrapContentSize(),
-            ) {
-                Icon(
-                    imageVector = Icons.TwoTone.KeyboardCommandKey,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun ULPopFAB(
-    modifier: Modifier = Modifier,
-    popBackStack: () -> Unit = NoOnClick,
-) {
-    ExtendedFloatingActionButton(
-        text = {
-            Text(text = "返回")
-        },
-        icon = {
-            Icon(
-                imageVector = Icons.TwoTone.Home,
-                contentDescription = null,
-            )
-        },
-        onClick = popBackStack,
-        modifier = modifier
-            .wrapContentSize()
-            .padding(start = 4.dp),
-        shape = ContinuousRoundedRectangle(size = 16.dp),
-        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
-    )
-}
-
-@Composable
-fun ULAppsPage(
+fun DashboardPage(
     modifier: Modifier = Modifier,
     popBackStack: () -> Unit = NoOnClick,
     animateToEcosed: () -> Unit = NoOnClick,
@@ -749,7 +642,7 @@ fun MPPlayer(
                 appIcon = rememberDrawablePainter(
                     drawable = AppCompatResources.getDrawable(
                         context,
-                        R.mipmap.ic_launcher,
+                        R.mipmap.ic_ebkit,
                     ),
                 ),
                 appName = "EbKit",
@@ -788,8 +681,7 @@ fun RecentPlayer(
                 .fillMaxWidth()
                 .clip(shape = ContinuousCapsule)
                 .background(Color(color = 0xFF434056))
-                .clickable(onClick = animateToFlutter),
-            contentAlignment = Alignment.Center
+                .clickable(onClick = animateToFlutter), contentAlignment = Alignment.Center
         ) {
             Row(
                 modifier = Modifier.wrapContentSize(),
@@ -966,7 +858,7 @@ private fun AppItemPreview() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ULEKitPage(
+fun EcosedKitPage(
     modifier: Modifier = Modifier,
     animateToApps: () -> Unit = NoOnClick,
 ) {
@@ -1014,15 +906,13 @@ fun ULEKitPage(
                 )
             } else {
                 Scaffold(
-                    contentWindowInsets = WindowInsets(),
-                    topBar = {
+                    contentWindowInsets = WindowInsets(), topBar = {
                         CenterAlignedTopAppBar(
                             title = {
                                 Text("EcosedKit")
                             },
                         )
-                    }
-                ) { innerPadding ->
+                    }) { innerPadding ->
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -1034,155 +924,5 @@ fun ULEKitPage(
                 }
             }
         }
-    }
-}
-
-
-data class AppDestination<T>(
-    val label: String,
-    val route: T,
-    val icon: ImageVector,
-    val selectedIcon: ImageVector,
-)
-
-@Serializable
-data object Home
-
-@Serializable
-data object Settings
-
-@Composable
-fun NavigationRoot(
-    modifier: Modifier = Modifier,
-    showUnderLayer: () -> Unit = NoOnClick,
-) {
-    val appDestination = arrayListOf(
-        AppDestination(
-            label = "Home",
-            route = Home,
-            icon = Icons.Outlined.Home,
-            selectedIcon = Icons.Filled.Home,
-        ),
-        AppDestination(
-            label = "Settings",
-            route = Settings,
-            icon = Icons.Outlined.Settings,
-            selectedIcon = Icons.Filled.Settings,
-        ),
-    )
-    val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
-    val customNavSuiteType: NavigationSuiteType = with(
-        receiver = currentWindowAdaptiveInfo(),
-    ) {
-        return@with when (windowSizeClass.windowWidthSizeClass) {
-            WindowWidthSizeClass.COMPACT -> NavigationSuiteType.NavigationBar
-            WindowWidthSizeClass.MEDIUM -> NavigationSuiteType.NavigationRail
-            WindowWidthSizeClass.EXPANDED -> NavigationSuiteType.NavigationDrawer
-            else -> NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(
-                adaptiveInfo = this@with
-            )
-        }
-    }
-    NavigationSuiteScaffold(
-        navigationSuiteItems = {
-            appDestination.forEach { destination ->
-                val isCurrent: Boolean = currentDestination?.hierarchy?.any {
-                    return@any it.hasRoute(route = destination.route::class)
-                } == true
-                item(
-                    icon = {
-                        Icon(
-                            imageVector = if (isCurrent) {
-                                destination.selectedIcon
-                            } else {
-                                destination.icon
-                            },
-                            contentDescription = destination.label,
-                        )
-                    },
-                    modifier = Modifier.wrapContentSize(),
-                    label = {
-                        Text(text = destination.label)
-                    },
-                    selected = isCurrent,
-                    onClick = {
-                        navController.navigate(
-                            route = destination.route,
-                        ) {
-                            popUpTo(
-                                id = navController.graph.findStartDestination().id,
-                            ) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    },
-                    alwaysShowLabel = false,
-                )
-            }
-        },
-        modifier = modifier.fillMaxSize(),
-        layoutType = customNavSuiteType,
-    ) {
-        NavHost(
-            navController = navController,
-            startDestination = Home,
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            composable<Home> {
-                HomeDestination(
-                    showUnderLayer = showUnderLayer
-                )
-            }
-            composable<Settings> {
-//                SettingsDestination()
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun HomeDestination(
-    modifier: Modifier = Modifier,
-    showUnderLayer: () -> Unit = NoOnClick,
-) {
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(
-                            id = R.string.app_name,
-                        ),
-                    )
-                },
-            )
-        },
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            contentAlignment = Alignment.Center
-        ) {
-            Button(
-                onClick = showUnderLayer,
-            ) {
-                Text("Under")
-            }
-        }
-    }
-}
-
-@Preview
-@Composable
-fun HomeDestinationPreview() {
-    TrebleKitTheme {
-        HomeDestination()
     }
 }
