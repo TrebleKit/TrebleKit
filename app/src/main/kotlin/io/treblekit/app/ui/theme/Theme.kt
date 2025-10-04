@@ -1,6 +1,7 @@
 package io.treblekit.app.ui.theme
 
 import android.app.Activity
+import android.content.Context
 import android.os.Build
 import androidx.activity.compose.LocalActivity
 import androidx.compose.material3.MaterialTheme
@@ -51,7 +52,7 @@ private val DarkColorScheme = darkColorScheme(
 
 @Composable
 fun TrebleKitTheme(content: @Composable () -> Unit) {
-    val context = LocalContext.current
+    val context: Context = LocalContext.current
     val inspection: Boolean = LocalInspectionMode.current
     val activity: Activity? = LocalActivity.current
 

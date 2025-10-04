@@ -4,11 +4,12 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
-import androidx.core.content.ContextCompat
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.createBitmap
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import io.treblekit.app.R
 import java.io.ByteArrayOutputStream
 
 class PlatformResources : FlutterPlugin, MethodChannel.MethodCallHandler {
@@ -19,12 +20,18 @@ class PlatformResources : FlutterPlugin, MethodChannel.MethodCallHandler {
     /** 应用程序上下文 */
     private lateinit var mContext: Context
 
+    /**
+     * 附加到引擎
+     */
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         mContext = binding.applicationContext
         mChannel = MethodChannel(binding.binaryMessenger, PLATFORM_RESOURCES_CHANNEL)
         mChannel.setMethodCallHandler(this)
     }
 
+    /**
+     * 从引擎分离
+     */
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         mChannel.setMethodCallHandler(null)
     }
@@ -34,19 +41,9 @@ class PlatformResources : FlutterPlugin, MethodChannel.MethodCallHandler {
      */
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
-            "drawableMipmap" -> {
-                val name: String? = call.argument("name")
-                val isDrawable: Boolean = call.argument("is_drawable") ?: false
-                val id: Int? = mContext.resources?.getIdentifier(
-                    name,
-                    if (isDrawable) "drawable" else "mipmap",
-                    mContext.packageName,
-                )
-                val drawable: Drawable? = ContextCompat.getDrawable(mContext, id!!)
-                val byteArray = drawableToByteArray(drawable)
-                result.success(byteArray)
-            }
-
+            "freefeos" -> result.success(drawableToByteArray(id = R.drawable.ic_freefeos))
+            "ecosedkit" -> result.success(drawableToByteArray(id = R.drawable.ic_ecosedkit))
+            "ebkit" -> result.success(drawableToByteArray(id = R.drawable.ic_ebkit))
             else -> result.notImplemented()
         }
     }
@@ -54,7 +51,8 @@ class PlatformResources : FlutterPlugin, MethodChannel.MethodCallHandler {
     /**
      * 绘制Drawable为PNG格式二进制数据
      */
-    private fun drawableToByteArray(drawable: Drawable?): ByteArray {
+    private fun drawableToByteArray(id: Int): ByteArray {
+        val drawable: Drawable? = AppCompatResources.getDrawable(mContext, id)
         if (drawable != null) {
             val bitmap = createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
             val canvas = Canvas(bitmap)
@@ -77,4 +75,3 @@ class PlatformResources : FlutterPlugin, MethodChannel.MethodCallHandler {
         const val PLATFORM_RESOURCES_CHANNEL: String = "platform_resources"
     }
 }
-

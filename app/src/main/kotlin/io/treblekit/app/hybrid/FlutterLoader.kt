@@ -2,28 +2,28 @@ package io.treblekit.app.hybrid
 
 import android.app.Application
 import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.android.RenderMode
-import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
-import io.flutter.embedding.engine.dart.DartExecutor
+import io.flutter.embedding.engine.FlutterEngineGroup
 
 /** Flutter引擎ID */
-const val ENGINE_ID: String = "treblekit_flutter"
+const val EMBED_ENGINE_ID: String = "dm_utility_flutter_embed"
+const val FLOAT_ENGINE_ID: String = "dm_utility_flutter_float"
 
 /**
  * 初始化Flutter引擎
  */
-fun Application.loadFlutter(): FlutterEngine {
-    return FlutterEngine(this@loadFlutter).let { engine ->
-        val entry = DartExecutor.DartEntrypoint.createDefault()
-        engine.dartExecutor.executeDartEntrypoint(entry)
-        FlutterEngineCache.getInstance().put(ENGINE_ID, engine)
-        return@let engine
+fun Application.loadFlutter() {
+    FlutterEngineGroup(this@loadFlutter).let { group ->
+        arrayListOf(EMBED_ENGINE_ID, FLOAT_ENGINE_ID).forEach { engineId ->
+            group.createAndRunDefaultEngine(this@loadFlutter).let { engine ->
+                CustomPluginRegistrant().registerWith(engine = engine)
+                FlutterEngineCache.getInstance().put(engineId, engine)
+            }
+        }
     }
 }
 
@@ -31,10 +31,11 @@ fun Application.loadFlutter(): FlutterEngine {
  * 加载Flutter片段
  */
 fun loadFlutterFragment(): FlutterFragment {
-    return FlutterFragment
-        .withCachedEngine(ENGINE_ID)
-        .renderMode(RenderMode.texture)
-        .build()
+    return FlutterFragment.withCachedEngine(
+        EMBED_ENGINE_ID,
+    ).renderMode(
+        RenderMode.texture,
+    ).build()
 }
 
 /**
@@ -45,18 +46,9 @@ fun FragmentActivity.loadFlutterView(
 ): View {
     return ViewPager2(this@loadFlutterView).apply {
         isUserInputEnabled = false
-        adapter = object : FragmentStateAdapter(
-            this@loadFlutterView,
-        ) {
-            /** 获取 Fragment 数量 */
-            override fun getItemCount() = 1
-
-            /** 创建 Fragment */
-            override fun createFragment(position: Int): Fragment {
-                return flutter ?: error(
-                    message = "Flutter is null!",
-                )
-            }
-        }
+        adapter = FlutterAdapter(
+            activity = this@loadFlutterView,
+            flutter = flutter
+        )
     }
 }

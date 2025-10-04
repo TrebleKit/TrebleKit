@@ -1,7 +1,5 @@
 package io.treblekit.app.hybrid
 
-import android.util.Log
-import io.flutter.embedding.engine.FlutterEngine
 import io.treblekit.app.base.BaseApplication
 
 abstract class HybridApplication : BaseApplication() {
@@ -11,42 +9,7 @@ abstract class HybridApplication : BaseApplication() {
      */
     override fun onCreate() {
         super.onCreate()
-        // 初始化Flutter引擎并注册插件
-        registerWith(engine = loadFlutter())
-    }
-
-    /**
-     * 注册插件
-     *
-     * @param engine Flutter引擎
-     */
-    private fun registerWith(engine: FlutterEngine) {
-        try {
-            engine.plugins.add(PlatformResources())
-        } catch (e: Exception) {
-            Log.e(
-                TAG,
-                "Error registering plugin PlatformResources",
-                e,
-            )
-        }
-        try {
-            engine.plugins.add(AndroidToFlutter())
-        } catch (e: Exception) {
-            Log.e(
-                TAG,
-                "Error registering plugin AndroidToFlutter",
-                e,
-            )
-        }
-    }
-
-    /**
-     * 伴生对象
-     */
-    private companion object {
-
-        /** 日志标签 */
-        const val TAG: String = "HybridApplication"
+        // 初始化Flutter引擎
+        loadFlutter()
     }
 }

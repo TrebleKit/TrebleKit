@@ -15,7 +15,14 @@ data object DashboardPage
 @Serializable
 data object EcosedKitPage
 
+@Serializable
+data object HomeDestination
+
+@Serializable
+data object FloatFlutterDestination
+
 data class AppDestination<T>(
+//    val label: Int,
     val route: T,
     val icon: ImageVector,
     val selectedIcon: ImageVector,
@@ -33,17 +40,3 @@ val appDestination: ArrayList<AppDestination<out Any>> = arrayListOf(
         selectedIcon = Icons.Filled.KeyboardCommandKey,
     ),
 )
-
-fun <T : Any> PagerState.isCurrentDestination(page: T): Boolean {
-    return this@isCurrentDestination.currentPage == appDestination.indexOfFirst { index ->
-        return@indexOfFirst index.route == page
-    }
-}
-
-suspend fun <T : Any> PagerState.animateToRoute(route: T) {
-    return this@animateToRoute.animateScrollToPage(
-        page = appDestination.indexOfFirst { index ->
-            return@indexOfFirst index.route == route
-        },
-    )
-}

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import io.treblekit.app.common.IViewFactory
 import io.flutter.embedding.android.FlutterFragment
 
 abstract class HybridActivity : AppCompatActivity(), IViewFactory {

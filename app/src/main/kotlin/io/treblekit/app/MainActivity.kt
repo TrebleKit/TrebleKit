@@ -5,12 +5,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import io.treblekit.app.base.ComposableActivity
 import io.treblekit.app.ui.ActivityMain
+import io.treblekit.app.ui.theme.TrebleKitTheme
 
 class MainActivity : ComposableActivity() {
 
     @Composable
     override fun Content() {
-        ActivityMain()
+        TrebleKitTheme {
+            ActivityMain()
+        }
     }
 
     @Preview(
@@ -22,6 +25,8 @@ class MainActivity : ComposableActivity() {
     )
     @Composable
     private fun MainActivityPreview() {
-        ActivityMain()
+        TrebleKitTheme {
+            ActivityMain()
+        }
     }
 }

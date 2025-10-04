@@ -35,7 +35,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.Close
@@ -43,6 +42,7 @@ import androidx.compose.material.icons.filled.FlutterDash
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.twotone.Category
 import androidx.compose.material.icons.twotone.Home
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
@@ -75,49 +75,70 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.activity
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.accompanist.imageloading.rememberDrawablePainter
 import com.kyant.capsule.ContinuousCapsule
 import com.kyant.capsule.ContinuousRoundedRectangle
+import io.treblekit.app.FloatFlutterActivity
 import io.treblekit.app.R
-import io.treblekit.app.hybrid.FlutterView
 import io.treblekit.app.ui.page.EcosedKitPage
 import io.treblekit.app.ui.theme.AndroidGreen
-import io.treblekit.app.ui.theme.AppBackground
 import io.treblekit.app.ui.theme.CapsuleEdgePadding
 import io.treblekit.app.ui.theme.CapsuleHeight
 import io.treblekit.app.ui.theme.CapsuleIndent
 import io.treblekit.app.ui.theme.CapsuleWidth
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.utils.NoOnClick
+import io.treblekit.app.ui.utils.isCurrentPagerDestination
+import io.treblekit.app.ui.utils.navigateToPagerRoute
 import kotlinx.coroutines.launch
 
 @Composable
 fun ActivityMain() {
-    TrebleKitTheme {
-        UnderLayer()
+    val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    NavHost(
+        navController = navController,
+        startDestination = HomeDestination,
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        composable<HomeDestination> {
+            UnderLayer(navController = navController)
+        }
+        activity<FloatFlutterDestination> {
+            activityClass = FloatFlutterActivity::class
+        }
     }
 }
 
 @Preview
 @Composable
 private fun ActivityMainPreview() {
-    ActivityMain()
+    TrebleKitTheme {
+        ActivityMain()
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UnderLayer(modifier: Modifier = Modifier) {
+fun UnderLayer(
+    modifier: Modifier = Modifier,
+    navController: NavHostController? = null,
+) {
     val coroutineScope = rememberCoroutineScope()
     val pageState = rememberPagerState(
         pageCount = { appDestination.size },
@@ -125,133 +146,131 @@ fun UnderLayer(modifier: Modifier = Modifier) {
     var showDialog by remember {
         mutableStateOf(value = false)
     }
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        topBar = {
-            ULTopBar()
-        },
-        bottomBar = {
-            BottomAppBar(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .clip(
-                        shape = ContinuousRoundedRectangle(
-                            topStart = 16.dp,
-                            topEnd = 16.dp,
-                        ),
-                    ),
-                containerColor = Color(color = 0xff787493),
-                actions = {
-                    IconButton(
-                        onClick = {
-                            showDialog = true
-                        },
-                    ) {
-                        if (showDialog) AlertDialog(
-                            onDismissRequest = {
-                                showDialog = false
+    EffectBackground {
+        Scaffold(
+            modifier = modifier.fillMaxSize(),
+            topBar = {
+                ULTopBar()
+            },
+            bottomBar = {
+                BottomAppBar(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    containerColor = Color.Transparent,
+                    actions = {
+                        IconButton(
+                            onClick = {
+                                showDialog = true
                             },
-                            confirmButton = {
-                                TextButton(
-                                    onClick = {
-                                        showDialog = false
-                                    },
-                                ) {
-                                    Text(text = "确定")
-                                }
-                            },
-                            icon = {
-                                Icon(
-                                    imageVector = Icons.Filled.Android,
-                                    contentDescription = null,
+                        ) {
+                            if (showDialog) AlertDialog(
+                                onDismissRequest = {
+                                    showDialog = false
+                                },
+                                confirmButton = {
+                                    TextButton(
+                                        onClick = {
+                                            showDialog = false
+                                        },
+                                    ) {
+                                        Text(text = "确定")
+                                    }
+                                },
+                                icon = {
+                                    Icon(
+                                        imageVector = Icons.Filled.Android,
+                                        contentDescription = null,
+                                    )
+                                },
+                                iconContentColor = AndroidGreen,
+                                title = {
+                                    Text(text = "Android")
+                                },
+                                text = {
+                                    Text(text = "Android API ${Build.VERSION.SDK_INT}")
+                                },
+                            )
+                            Icon(
+                                imageVector = Icons.Filled.Android,
+                                contentDescription = null,
+                                tint = AndroidGreen,
+                            )
+                        }
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight(),
+                            text = "Android",
+                            style = MaterialTheme.typography.titleMedium,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            textAlign = TextAlign.Left,
+                        )
+                    },
+                    floatingActionButton = {
+                        Row {
+                            NavBlock(
+                                modifier = Modifier.padding(end = 4.dp),
+                                pageState = pageState,
+                            )
+                            HomeFAB(
+                                modifier = Modifier.padding(start = 4.dp),
+                                popBackStack = {},
+                            )
+                        }
+                    },
+                )
+            },
+            containerColor = Color.Transparent,
+        ) { innerPadding ->
+            HorizontalPager(
+                state = pageState,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues = innerPadding),
+                userScrollEnabled = false,
+            ) { page ->
+                when (appDestination[page].route) {
+                    DashboardPage -> DashboardPage(
+                        popBackStack = {},
+                        animateToEcosed = {
+                            coroutineScope.launch {
+                                pageState.navigateToPagerRoute(
+                                    route = EcosedKitPage
                                 )
-                            },
-                            iconContentColor = AndroidGreen,
-                            title = {
-                                Text(text = "Android")
-                            },
-                            text = {
-                                Text(text = "Android API ${Build.VERSION.SDK_INT}")
-                            },
-                        )
-                        Icon(
-                            imageVector = Icons.Filled.Android,
-                            contentDescription = null,
-                            tint = AndroidGreen,
+                            }
+                        },
+                    )
+
+                    EcosedKitPage -> EcosedKitPage(
+                        navController = navController,
+                        animateToDashboard = {
+                            coroutineScope.launch {
+                                pageState.navigateToPagerRoute(
+                                    route = DashboardPage
+                                )
+                            }
+                        },
+                    )
+
+                    else -> Box(
+                        modifier = modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text = "未知页面",
+                            color = MaterialTheme.colorScheme.error,
+                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
                         )
                     }
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight(),
-                        text = "Android",
-                        style = MaterialTheme.typography.titleMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = Color.White,
-                        fontSize = 16.sp,
-                        textAlign = TextAlign.Left,
-                    )
-                },
-                floatingActionButton = {
-                    Row {
-                        NavBlock(
-                            modifier = Modifier.padding(end = 4.dp),
-                            pageState = pageState,
-                        )
-                        HomeFAB(
-                            modifier = Modifier.padding(start = 4.dp),
-                            popBackStack = {},
-                        )
-                    }
-                },
-            )
-        },
-        containerColor = AppBackground,
-    ) { innerPadding ->
-        HorizontalPager(
-            state = pageState,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues = innerPadding),
-            userScrollEnabled = false,
-        ) { page ->
-            when (appDestination[page].route) {
-                DashboardPage -> DashboardPage(
-                    popBackStack = {},
-                    animateToEcosed = {
-                        coroutineScope.launch {
-                            pageState.animateToRoute(
-                                route = EcosedKitPage
-                            )
-                        }
-                    },
-                )
-
-                EcosedKitPage -> EcosedKitPage(
-                    animateToDashboard = {
-                        coroutineScope.launch {
-                            pageState.animateToRoute(
-                                route = DashboardPage
-                            )
-                        }
-                    },
-                )
-
-                else -> Box(
-                    modifier = modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = "未知页面",
-                        color = MaterialTheme.colorScheme.error,
-                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                    )
                 }
             }
         }
     }
+
 }
 
 @Preview
@@ -283,11 +302,11 @@ fun NavBlock(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             appDestination.forEach { page ->
-                val isCurrent = pageState?.isCurrentDestination(page = page.route)
+                val isCurrent = pageState?.isCurrentPagerDestination(route = page.route)
                 IconButton(
                     onClick = {
                         if (isCurrent == false) coroutineScope.launch {
-                            pageState.animateToRoute(route = page.route)
+                            pageState.navigateToPagerRoute(route = page.route)
                         }
                     },
                     modifier = Modifier.wrapContentSize(),
@@ -357,72 +376,36 @@ fun HomeFABPreview() {
     }
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ULActionBar(
-    modifier: Modifier = Modifier,
-    title: @Composable () -> Unit = {},
-    navigationIcon: @Composable () -> Unit = {},
-) {
-    Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(height = 56.dp),
-        shape = ContinuousRoundedRectangle(size = 16.dp),
-        color = MaterialTheme.colorScheme.primaryContainer,
-    ) {
-        TopAppBar(
-            title = title,
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            navigationIcon = navigationIcon,
-            actions = {
-                IconButton(onClick = NoOnClick) {
-                    Icon(
-                        imageVector = Icons.Filled.MoreVert,
-                        contentDescription = null,
-                    )
-                }
-            },
-            windowInsets = WindowInsets(),
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent,
-            ),
-        )
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ULTopBar(
     modifier: Modifier = Modifier,
 ) {
-    Column(
+    CenterAlignedTopAppBar(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight(),
-    ) {
-        CenterAlignedTopAppBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            title = {
-                Text(
-                    text = stringResource(id = R.string.app_name),
-                    color = Color.White,
-                )
-            },
-            navigationIcon = {
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Transparent,
+        ),
+        title = {
+            Text(
+                text = stringResource(id = R.string.app_name),
+                color = Color.White,
+            )
+        },
+        navigationIcon = {
+            Surface(
+                modifier = Modifier
+                    .padding(start = CapsuleEdgePadding)
+                    .width(width = CapsuleWidth)
+                    .height(height = CapsuleHeight),
+                shape = ContinuousCapsule,
+                color = Color(color = 0xff434056),
+                onClick = NoOnClick
+            ) {
                 Box(
-                    modifier = Modifier
-                        .padding(start = CapsuleEdgePadding)
-                        .width(width = CapsuleWidth)
-                        .height(height = CapsuleHeight)
-                        .clip(shape = ContinuousCapsule)
-                        .background(color = Color(color = 0xff434056))
-                        .clickable(onClick = {}),
+                    modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,
                 ) {
                     Row(
@@ -432,8 +415,8 @@ fun ULTopBar(
                         Icon(
                             imageVector = Icons.Filled.Search,
                             contentDescription = null,
+                            tint = Color(color = 0xff8E8E9E),
                             modifier = Modifier.size(size = 20.dp),
-                            tint = Color(color = 0xff8E8E9E)
                         )
                         Text(
                             text = "搜索",
@@ -446,15 +429,19 @@ fun ULTopBar(
                         )
                     }
                 }
-            },
-            actions = {
+            }
+        },
+        actions = {
+            Surface(
+                modifier = Modifier
+                    .padding(end = CapsuleEdgePadding)
+                    .width(width = CapsuleWidth)
+                    .height(height = CapsuleHeight),
+                shape = ContinuousCapsule,
+                color = Color(color = 0xff434056),
+            ) {
                 Row(
-                    modifier = Modifier
-                        .padding(end = CapsuleEdgePadding)
-                        .height(height = CapsuleHeight)
-                        .width(width = CapsuleWidth)
-                        .clip(shape = ContinuousCapsule)
-                        .background(color = Color(color = 0xff434056)),
+                    modifier = Modifier.fillMaxSize(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Box(
@@ -491,17 +478,9 @@ fun ULTopBar(
                         )
                     }
                 }
-            },
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Color.Transparent,
-            ),
-        )
-        HorizontalDivider(
-            modifier = Modifier.fillMaxWidth(), thickness = 0.5.dp, color = Color.Black.copy(
-                alpha = 0.2f
-            )
-        )
-    }
+            }
+        },
+    )
 }
 
 @Composable
@@ -661,15 +640,11 @@ fun DashboardPage(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun DashboardPagePreview() {
     TrebleKitTheme {
-        DashboardPage(
-            modifier = Modifier.background(
-                color = AppBackground
-            )
-        )
+        DashboardPage()
     }
 }
 
@@ -714,7 +689,7 @@ fun MPPlayer(
                 appIcon = rememberDrawablePainter(
                     drawable = AppCompatResources.getDrawable(
                         context,
-                        R.mipmap.ic_ebkit,
+                        R.drawable.ic_ebkit,
                     ),
                 ),
                 appName = "EbKit",
@@ -730,7 +705,7 @@ fun MPPlayer(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun MPPlayerPreview() {
     TrebleKitTheme {
@@ -752,21 +727,22 @@ fun RecentPlayer(
                 .height(height = 60.dp)
                 .fillMaxWidth()
                 .clip(shape = ContinuousCapsule)
-                .background(Color(color = 0xFF434056))
-                .clickable(onClick = animateToFlutter), contentAlignment = Alignment.Center
+                .background(color = Color(color = 0xFF434056))
+                .clickable(onClick = animateToFlutter),
+            contentAlignment = Alignment.Center,
         ) {
             Row(
                 modifier = Modifier.wrapContentSize(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
-                    imageVector = Icons.Filled.FlutterDash,
+                    imageVector = Icons.TwoTone.Category,
                     contentDescription = null,
                     modifier = Modifier.size(size = 30.dp),
-                    tint = Color(color = 0xFF8E8E9E)
+                    tint = Color(color = 0xFF8E8E9E),
                 )
                 Text(
-                    text = "暂无内容",
+                    text = "软件平台",
                     modifier = Modifier
                         .wrapContentSize()
                         .padding(start = 10.dp),
@@ -777,7 +753,7 @@ fun RecentPlayer(
             }
         }
         Text(
-            text = "Ecosed",
+            text = "Treble",
             fontSize = 15.sp,
             color = Color.White,
             textAlign = TextAlign.Center,
@@ -786,7 +762,7 @@ fun RecentPlayer(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun RecentPlayerPreview() {
     TrebleKitTheme {
@@ -916,7 +892,7 @@ fun AppItem(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun AppItemPreview() {
     TrebleKitTheme {
