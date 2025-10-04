@@ -47,6 +47,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -149,76 +150,85 @@ fun UnderLayer(
                 ULTopBar()
             },
             bottomBar = {
-                BottomAppBar(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    containerColor = Color.Transparent,
-                    actions = {
-                        if (showDialog) AlertDialog(
-                            onDismissRequest = {
-                                showDialog = false
-                            },
-                            confirmButton = {
-                                TextButton(
-                                    onClick = {
-                                        showDialog = false
-                                    },
-                                ) {
-                                    Text(text = "确定")
-                                }
-                            },
-                            icon = {
+                Column {
+                    HorizontalDivider(
+                        modifier = Modifier.fillMaxWidth(),
+                        thickness = 0.5.dp,
+                        color = Color.Black.copy(
+                            alpha = 0.2f
+                        ),
+                    )
+                    BottomAppBar(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                        containerColor = Color.Transparent,
+                        actions = {
+                            if (showDialog) AlertDialog(
+                                onDismissRequest = {
+                                    showDialog = false
+                                },
+                                confirmButton = {
+                                    TextButton(
+                                        onClick = {
+                                            showDialog = false
+                                        },
+                                    ) {
+                                        Text(text = "确定")
+                                    }
+                                },
+                                icon = {
+                                    Icon(
+                                        imageVector = Icons.Filled.Android,
+                                        contentDescription = null,
+                                    )
+                                },
+                                iconContentColor = AndroidGreen,
+                                title = {
+                                    Text(text = "Android")
+                                },
+                                text = {
+                                    Text(text = "Android API ${Build.VERSION.SDK_INT}")
+                                },
+                            )
+                            IconButton(
+                                onClick = {
+                                    showDialog = true
+                                },
+                            ) {
                                 Icon(
                                     imageVector = Icons.Filled.Android,
                                     contentDescription = null,
+                                    tint = AndroidGreen,
                                 )
-                            },
-                            iconContentColor = AndroidGreen,
-                            title = {
-                                Text(text = "Android")
-                            },
-                            text = {
-                                Text(text = "Android API ${Build.VERSION.SDK_INT}")
-                            },
-                        )
-                        IconButton(
-                            onClick = {
-                                showDialog = true
-                            },
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Android,
-                                contentDescription = null,
-                                tint = AndroidGreen,
+                            }
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight(),
+                                text = "Android",
+                                style = MaterialTheme.typography.titleMedium,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                textAlign = TextAlign.Left,
                             )
-                        }
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight(),
-                            text = "Android",
-                            style = MaterialTheme.typography.titleMedium,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            color = Color.White,
-                            fontSize = 16.sp,
-                            textAlign = TextAlign.Left,
-                        )
-                    },
-                    floatingActionButton = {
-                        Row {
-                            NavBlock(
-                                modifier = Modifier.padding(end = 4.dp),
-                                pageState = pageState,
-                            )
-                            HomeFAB(
-                                modifier = Modifier.padding(start = 4.dp),
-                                popBackStack = {},
-                            )
-                        }
-                    },
-                )
+                        },
+                        floatingActionButton = {
+                            Row {
+                                NavBlock(
+                                    modifier = Modifier.padding(end = 4.dp),
+                                    pageState = pageState,
+                                )
+                                HomeFAB(
+                                    modifier = Modifier.padding(start = 4.dp),
+                                    popBackStack = {},
+                                )
+                            }
+                        },
+                    )
+                }
             },
             containerColor = Color.Transparent,
         ) { innerPadding ->
@@ -375,106 +385,117 @@ fun HomeFABPreview() {
 fun ULTopBar(
     modifier: Modifier = Modifier,
 ) {
-    CenterAlignedTopAppBar(
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Transparent,
-        ),
-        title = {
-            Text(
-                text = stringResource(id = R.string.app_name),
-                color = Color.White,
-            )
-        },
-        navigationIcon = {
-            Surface(
-                modifier = Modifier
-                    .padding(start = CapsuleEdgePadding)
-                    .width(width = CapsuleWidth)
-                    .height(height = CapsuleHeight),
-                shape = ContinuousCapsule,
-                color = Color(color = 0xff434056),
-                onClick = NoOnClick
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center,
+    Column(
+        modifier = modifier.fillMaxWidth().wrapContentHeight()
+    ) {
+        CenterAlignedTopAppBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+            ),
+            title = {
+                Text(
+                    text = stringResource(id = R.string.app_name),
+                    color = Color.White,
+                )
+            },
+            navigationIcon = {
+                Surface(
+                    modifier = Modifier
+                        .padding(start = CapsuleEdgePadding)
+                        .width(width = CapsuleWidth)
+                        .height(height = CapsuleHeight),
+                    shape = ContinuousCapsule,
+                    color = Color(color = 0xff434056),
+                    onClick = NoOnClick
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Row(
+                            modifier = Modifier.wrapContentSize(),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Search,
+                                contentDescription = null,
+                                tint = Color(color = 0xff8E8E9E),
+                                modifier = Modifier.size(size = 20.dp),
+                            )
+                            Text(
+                                text = "搜索",
+                                modifier = Modifier
+                                    .wrapContentSize()
+                                    .padding(start = 6.dp),
+                                fontSize = 13.sp,
+                                color = Color(color = 0xff8E8E9E),
+                                textAlign = TextAlign.Center,
+                            )
+                        }
+                    }
+                }
+            },
+            actions = {
+                Surface(
+                    modifier = Modifier
+                        .padding(end = CapsuleEdgePadding)
+                        .width(width = CapsuleWidth)
+                        .height(height = CapsuleHeight),
+                    shape = ContinuousCapsule,
+                    color = Color(color = 0xff434056),
                 ) {
                     Row(
-                        modifier = Modifier.wrapContentSize(),
+                        modifier = Modifier.fillMaxSize(),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.Search,
-                            contentDescription = null,
-                            tint = Color(color = 0xff8E8E9E),
-                            modifier = Modifier.size(size = 20.dp),
-                        )
-                        Text(
-                            text = "搜索",
+                        Box(
                             modifier = Modifier
-                                .wrapContentSize()
-                                .padding(start = 6.dp),
-                            fontSize = 13.sp,
+                                .weight(weight = 1f)
+                                .fillMaxSize()
+                                .clickable(onClick = NoOnClick),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.MoreHoriz,
+                                contentDescription = null,
+                                tint = Color(color = 0xff8E8E9E),
+                            )
+                        }
+                        VerticalDivider(
+                            modifier = Modifier
+                                .padding(vertical = CapsuleIndent)
+                                .wrapContentWidth()
+                                .fillMaxHeight(),
                             color = Color(color = 0xff8E8E9E),
-                            textAlign = TextAlign.Center,
                         )
+                        Box(
+                            modifier = Modifier
+                                .weight(weight = 1f)
+                                .fillMaxSize()
+                                .clickable(onClick = NoOnClick),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Close,
+                                contentDescription = null,
+                                tint = Color(color = 0xff8E8E9E),
+                            )
+                        }
                     }
                 }
-            }
-        },
-        actions = {
-            Surface(
-                modifier = Modifier
-                    .padding(end = CapsuleEdgePadding)
-                    .width(width = CapsuleWidth)
-                    .height(height = CapsuleHeight),
-                shape = ContinuousCapsule,
-                color = Color(color = 0xff434056),
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .weight(weight = 1f)
-                            .fillMaxSize()
-                            .clickable(onClick = NoOnClick),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.MoreHoriz,
-                            contentDescription = null,
-                            tint = Color(color = 0xff8E8E9E),
-                        )
-                    }
-                    VerticalDivider(
-                        modifier = Modifier
-                            .padding(vertical = CapsuleIndent)
-                            .wrapContentWidth()
-                            .fillMaxHeight(),
-                        color = Color(color = 0xff8E8E9E),
-                    )
-                    Box(
-                        modifier = Modifier
-                            .weight(weight = 1f)
-                            .fillMaxSize()
-                            .clickable(onClick = NoOnClick),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Close,
-                            contentDescription = null,
-                            tint = Color(color = 0xff8E8E9E),
-                        )
-                    }
-                }
-            }
-        },
-    )
+            },
+        )
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 0.5.dp,
+            color = Color.Black.copy(
+                alpha = 0.2f
+            ),
+        )
+    }
 }
 
 @Composable
@@ -634,7 +655,7 @@ fun DashboardDestination(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 fun DashboardDestinationPreview() {
     TrebleKitTheme {
@@ -699,7 +720,7 @@ fun MPPlayer(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 fun MPPlayerPreview() {
     TrebleKitTheme {
@@ -756,7 +777,7 @@ fun RecentPlayer(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 fun RecentPlayerPreview() {
     TrebleKitTheme {
@@ -886,7 +907,7 @@ fun AppItem(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun AppItemPreview() {
     TrebleKitTheme {
