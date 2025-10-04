@@ -2,18 +2,20 @@ package io.treblekit.app.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import io.treblekit.app.ui.theme.AppBackground
 import io.treblekit.app.ui.theme.TrebleKitTheme
 
 @Composable
-fun EffectBackground(content: @Composable () -> Unit) {
-    Box(
+fun EffectBackground(content: @Composable BoxScope.() -> Unit) {
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .background(color = AppBackground),
@@ -21,9 +23,20 @@ fun EffectBackground(content: @Composable () -> Unit) {
         ViewFactory(
             modifier = Modifier
                 .fillMaxSize()
-                .offset(y = 250.dp),
-        ) { getEffectView }
-        content()
+                .offset(
+                    y = with(
+                        receiver = LocalDensity.current,
+                    ) {
+                        return@with (constraints.maxHeight / 4).toDp()
+                    }
+                ),
+        ) {
+            getEffectView
+        }
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            content = content
+        )
     }
 }
 

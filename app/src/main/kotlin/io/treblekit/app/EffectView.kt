@@ -138,30 +138,6 @@ class EffectView(context: Context) : FrameLayout(context) {
             this.mBgRuntimeShader.setFloatUniform("uSaturateOffset", f)
         }
 
-        fun setPhoneLight(fArr: FloatArray) {
-            setLightOffset(0.1f)
-            setSaturateOffset(0.2f)
-            setPoints(
-                floatArrayOf(
-                    0.67f,
-                    0.42f,
-                    1.0f,
-                    0.69f,
-                    0.75f,
-                    1.0f,
-                    0.14f,
-                    0.71f,
-                    0.95f,
-                    0.14f,
-                    0.27f,
-                    0.8f
-                )
-            )
-            setColors(generateRandomColors())
-            setBound(fArr)
-            startColorAnimation(false)
-        }
-
         fun setPhoneDark(fArr: FloatArray) {
             setLightOffset(-0.1f)
             setSaturateOffset(0.2f)
