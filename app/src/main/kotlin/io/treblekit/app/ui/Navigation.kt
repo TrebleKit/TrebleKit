@@ -10,10 +10,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object DashboardPage
+data object DashboardDestination
 
 @Serializable
-data object EcosedKitPage
+data object PlatformDestination
 
 @Serializable
 data object HomeDestination
@@ -30,12 +30,12 @@ data class AppDestination<T>(
 
 val appDestination: ArrayList<AppDestination<out Any>> = arrayListOf(
     AppDestination(
-        route = DashboardPage,
+        route = DashboardDestination,
         icon = Icons.Outlined.Dashboard,
         selectedIcon = Icons.Filled.Dashboard,
     ),
     AppDestination(
-        route = EcosedKitPage,
+        route = PlatformDestination,
         icon = Icons.Outlined.KeyboardCommandKey,
         selectedIcon = Icons.Filled.KeyboardCommandKey,
     ),

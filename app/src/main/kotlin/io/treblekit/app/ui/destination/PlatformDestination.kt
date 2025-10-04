@@ -1,6 +1,5 @@
-package io.treblekit.app.ui.page
+package io.treblekit.app.ui.destination
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -16,8 +15,6 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.twotone.Category
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -25,7 +22,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -54,7 +50,7 @@ import io.treblekit.app.ui.utils.NoOnClick
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EcosedKitPage(
+fun PlatformDestination(
     modifier: Modifier = Modifier,
     navController: NavHostController? = null,
     animateToDashboard: () -> Unit = NoOnClick,
@@ -68,7 +64,7 @@ fun EcosedKitPage(
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
-        Card (
+        Surface(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(
@@ -79,9 +75,7 @@ fun EcosedKitPage(
                 )
                 .height(height = 56.dp),
             shape = ContinuousRoundedRectangle(size = 16.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-            ),
+            color = MaterialTheme.colorScheme.primaryContainer,
         ) {
             TopAppBar(
                 title = {
@@ -177,7 +171,7 @@ fun EcosedKitPage(
                 ),
             )
         }
-        OutlinedCard(
+        Surface(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
@@ -217,10 +211,10 @@ fun EcosedKitPage(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun EcosedKitPagePreview() {
+fun PlatformDestinationPreview() {
     TrebleKitTheme {
-        EcosedKitPage()
+        PlatformDestination()
     }
 }

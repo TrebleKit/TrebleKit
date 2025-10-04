@@ -1,4 +1,4 @@
-package io.treblekit.app.ui
+package io.treblekit.app
 
 import android.content.Context
 import android.content.res.Resources
@@ -10,39 +10,12 @@ import android.os.Looper
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import io.treblekit.app.R
-import io.treblekit.app.ui.theme.AppBackground
 import java.util.Scanner
 
-@Composable
-fun EffectBackground(content: @Composable () -> Unit) {
-    val inspection: Boolean = LocalInspectionMode.current
-    Box(
-        modifier = Modifier.fillMaxSize().background(color = AppBackground),
-    ) {
-        if (!inspection && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            AndroidView(
-                modifier = Modifier.fillMaxSize().offset(y = 200.dp),
-                factory = { context -> BgEffectView(context) },
-            )
-        }
-        content()
-    }
-}
-
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-class BgEffectView(context: Context?) : LinearLayout(context) {
+class EffectView(context: Context) : FrameLayout(context) {
 
     private var mBgEffectPainter: BgEffectPainter? = null
     private val startTime = System.nanoTime().toFloat()
@@ -52,15 +25,11 @@ class BgEffectView(context: Context?) : LinearLayout(context) {
         bgEffect(context)
     }
 
-    private fun bgEffect(context: Context?) {
-        post {
-            if (context != null) {
-                val appContext = context.applicationContext
-                mBgEffectPainter = BgEffectPainter(appContext)
-                mBgEffectPainter?.showRuntimeShader(appContext, this@BgEffectView)
-                mHandler.post(mRunnableBgEffect)
-            }
-        }
+    private fun bgEffect(context: Context) = post {
+        val appContext = context.applicationContext
+        mBgEffectPainter = BgEffectPainter(appContext)
+        mBgEffectPainter?.showRuntimeShader(appContext, this@EffectView)
+        mHandler.post(mRunnableBgEffect)
     }
 
     private var mRunnableBgEffect: Runnable = Runnable {

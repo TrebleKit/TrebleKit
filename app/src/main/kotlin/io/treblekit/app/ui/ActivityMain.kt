@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,9 +37,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.FlutterDash
 import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.twotone.Category
 import androidx.compose.material.icons.twotone.Home
@@ -50,7 +47,6 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -58,7 +54,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -95,7 +90,8 @@ import com.kyant.capsule.ContinuousCapsule
 import com.kyant.capsule.ContinuousRoundedRectangle
 import io.treblekit.app.FloatFlutterActivity
 import io.treblekit.app.R
-import io.treblekit.app.ui.page.EcosedKitPage
+import io.treblekit.app.ui.components.EffectBackground
+import io.treblekit.app.ui.destination.PlatformDestination
 import io.treblekit.app.ui.theme.AndroidGreen
 import io.treblekit.app.ui.theme.CapsuleEdgePadding
 import io.treblekit.app.ui.theme.CapsuleHeight
@@ -159,38 +155,38 @@ fun UnderLayer(
                         .wrapContentHeight(),
                     containerColor = Color.Transparent,
                     actions = {
+                        if (showDialog) AlertDialog(
+                            onDismissRequest = {
+                                showDialog = false
+                            },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        showDialog = false
+                                    },
+                                ) {
+                                    Text(text = "确定")
+                                }
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.Filled.Android,
+                                    contentDescription = null,
+                                )
+                            },
+                            iconContentColor = AndroidGreen,
+                            title = {
+                                Text(text = "Android")
+                            },
+                            text = {
+                                Text(text = "Android API ${Build.VERSION.SDK_INT}")
+                            },
+                        )
                         IconButton(
                             onClick = {
                                 showDialog = true
                             },
                         ) {
-                            if (showDialog) AlertDialog(
-                                onDismissRequest = {
-                                    showDialog = false
-                                },
-                                confirmButton = {
-                                    TextButton(
-                                        onClick = {
-                                            showDialog = false
-                                        },
-                                    ) {
-                                        Text(text = "确定")
-                                    }
-                                },
-                                icon = {
-                                    Icon(
-                                        imageVector = Icons.Filled.Android,
-                                        contentDescription = null,
-                                    )
-                                },
-                                iconContentColor = AndroidGreen,
-                                title = {
-                                    Text(text = "Android")
-                                },
-                                text = {
-                                    Text(text = "Android API ${Build.VERSION.SDK_INT}")
-                                },
-                            )
                             Icon(
                                 imageVector = Icons.Filled.Android,
                                 contentDescription = null,
@@ -234,23 +230,23 @@ fun UnderLayer(
                 userScrollEnabled = false,
             ) { page ->
                 when (appDestination[page].route) {
-                    DashboardPage -> DashboardPage(
+                    DashboardDestination -> DashboardDestination(
                         popBackStack = {},
                         animateToEcosed = {
                             coroutineScope.launch {
                                 pageState.navigateToPagerRoute(
-                                    route = EcosedKitPage
+                                    route = PlatformDestination
                                 )
                             }
                         },
                     )
 
-                    EcosedKitPage -> EcosedKitPage(
+                    PlatformDestination -> PlatformDestination(
                         navController = navController,
                         animateToDashboard = {
                             coroutineScope.launch {
                                 pageState.navigateToPagerRoute(
-                                    route = DashboardPage
+                                    route = DashboardDestination
                                 )
                             }
                         },
@@ -360,9 +356,7 @@ fun HomeFAB(
             )
         },
         onClick = popBackStack,
-        modifier = modifier
-            .wrapContentSize()
-            ,
+        modifier = modifier.wrapContentSize(),
         shape = ContinuousRoundedRectangle(size = 16.dp),
         elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
     )
@@ -484,7 +478,7 @@ fun ULTopBar(
 }
 
 @Composable
-fun DashboardPage(
+fun DashboardDestination(
     modifier: Modifier = Modifier,
     popBackStack: () -> Unit = NoOnClick,
     animateToEcosed: () -> Unit = NoOnClick,
@@ -642,9 +636,9 @@ fun DashboardPage(
 
 @Preview(showBackground = true)
 @Composable
-fun DashboardPagePreview() {
+fun DashboardDestinationPreview() {
     TrebleKitTheme {
-        DashboardPage()
+        DashboardDestination()
     }
 }
 
