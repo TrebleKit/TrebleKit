@@ -27,6 +27,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.twotone.Category
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -72,9 +73,7 @@ fun DashboardDestination(
                 bottom = 15.dp,
             ),
             fontSize = 14.sp,
-            color = Color(
-                color = 0xFF8E8E9E,
-            ),
+            color = Color.White,
         )
         MPPlayer(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp),
@@ -193,9 +192,7 @@ fun DashboardDestination(
                 bottom = 15.dp,
             ),
             fontSize = 14.sp,
-            color = Color(
-                color = 0xFF8E8E9E,
-            ),
+            color = Color.White,
         )
         AppsGrid(
             modifier = Modifier.padding(
@@ -295,7 +292,7 @@ fun RecentPlayer(
                 .height(height = 60.dp)
                 .fillMaxWidth()
                 .clip(shape = ContinuousCapsule)
-                .background(color = Color(color = 0xFF434056))
+                .background(color = MaterialTheme.colorScheme.primaryContainer)
                 .clickable(onClick = animateToFlutter),
             contentAlignment = Alignment.Center,
         ) {
@@ -306,8 +303,8 @@ fun RecentPlayer(
                 Icon(
                     imageVector = Icons.TwoTone.Category,
                     contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.size(size = 30.dp),
-                    tint = Color(color = 0xFF8E8E9E),
                 )
                 Text(
                     text = "软件平台",
@@ -315,7 +312,7 @@ fun RecentPlayer(
                         .wrapContentSize()
                         .padding(start = 10.dp),
                     fontSize = 16.sp,
-                    color = Color(color = 0xFF8E8E9E),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     textAlign = TextAlign.Center,
                 )
             }

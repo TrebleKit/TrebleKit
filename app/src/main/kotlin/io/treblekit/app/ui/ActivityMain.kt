@@ -338,24 +338,24 @@ fun ActivityMain() {
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
                                     appDestination.forEach { page ->
-                                        val isCurrent = pageState?.isCurrentPagerDestination(route = page.route)
+                                        val isCurrent = pageState.isCurrentPagerDestination(route = page.route)
                                         IconButton(
                                             onClick = {
-                                                if (isCurrent == false) coroutineScope.launch {
+                                                if (!isCurrent) coroutineScope.launch {
                                                     pageState.navigateToPagerRoute(route = page.route)
                                                 }
                                             },
                                             modifier = Modifier.wrapContentSize(),
                                         ) {
                                             val iconAlpha: Float by animateFloatAsState(
-                                                targetValue = if (isCurrent == true) 1f else 0.5f,
+                                                targetValue = if (isCurrent) 1f else 0.5f,
                                                 animationSpec = spring(
                                                     dampingRatio = 0.8f,
                                                     stiffness = 200f,
                                                 ),
                                             )
                                             Icon(
-                                                imageVector = if (isCurrent == true) {
+                                                imageVector = if (isCurrent) {
                                                     page.selectedIcon
                                                 } else {
                                                     page.icon

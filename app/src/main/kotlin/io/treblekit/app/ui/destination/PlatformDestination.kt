@@ -75,7 +75,7 @@ fun PlatformDestination(
         ) {
             TopAppBar(
                 title = {
-                    Text(text = "EcosedKit")
+                    Text(text = "Treble平台")
                 },
                 modifier = Modifier
                     .fillMaxWidth()

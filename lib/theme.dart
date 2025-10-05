@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 
-class DMUtilityTheme {
-  const DMUtilityTheme();
+class TrebleKitTheme {
+  const TrebleKitTheme();
 
   static ColorScheme lightScheme() {
     return const ColorScheme(

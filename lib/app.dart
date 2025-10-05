@@ -10,17 +10,7 @@ class TrebleKitApp extends StatelessWidget {
   const TrebleKitApp({super.key});
 
   /// 主题
-  final DMUtilityTheme theme = const DMUtilityTheme();
-
-  /// 获取系统栏图标深色/浅色
-  Brightness getSystemBarBrightness(BuildContext context) {
-    return Brightness.light;
-    if (MediaQuery.platformBrightnessOf(context) == Brightness.light) {
-      return Brightness.dark; // 浅色主题深色系统栏图标
-    } else {
-      return Brightness.light; // 深色主题浅色系统栏图标
-    }
-  }
+  final TrebleKitTheme theme = const TrebleKitTheme();
 
   /// 主题
   ThemeData customTheme(BuildContext context, ThemeData origin) {
@@ -29,11 +19,11 @@ class TrebleKitApp extends StatelessWidget {
         systemOverlayStyle: SystemUiOverlayStyle(
           systemNavigationBarColor: Colors.transparent,
           systemNavigationBarDividerColor: Colors.transparent,
-          systemNavigationBarIconBrightness: getSystemBarBrightness(context),
+          systemNavigationBarIconBrightness: Brightness.light,
           systemNavigationBarContrastEnforced: false,
           statusBarColor: Colors.transparent,
-          statusBarBrightness: getSystemBarBrightness(context),
-          statusBarIconBrightness: getSystemBarBrightness(context),
+          statusBarBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.light,
           systemStatusBarContrastEnforced: false,
         ),
       ),
