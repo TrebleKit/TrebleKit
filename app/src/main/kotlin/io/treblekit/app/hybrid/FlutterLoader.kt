@@ -6,24 +6,22 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.android.RenderMode
+import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
-import io.flutter.embedding.engine.FlutterEngineGroup
+import io.flutter.embedding.engine.dart.DartExecutor
 
 /** Flutter引擎ID */
-const val EMBED_ENGINE_ID: String = "dm_utility_flutter_embed"
-const val FLOAT_ENGINE_ID: String = "dm_utility_flutter_float"
+private const val ENGINE_ID: String = "treblekit_flutter"
 
 /**
  * 初始化Flutter引擎
  */
 fun Application.loadFlutter() {
-    FlutterEngineGroup(this@loadFlutter).let { group ->
-        arrayListOf(EMBED_ENGINE_ID, FLOAT_ENGINE_ID).forEach { engineId ->
-            group.createAndRunDefaultEngine(this@loadFlutter).let { engine ->
-                CustomPluginRegistrant().registerWith(engine = engine)
-                FlutterEngineCache.getInstance().put(engineId, engine)
-            }
-        }
+    FlutterEngine(this@loadFlutter).let { engine ->
+        val entry = DartExecutor.DartEntrypoint.createDefault()
+        engine.dartExecutor.executeDartEntrypoint(entry)
+        CustomPluginRegistrant().registerWith(engine = engine)
+        FlutterEngineCache.getInstance().put(ENGINE_ID, engine)
     }
 }
 
@@ -32,7 +30,7 @@ fun Application.loadFlutter() {
  */
 fun loadFlutterFragment(): FlutterFragment {
     return FlutterFragment.withCachedEngine(
-        EMBED_ENGINE_ID,
+        ENGINE_ID,
     ).renderMode(
         RenderMode.texture,
     ).build()

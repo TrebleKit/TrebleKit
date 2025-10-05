@@ -134,21 +134,6 @@ fun PlatformDestination(
                                 dropdownExpanded = false
                             },
                         )
-//                        DropdownMenuItem(
-//                            leadingIcon = {
-//                                Icon(
-//                                    imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
-//                                    contentDescription = null,
-//                                )
-//                            },
-//                            text = {
-//                                Text(text = "在新页面中打开")
-//                            },
-//                            onClick = {
-//                                navController?.navigate(route = FloatFlutterDestination)
-//                                dropdownExpanded = false
-//                            },
-//                        )
                     }
                     IconButton(
                         onClick = {
