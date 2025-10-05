@@ -6,6 +6,7 @@ import android.graphics.RenderEffect
 import android.graphics.RuntimeShader
 import android.os.Handler
 import android.os.Looper
+import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,11 @@ import android.widget.FrameLayout
 import io.treblekit.app.R
 import java.util.Scanner
 
-class EffectView(context: Context) : FrameLayout(context) {
+class EffectView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+) : FrameLayout(context, attrs, defStyleAttr) {
 
     private var mBgEffectPainter: BgEffectPainter? = null
     private val startTime = System.nanoTime().toFloat()
@@ -31,7 +36,9 @@ class EffectView(context: Context) : FrameLayout(context) {
     }
 
     private var mRunnableBgEffect: Runnable = Runnable {
-        mBgEffectPainter?.setAnimTime((((System.nanoTime().toFloat()) - startTime) / 1.0E9f) % 62.831852f)
+        mBgEffectPainter?.setAnimTime(
+            (((System.nanoTime().toFloat()) - startTime) / 1.0E9f) % 62.831852f
+        )
         mBgEffectPainter?.setResolution(floatArrayOf(width.toFloat(), height.toFloat()))
         mBgEffectPainter?.updateMaterials()
         setRenderEffect(mBgEffectPainter?.renderEffect)

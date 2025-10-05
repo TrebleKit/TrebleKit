@@ -41,7 +41,7 @@ fun loadFlutterFragment(): FlutterFragment {
  */
 fun FragmentActivity.loadFlutterView(
     flutter: FlutterFragment?,
-): View {
+): ViewPager2 {
     return ViewPager2(this@loadFlutterView).apply {
         isUserInputEnabled = false
         adapter = FlutterAdapter(

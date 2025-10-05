@@ -73,10 +73,10 @@ import io.treblekit.app.ui.destination.DashboardDestination
 import io.treblekit.app.ui.destination.PlatformDestination
 import io.treblekit.app.ui.theme.AndroidGreen
 import io.treblekit.app.ui.theme.AppBackground
-import io.treblekit.app.ui.theme.CapsuleEdgePadding
-import io.treblekit.app.ui.theme.CapsuleHeight
-import io.treblekit.app.ui.theme.CapsuleWidth
 import io.treblekit.app.ui.theme.TrebleKitTheme
+import io.treblekit.app.ui.theme.capsuleEdgePadding
+import io.treblekit.app.ui.theme.capsuleHeight
+import io.treblekit.app.ui.theme.capsuleWidth
 import io.treblekit.app.ui.utils.NoOnClick
 import io.treblekit.app.ui.utils.isCurrentPagerDestination
 import io.treblekit.app.ui.utils.navigateToPagerRoute
@@ -131,9 +131,9 @@ fun ActivityMain() {
                     navigationIcon = {
                         Box(
                             modifier = Modifier
-                                .padding(start = CapsuleEdgePadding)
-                                .width(width = CapsuleWidth)
-                                .height(height = CapsuleHeight)
+                                .padding(start = capsuleEdgePadding)
+                                .width(width = capsuleWidth)
+                                .height(height = capsuleHeight)
                                 .drawBackdrop(
                                     backdrop = backdrop,
                                     shape = { ContinuousCapsule },

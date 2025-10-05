@@ -38,6 +38,12 @@ val surfaceContainerDark: Color = Color(color = 0xFF1D2024)
 val surfaceContainerHighDark: Color = Color(color = 0xFF272A2F)
 val surfaceContainerHighestDark: Color = Color(color = 0xFF32353A)
 
+val BannerContainer = Color(color = 0xA0B71C1C) // 角标背景色
+val BannerContent = Color(color = 0xFFFFFFFF) // 角标文字色
+
+val CapsuleContainer = Color(color = 0x99FFFFFF) // 胶囊背景填充
+val CapsuleStroke = Color(color = 0x19000000) // 胶囊背景描边
+val CapsuleContent = Color(color = 0xFF000000) // 胶囊前景
 
 val AndroidGreen: Color = Color(color = 0xFF3EDC87)
 val AppBackground: Color = Color(color = 0xff1B1B2B)
