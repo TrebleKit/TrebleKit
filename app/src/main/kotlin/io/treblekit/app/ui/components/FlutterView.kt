@@ -7,7 +7,9 @@ import io.treblekit.app.ui.theme.TrebleKitTheme
 
 @Composable
 fun FlutterView(modifier: Modifier = Modifier) {
-    ViewFactory(modifier = modifier) { getFlutterView }
+    ViewFactory(modifier = modifier) {
+        getFlutterView
+    }
 }
 
 @Preview(showBackground = true)

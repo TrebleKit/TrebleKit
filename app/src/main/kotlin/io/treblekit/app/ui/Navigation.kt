@@ -1,6 +1,5 @@
 package io.treblekit.app.ui
 
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.KeyboardCommandKey
@@ -15,14 +14,7 @@ data object DashboardDestination
 @Serializable
 data object PlatformDestination
 
-@Serializable
-data object HomeDestination
-
-@Serializable
-data object FloatFlutterDestination
-
 data class AppDestination<T>(
-//    val label: Int,
     val route: T,
     val icon: ImageVector,
     val selectedIcon: ImageVector,

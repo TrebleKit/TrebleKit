@@ -52,7 +52,6 @@ import io.treblekit.app.ui.utils.NoOnClick
 @Composable
 fun PlatformDestination(
     modifier: Modifier = Modifier,
-    navController: NavHostController? = null,
     animateToDashboard: () -> Unit = NoOnClick,
 ) {
     val inspection: Boolean = LocalInspectionMode.current
@@ -138,21 +137,21 @@ fun PlatformDestination(
                                 dropdownExpanded = false
                             },
                         )
-                        DropdownMenuItem(
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
-                                    contentDescription = null,
-                                )
-                            },
-                            text = {
-                                Text(text = "在新页面中打开")
-                            },
-                            onClick = {
-                                navController?.navigate(route = FloatFlutterDestination)
-                                dropdownExpanded = false
-                            },
-                        )
+//                        DropdownMenuItem(
+//                            leadingIcon = {
+//                                Icon(
+//                                    imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
+//                                    contentDescription = null,
+//                                )
+//                            },
+//                            text = {
+//                                Text(text = "在新页面中打开")
+//                            },
+//                            onClick = {
+//                                navController?.navigate(route = FloatFlutterDestination)
+//                                dropdownExpanded = false
+//                            },
+//                        )
                     }
                     IconButton(
                         onClick = {

@@ -1,20 +1,18 @@
-package io.treblekit.app
+package io.treblekit.app.ui.view
 
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.RenderEffect
 import android.graphics.RuntimeShader
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.annotation.RequiresApi
+import io.treblekit.app.R
 import java.util.Scanner
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 class EffectView(context: Context) : FrameLayout(context) {
 
     private var mBgEffectPainter: BgEffectPainter? = null
