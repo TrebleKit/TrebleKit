@@ -85,10 +85,13 @@ fun DashboardDestination(
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .padding(
-                    start = 16.dp, top = 15.dp, end = 16.dp, bottom = 15.dp
+                    start = 16.dp,
+                    top = 15.dp,
+                    end = 16.dp,
+                    bottom = 15.dp,
                 ),
             shape = ContinuousRoundedRectangle(size = 16.dp),
-            color = Color(color = 0xFF434056)
+            color = MaterialTheme.colorScheme.secondaryContainer,
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
@@ -97,9 +100,6 @@ fun DashboardDestination(
                     Text(
                         text = "互联互通",
                         fontSize = 14.sp,
-                        color = Color(
-                            color = 0xFF8E8E9E,
-                        ),
                     )
                 }
                 Row(
@@ -205,7 +205,7 @@ fun DashboardDestination(
     }
 }
 
-@Preview
+@Preview(showSystemUi = false, showBackground = false)
 @Composable
 fun DashboardDestinationPreview() {
     TrebleKitTheme {
@@ -287,34 +287,38 @@ fun RecentPlayer(
         modifier = modifier.wrapContentSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Box(
+        Surface(
             modifier = Modifier
                 .height(height = 60.dp)
-                .fillMaxWidth()
-                .clip(shape = ContinuousCapsule)
-                .background(color = MaterialTheme.colorScheme.primaryContainer)
-                .clickable(onClick = animateToFlutter),
-            contentAlignment = Alignment.Center,
+                .fillMaxWidth(),
+            shape = ContinuousCapsule,
+            color = MaterialTheme.colorScheme.primaryContainer,
+            onClick = animateToFlutter,
         ) {
-            Row(
-                modifier = Modifier.wrapContentSize(),
-                verticalAlignment = Alignment.CenterVertically,
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
             ) {
-                Icon(
-                    imageVector = Icons.TwoTone.Category,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier.size(size = 30.dp),
-                )
-                Text(
-                    text = "软件平台",
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .padding(start = 10.dp),
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    textAlign = TextAlign.Center,
-                )
+                Row(
+                    modifier = Modifier.wrapContentSize(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        imageVector = Icons.TwoTone.Category,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.size(size = 30.dp),
+                    )
+                    Text(
+                        text = "软件平台",
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .padding(start = 10.dp),
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        textAlign = TextAlign.Center,
+                    )
+                }
             }
         }
         Text(
@@ -420,32 +424,35 @@ fun AppItem(
         modifier = modifier.wrapContentSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Box(
-            modifier = Modifier
-                .size(size = 60.dp)
-                .clip(shape = RoundedCornerShape(size = 35.dp))
-                .background(color = Color(color = 0xff434056))
-                .clickable(onClick = onLaunch),
-            contentAlignment = Alignment.Center,
+        Surface(
+            modifier = Modifier.size(size = 60.dp),
+            shape = ContinuousCapsule,
+            color = MaterialTheme.colorScheme.surfaceContainerHighest,
+            onClick = onLaunch,
         ) {
-            Image(
-                painter = appIcon,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = when (style) {
-                    AppItemStyle.Image -> Modifier
-                        .fillMaxSize()
-                        .clip(
-                            shape = RoundedCornerShape(
-                                size = 35.dp,
-                            ),
-                        )
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                Image(
+                    painter = appIcon,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = when (style) {
+                        AppItemStyle.Image -> Modifier
+                            .fillMaxSize()
+                            .clip(
+                                shape = RoundedCornerShape(
+                                    size = 35.dp,
+                                ),
+                            )
 
-                    AppItemStyle.Icon -> Modifier.size(
-                        size = 30.dp,
-                    )
-                }
-            )
+                        AppItemStyle.Icon -> Modifier.size(
+                            size = 30.dp,
+                        )
+                    }
+                )
+            }
         }
         Text(
             text = appName,

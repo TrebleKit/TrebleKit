@@ -14,7 +14,6 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.twotone.Category
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -171,10 +170,11 @@ fun PlatformDestination(
                 Scaffold(
                     contentWindowInsets = WindowInsets(),
                     topBar = {
-                        CenterAlignedTopAppBar(
+                        TopAppBar(
                             title = {
-                                Text("EcosedKit")
+                                Text(text = stringResource(id = R.string.app_name))
                             },
+                            windowInsets = WindowInsets()
                         )
                     },
                 ) { innerPadding ->

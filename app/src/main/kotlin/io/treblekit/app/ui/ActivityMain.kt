@@ -1,14 +1,11 @@
 package io.treblekit.app.ui
 
+import android.annotation.SuppressLint
 import android.os.Build
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -36,6 +33,7 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -49,17 +47,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.fontscaling.MathUtils.lerp
 import androidx.compose.ui.unit.sp
 import com.kyant.backdrop.backdrops.layerBackdrop
 import com.kyant.backdrop.backdrops.rememberCombinedBackdrop
@@ -85,7 +80,7 @@ import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.utils.NoOnClick
 import io.treblekit.app.ui.utils.isCurrentPagerDestination
 import io.treblekit.app.ui.utils.navigateToPagerRoute
-import io.treblekit.app.ui.utils.rememberUISensor
+import io.treblekit.app.ui.utils.rememberGravityAngle
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -105,9 +100,8 @@ fun ActivityMain() {
         backdrop2 = effectBackdrop,
     )
     val tint = MaterialTheme.colorScheme.primaryContainer
-    val uiSensor = rememberUISensor()
-    val animationScope = rememberCoroutineScope()
-    val progressAnimation = remember { Animatable(0f) }
+    val inspection = LocalInspectionMode.current
+    val gravityAngle = rememberGravityAngle()
     Box {
         Box(
             modifier = Modifier
@@ -140,16 +134,6 @@ fun ActivityMain() {
                                 .padding(start = CapsuleEdgePadding)
                                 .width(width = CapsuleWidth)
                                 .height(height = CapsuleHeight)
-                                .graphicsLayer {
-                                    val progress = progressAnimation.value
-                                    val scale = lerp(
-                                        start = 1f,
-                                        stop = 1.1f,
-                                        amount = progress,
-                                    )
-                                    scaleX = scale
-                                    scaleY = scale
-                                }
                                 .drawBackdrop(
                                     backdrop = backdrop,
                                     shape = { ContinuousCapsule },
@@ -163,49 +147,20 @@ fun ActivityMain() {
                                         )
                                     },
                                     highlight = {
-                                        Highlight(
-                                            style = HighlightStyle.Default(
-                                                angle = uiSensor.gravityAngle
-                                            ),
-                                        )
+                                        if (inspection) {
+                                            Highlight.Default
+                                        } else {
+                                            Highlight(
+                                                style = HighlightStyle.Default(
+                                                    angle = gravityAngle
+                                                ),
+                                            )
+                                        }
                                     },
-                                    layerBlock = {
-                                        val progress = progressAnimation.value
-                                        val scale = lerp(
-                                            start = 1f,
-                                            stop = 1.1f,
-                                            amount = progress,
-                                        )
-                                        scaleX = scale
-                                        scaleY = scale
-                                    }
                                 )
                                 .clickable {
 
                                 }
-                                .pointerInput(key1 = animationScope) {
-                                    val animationSpec = spring(
-                                        dampingRatio = 0.5f,
-                                        stiffness = 300f,
-                                        visibilityThreshold = 0.001f,
-                                    )
-                                    awaitEachGesture {
-                                        awaitFirstDown()
-                                        animationScope.launch {
-                                            progressAnimation.animateTo(
-                                                targetValue = 1f,
-                                                animationSpec = animationSpec,
-                                            )
-                                        }
-                                        waitForUpOrCancellation()
-                                        animationScope.launch {
-                                            progressAnimation.animateTo(
-                                                targetValue = 0f,
-                                                animationSpec = animationSpec,
-                                            )
-                                        }
-                                    }
-                                },
                         ) {
                             Box(
                                 modifier = Modifier.fillMaxSize(),
@@ -309,7 +264,9 @@ fun ActivityMain() {
                                         .defaultMinSize(minHeight = 56.dp)
                                         .drawBackdrop(
                                             backdrop = backdrop,
-                                            shape = { ContinuousRoundedRectangle(size = 16.dp) },
+                                            shape = {
+                                                ContinuousRoundedRectangle(size = 16.dp)
+                                            },
                                             effects = {
                                                 vibrancy()
                                                 blur(blurRadius = 16f.dp.toPx())
@@ -320,40 +277,52 @@ fun ActivityMain() {
                                                 )
                                             },
                                             onDrawSurface = {
-
                                                 drawRect(
                                                     color = tint.copy(alpha = 0.5f),
                                                     blendMode = BlendMode.Hue,
                                                 )
                                             },
                                             highlight = {
-                                                Highlight(
-                                                    style = HighlightStyle.Default(
-                                                        angle = uiSensor.gravityAngle
-                                                    ),
-                                                )
+                                                if (inspection) {
+                                                    Highlight.Default
+                                                } else {
+                                                    Highlight(
+                                                        style = HighlightStyle.Default(
+                                                            angle = gravityAngle
+                                                        ),
+                                                    )
+                                                }
                                             }
                                         ),
                                     horizontalArrangement = Arrangement.Center,
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
                                     appDestination.forEach { page ->
-                                        val isCurrent = pageState.isCurrentPagerDestination(route = page.route)
+                                        val isCurrent = pageState.isCurrentPagerDestination(
+                                            route = page.route,
+                                        )
+                                        val iconAlpha: Float by animateFloatAsState(
+                                            targetValue = if (isCurrent) 1f else 0.5f,
+                                            animationSpec = spring(
+                                                dampingRatio = 0.8f,
+                                                stiffness = 200f,
+                                            ),
+                                        )
                                         IconButton(
                                             onClick = {
                                                 if (!isCurrent) coroutineScope.launch {
-                                                    pageState.navigateToPagerRoute(route = page.route)
+                                                    pageState.navigateToPagerRoute(
+                                                        route = page.route,
+                                                    )
                                                 }
                                             },
                                             modifier = Modifier.wrapContentSize(),
-                                        ) {
-                                            val iconAlpha: Float by animateFloatAsState(
-                                                targetValue = if (isCurrent) 1f else 0.5f,
-                                                animationSpec = spring(
-                                                    dampingRatio = 0.8f,
-                                                    stiffness = 200f,
+                                            colors = IconButtonDefaults.iconButtonColors(
+                                                contentColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(
+                                                    alpha = iconAlpha,
                                                 ),
-                                            )
+                                            ),
+                                        ) {
                                             Icon(
                                                 imageVector = if (isCurrent) {
                                                     page.selectedIcon
@@ -361,10 +330,7 @@ fun ActivityMain() {
                                                     page.icon
                                                 },
                                                 contentDescription = null,
-                                                modifier = Modifier
-                                                    .wrapContentSize()
-                                                    .alpha(alpha = iconAlpha),
-                                                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                                                modifier = Modifier.wrapContentSize(),
                                             )
                                         }
                                     }
@@ -409,11 +375,15 @@ fun ActivityMain() {
                                             )
                                         },
                                         highlight = {
-                                            Highlight(
-                                                style = HighlightStyle.Default(
-                                                    angle = uiSensor.gravityAngle
-                                                ),
-                                            )
+                                            if (inspection) {
+                                                Highlight.Default
+                                            } else {
+                                                Highlight(
+                                                    style = HighlightStyle.Default(
+                                                        angle = gravityAngle
+                                                    ),
+                                                )
+                                            }
                                         }
                                     ),
                                 containerColor = Color.Transparent,

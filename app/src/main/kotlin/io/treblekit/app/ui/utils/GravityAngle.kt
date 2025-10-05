@@ -14,33 +14,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
 @Composable
-fun rememberUISensor(): UISensor {
+fun rememberGravityAngle(): Float {
+    val inspection = LocalInspectionMode.current
+    if (inspection) return 45f
     val context = LocalContext.current
-    val uiSensor = remember { UISensor(context) }
 
-    DisposableEffect(Unit) {
-        uiSensor.start()
-        onDispose { uiSensor.stop() }
-    }
-
-    return uiSensor
-}
-
-class UISensor(context: Context) {
-
-    var gravityAngle: Float by mutableFloatStateOf(45f)
-        private set
-    var gravity: Offset by mutableStateOf(Offset.Zero)
-        private set
-
-    private val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-    private val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-    private val listener = object : SensorEventListener {
+    var gravityAngle: Float by remember { mutableFloatStateOf(value = 45f) }
+    var gravity: Offset by remember { mutableStateOf(value = Offset.Zero) }
+    val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+    val listener = object : SensorEventListener {
 
         override fun onSensorChanged(event: SensorEvent?) {
             if (event == null) return
@@ -59,11 +48,12 @@ class UISensor(context: Context) {
         override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
     }
 
-    fun start() {
+    DisposableEffect(Unit) {
         sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_UI)
+        onDispose {
+            sensorManager.unregisterListener(listener)
+        }
     }
 
-    fun stop() {
-        sensorManager.unregisterListener(listener)
-    }
+    return gravityAngle
 }
