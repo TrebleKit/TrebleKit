@@ -163,9 +163,7 @@ fun PlatformDestination(
             shape = ContinuousRoundedRectangle(size = 16.dp),
         ) {
             if (!inspection) {
-                FlutterView(
-                    modifier = Modifier.fillMaxSize(),
-                )
+                FlutterView()
             } else {
                 Scaffold(
                     contentWindowInsets = WindowInsets(),

@@ -2,7 +2,6 @@ package io.treblekit.app
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.FrameLayout
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +17,7 @@ import io.flutter.embedding.android.FlutterFragment
 import io.treblekit.app.common.IViewFactory
 import io.treblekit.app.hybrid.loadFlutterFragment
 import io.treblekit.app.hybrid.loadFlutterView
-import io.treblekit.app.ui.ActivityMain
+import io.treblekit.app.ui.activity.ActivityMain
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.view.EffectView
 import io.treblekit.app.ui.view.HybridComposeView
@@ -28,10 +27,6 @@ import io.treblekit.app.ui.view.OverlayView
 class MainActivity : AppCompatActivity(), IViewFactory {
 
     private var mFlutterFragment: FlutterFragment? = null
-
-    override val getContentFrame: FrameLayout by lazy {
-        return@lazy FrameLayout(this@MainActivity)
-    }
 
     override val getContentView: HybridComposeView by lazy {
         return@lazy HybridComposeView(this@MainActivity)
@@ -72,30 +67,12 @@ class MainActivity : AppCompatActivity(), IViewFactory {
         window.isNavigationBarContrastEnforced = false
         mFlutterFragment = loadFlutterFragment()
 
-        getContentFrame.apply {
-            addView(
-                getContentView.apply {
-                    setContent {
-                        TrebleKitTheme {
-                            ActivityMain()
-                        }
-                    }
-                },
-                FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.MATCH_PARENT,
-                    FrameLayout.LayoutParams.MATCH_PARENT,
-                ),
-            )
-            addView(
-                getOverlayView,
-                FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.MATCH_PARENT,
-                    FrameLayout.LayoutParams.MATCH_PARENT,
-                ),
-            )
+        setContentView(getContentView)
+        getContentView.setContent {
+            TrebleKitTheme {
+                ActivityMain()
+            }
         }
-        setContentView(getContentFrame)
-
     }
 
     override fun onPostResume() {

@@ -18,12 +18,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import io.treblekit.app.BuildConfig
 import io.treblekit.app.R
-import io.treblekit.app.ui.theme.BannerContainer
-import io.treblekit.app.ui.theme.BannerContent
-import io.treblekit.app.ui.theme.BannerTextSize
-import io.treblekit.app.ui.theme.CapsuleContainer
-import io.treblekit.app.ui.theme.CapsuleContent
-import io.treblekit.app.ui.theme.CapsuleStroke
+import io.treblekit.app.ui.theme.bannerContainer
+import io.treblekit.app.ui.theme.bannerContent
+import io.treblekit.app.ui.theme.bannerTextSize
+import io.treblekit.app.ui.theme.capsuleContainer
+import io.treblekit.app.ui.theme.capsuleContent
+import io.treblekit.app.ui.theme.capsuleStroke
 import io.treblekit.app.ui.theme.actionBarExpandedHeight
 import io.treblekit.app.ui.theme.bannerDistanceOriginPointLength
 import io.treblekit.app.ui.theme.bannerWidth
@@ -56,32 +56,32 @@ class OverlayView @JvmOverloads constructor(
     private val sdkBannerPaint: Paint = Paint(
         Paint.ANTI_ALIAS_FLAG,
     ).apply {
-        color = BannerContainer.toArgb()
+        color = bannerContainer.toArgb()
         style = Paint.Style.FILL
     }
     private val debugBannerPaint: Paint = Paint(
         Paint.ANTI_ALIAS_FLAG,
     ).apply {
-        color = BannerContainer.toArgb()
+        color = bannerContainer.toArgb()
         style = Paint.Style.FILL
     }
     private val capsuleFillPaint: Paint = Paint(
         Paint.ANTI_ALIAS_FLAG,
     ).apply {
-        color = CapsuleContainer.toArgb()
+        color = capsuleContainer.toArgb()
         style = Paint.Style.FILL
     }
     private val capsuleStrokePaint: Paint = Paint(
         Paint.ANTI_ALIAS_FLAG,
     ).apply {
-        color = CapsuleStroke.toArgb()
+        color = capsuleStroke.toArgb()
         style = Paint.Style.STROKE
         strokeWidth = computingCapsuleStrokeWidth.toFloat()
     }
     private val capsuleDividerPaint: Paint = Paint(
         Paint.ANTI_ALIAS_FLAG,
     ).apply {
-        color = CapsuleStroke.toArgb()
+        color = capsuleStroke.toArgb()
         style = Paint.Style.STROKE
         strokeWidth = computingCapsuleStrokeWidth.toFloat()
     }
@@ -93,7 +93,7 @@ class OverlayView @JvmOverloads constructor(
     private val sdkBannerTextPaint: Paint = Paint(
         Paint.ANTI_ALIAS_FLAG,
     ).apply {
-        color = BannerContent.toArgb()
+        color = bannerContent.toArgb()
         textSize = computingBannerTextSize.toFloat()
         style = Paint.Style.FILL
         textAlign = Paint.Align.LEFT
@@ -101,7 +101,7 @@ class OverlayView @JvmOverloads constructor(
     private val debugBannerTextPaint: Paint = Paint(
         Paint.ANTI_ALIAS_FLAG,
     ).apply {
-        color = BannerContent.toArgb()
+        color = bannerContent.toArgb()
         textSize = computingBannerTextSize.toFloat()
         style = Paint.Style.FILL
         textAlign = Paint.Align.LEFT
@@ -185,7 +185,7 @@ class OverlayView @JvmOverloads constructor(
                     setImageResource(R.drawable.baseline_more_horiz_24)
                     setBackgroundColor(Color.Transparent.toArgb())
                     setColorFilter(
-                        CapsuleContent.toArgb(), PorterDuff.Mode.SRC_IN
+                        capsuleContent.toArgb(), PorterDuff.Mode.SRC_IN
                     )
                     setOnClickListener {
                         Toast.makeText(
@@ -200,7 +200,7 @@ class OverlayView @JvmOverloads constructor(
                     setImageResource(R.drawable.baseline_close_24)
                     setBackgroundColor(Color.Transparent.toArgb())
                     setColorFilter(
-                        CapsuleContent.toArgb(), PorterDuff.Mode.SRC_IN
+                        capsuleContent.toArgb(), PorterDuff.Mode.SRC_IN
                     )
                     setOnClickListener {
                         Toast.makeText(
@@ -594,7 +594,7 @@ class OverlayView @JvmOverloads constructor(
     private val computingBannerTextSize: Int
         get() = convertSpToPx(
             context = context,
-            value = BannerTextSize,
+            value = bannerTextSize,
         )
 
     companion object {

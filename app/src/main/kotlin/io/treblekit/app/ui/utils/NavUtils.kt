@@ -6,7 +6,7 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import io.treblekit.app.ui.appDestination
+import io.treblekit.app.ui.navigation.appDestination
 
 fun <T : Any> NavBackStackEntry?.isCurrentNavDestination(route: T): Boolean {
     return this@isCurrentNavDestination?.destination?.hierarchy?.any {

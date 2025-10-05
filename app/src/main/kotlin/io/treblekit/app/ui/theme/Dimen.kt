@@ -7,11 +7,6 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-//val CapsuleWidth: Dp = 87.dp // 胶囊宽度
-//val CapsuleHeight: Dp = 32.dp // 胶囊高度
-//val CapsuleEdgePadding: Dp = 12.dp // 胶囊右边距
-//val capsuleIndent: Dp = 5.dp // 胶囊分割线内边距
-
 // 胶囊宽度
 val capsuleWidth: Dp = 87.dp
 
@@ -35,4 +30,4 @@ val actionBarExpandedHeight: Dp = TopAppBarDefaults.TopAppBarExpandedHeight
 val bannerWidth = 16.dp // 角标宽度
 val bannerDistanceOriginPointLength = 55.dp // 角标距离原点长度
 
-val BannerTextSize: TextUnit = 10.sp
+val bannerTextSize: TextUnit = 10.sp

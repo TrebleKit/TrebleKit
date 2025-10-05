@@ -1,6 +1,5 @@
-package io.treblekit.app.ui
+package io.treblekit.app.ui.activity
 
-import android.annotation.SuppressLint
 import android.os.Build
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -69,10 +68,14 @@ import com.kyant.capsule.ContinuousCapsule
 import com.kyant.capsule.ContinuousRoundedRectangle
 import io.treblekit.app.R
 import io.treblekit.app.ui.components.EffectView
+import io.treblekit.app.ui.components.OverlayView
 import io.treblekit.app.ui.destination.DashboardDestination
 import io.treblekit.app.ui.destination.PlatformDestination
-import io.treblekit.app.ui.theme.AndroidGreen
-import io.treblekit.app.ui.theme.AppBackground
+import io.treblekit.app.ui.navigation.DashboardDestination
+import io.treblekit.app.ui.navigation.PlatformDestination
+import io.treblekit.app.ui.navigation.appDestination
+import io.treblekit.app.ui.theme.androidGreen
+import io.treblekit.app.ui.theme.appBackground
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.theme.capsuleEdgePadding
 import io.treblekit.app.ui.theme.capsuleHeight
@@ -99,14 +102,14 @@ fun ActivityMain() {
         backdrop1 = backgroundBackdrop,
         backdrop2 = effectBackdrop,
     )
-    val tint = MaterialTheme.colorScheme.primaryContainer
+    val fabTint = MaterialTheme.colorScheme.primaryContainer
     val inspection = LocalInspectionMode.current
     val gravityAngle = rememberGravityAngle()
     Box {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = AppBackground)
+                .background(color = appBackground)
                 .layerBackdrop(backdrop = backgroundBackdrop),
         )
         EffectView(
@@ -136,7 +139,9 @@ fun ActivityMain() {
                                 .height(height = capsuleHeight)
                                 .drawBackdrop(
                                     backdrop = backdrop,
-                                    shape = { ContinuousCapsule },
+                                    shape = {
+                                        ContinuousCapsule
+                                    },
                                     effects = {
                                         vibrancy()
                                         blur(blurRadius = 16f.dp.toPx())
@@ -218,7 +223,7 @@ fun ActivityMain() {
                                     contentDescription = null,
                                 )
                             },
-                            iconContentColor = AndroidGreen,
+                            iconContentColor = androidGreen,
                             title = {
                                 Text(text = "Android")
                             },
@@ -234,7 +239,7 @@ fun ActivityMain() {
                             Icon(
                                 imageVector = Icons.Filled.Android,
                                 contentDescription = null,
-                                tint = AndroidGreen,
+                                tint = androidGreen,
                             )
                         }
                         Text(
@@ -278,7 +283,7 @@ fun ActivityMain() {
                                             },
                                             onDrawSurface = {
                                                 drawRect(
-                                                    color = tint.copy(alpha = 0.5f),
+                                                    color = fabTint.copy(alpha = 0.5f),
                                                     blendMode = BlendMode.Hue,
                                                 )
                                             },
@@ -370,7 +375,7 @@ fun ActivityMain() {
                                         },
                                         onDrawSurface = {
                                             drawRect(
-                                                color = tint.copy(alpha = 0.5f),
+                                                color = fabTint.copy(alpha = 0.5f),
                                                 blendMode = BlendMode.Hue,
                                             )
                                         },
@@ -437,6 +442,7 @@ fun ActivityMain() {
                 }
             }
         }
+        OverlayView()
     }
 }
 

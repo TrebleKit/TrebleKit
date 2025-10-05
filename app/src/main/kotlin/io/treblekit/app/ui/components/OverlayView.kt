@@ -7,18 +7,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import io.treblekit.app.ui.theme.TrebleKitTheme
 
 @Composable
-fun FlutterView(modifier: Modifier = Modifier) {
+fun OverlayView(modifier: Modifier = Modifier) {
     ViewFactory(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize()
     ) {
-        getFlutterView
+        getOverlayView
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-private fun FlutterViewPreview() {
+fun OverlayViewPreview() {
     TrebleKitTheme {
-        FlutterView()
+        OverlayView()
     }
 }
