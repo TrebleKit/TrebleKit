@@ -31,3 +31,5 @@ val bannerWidth = 16.dp // 角标宽度
 val bannerDistanceOriginPointLength = 55.dp // 角标距离原点长度
 
 val bannerTextSize: TextUnit = 10.sp
+
+val topBarPaddingExcess: Dp = 4.dp

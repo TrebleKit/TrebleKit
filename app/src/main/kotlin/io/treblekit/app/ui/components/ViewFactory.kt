@@ -11,6 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import io.treblekit.app.R
+import io.treblekit.app.common.FactoryHost
 import io.treblekit.app.common.IViewFactory
 import io.treblekit.app.ui.theme.TrebleKitTheme
 
@@ -28,9 +29,9 @@ fun ViewFactory(
         factory = { context ->
             when {
                 inspection -> TextView(context)
-                activity != null && activity is IViewFactory -> {
-                    (activity as? IViewFactory)?.view() ?: error(
-                        message = "IViewFactory not implemented",
+                activity != null && activity is FactoryHost -> {
+                    (activity as? FactoryHost)?.getViewFactory?.view() ?: error(
+                        message = "FactoryHost not implemented",
                     )
                 }
 

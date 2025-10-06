@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -74,15 +75,17 @@ import io.treblekit.app.ui.destination.PlatformDestination
 import io.treblekit.app.ui.navigation.DashboardDestination
 import io.treblekit.app.ui.navigation.PlatformDestination
 import io.treblekit.app.ui.navigation.appDestination
+import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.theme.androidGreen
 import io.treblekit.app.ui.theme.appBackground
-import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.theme.capsuleEdgePadding
 import io.treblekit.app.ui.theme.capsuleHeight
 import io.treblekit.app.ui.theme.capsuleWidth
+import io.treblekit.app.ui.theme.topBarPaddingExcess
 import io.treblekit.app.ui.utils.NoOnClick
 import io.treblekit.app.ui.utils.isCurrentPagerDestination
 import io.treblekit.app.ui.utils.navigateToPagerRoute
+import io.treblekit.app.ui.utils.rememberCapsulePadding
 import io.treblekit.app.ui.utils.rememberGravityAngle
 import kotlinx.coroutines.launch
 
@@ -134,7 +137,7 @@ fun ActivityMain() {
                     navigationIcon = {
                         Box(
                             modifier = Modifier
-                                .padding(start = capsuleEdgePadding)
+                                .padding(start = capsuleEdgePadding - topBarPaddingExcess)
                                 .width(width = capsuleWidth)
                                 .height(height = capsuleHeight)
                                 .drawBackdrop(
@@ -194,7 +197,15 @@ fun ActivityMain() {
                             }
                         }
                     },
-                    actions = {},
+                    actions = {
+                        Spacer(
+                            modifier = Modifier.padding(
+                                paddingValues = rememberCapsulePadding(
+                                    excess = topBarPaddingExcess,
+                                ),
+                            ),
+                        )
+                    },
                 )
             },
             bottomBar = {
