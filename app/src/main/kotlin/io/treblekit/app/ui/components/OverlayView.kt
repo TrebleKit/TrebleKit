@@ -15,7 +15,7 @@ fun OverlayView(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun OverlayViewPreview() {
     TrebleKitTheme {

@@ -30,7 +30,7 @@ fun EffectView(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun EffectViewPreview() {
     TrebleKitTheme {

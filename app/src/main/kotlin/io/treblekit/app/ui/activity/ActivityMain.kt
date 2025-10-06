@@ -3,6 +3,7 @@ package io.treblekit.app.ui.activity
 import android.os.Build
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,7 +35,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
@@ -67,10 +68,8 @@ import com.kyant.backdrop.highlight.HighlightStyle
 import com.kyant.capsule.ContinuousCapsule
 import com.kyant.capsule.ContinuousRoundedRectangle
 import io.treblekit.app.R
-import io.treblekit.app.ui.components.Background
 import io.treblekit.app.ui.components.EffectView
 import io.treblekit.app.ui.components.OverlayView
-import io.treblekit.app.ui.components.TrebleScaffold
 import io.treblekit.app.ui.destination.DashboardDestination
 import io.treblekit.app.ui.destination.PlatformDestination
 import io.treblekit.app.ui.navigation.DashboardDestination
@@ -110,184 +109,274 @@ fun ActivityMain() {
     val fabTint = MaterialTheme.colorScheme.primaryContainer
     val inspection = LocalInspectionMode.current
     val gravityAngle = rememberGravityAngle()
-    TrebleScaffold(
+    Box(
         modifier = Modifier.fillMaxSize(),
-        background = {
-            Background(
-                modifier = Modifier.layerBackdrop(backdrop = backgroundBackdrop),
-                backgroundColor = appBackground,
-            )
-        },
-        effect = {
-            EffectView(
-                modifier = Modifier.layerBackdrop(backdrop = effectBackdrop)
-            )
-        },
-        overlay = {
-            OverlayView()
-        },
-        topBar = {
-            CenterAlignedTopAppBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent,
-                ),
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.app_name),
-                        color = Color.White,
-                    )
-                },
-                navigationIcon = {
-                    Box(
-                        modifier = Modifier
-                            .padding(start = capsuleEdgePadding - topBarPaddingExcess)
-                            .width(width = capsuleWidth)
-                            .height(height = capsuleHeight)
-                            .drawBackdrop(
-                                backdrop = backdrop,
-                                shape = {
-                                    ContinuousCapsule
-                                },
-                                effects = {
-                                    vibrancy()
-                                    blur(blurRadius = 16f.dp.toPx())
-                                    refraction(
-                                        height = 24f.dp.toPx(),
-                                        amount = 48f.dp.toPx(),
-                                        hasDepthEffect = true
-                                    )
-                                },
-                                onDrawSurface = {
-                                    drawRect(
-                                        color = capsuleContainer,
-                                        blendMode = BlendMode.Hue,
-                                    )
-                                },
-                                highlight = {
-                                    if (inspection) {
-                                        Highlight.Default
-                                    } else {
-                                        Highlight(
-                                            style = HighlightStyle.Default(
-                                                angle = gravityAngle
-                                            ),
-                                        )
-                                    }
-                                },
-                            )
-                            .clickable {
-
-                            }
-                    ) {
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = appBackground)
+                .layerBackdrop(backdrop = backgroundBackdrop),
+        )
+        EffectView(
+            modifier = Modifier.layerBackdrop(backdrop = effectBackdrop)
+        )
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                CenterAlignedTopAppBar(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Transparent,
+                    ),
+                    title = {
+                        Text(
+                            text = stringResource(id = R.string.app_name),
+                            color = Color.White,
+                        )
+                    },
+                    navigationIcon = {
                         Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .padding(start = capsuleEdgePadding - topBarPaddingExcess)
+                                .width(width = capsuleWidth)
+                                .height(height = capsuleHeight)
+                                .drawBackdrop(
+                                    backdrop = backdrop,
+                                    shape = {
+                                        ContinuousCapsule
+                                    },
+                                    effects = {
+                                        vibrancy()
+                                        blur(blurRadius = 16f.dp.toPx())
+                                        refraction(
+                                            height = 24f.dp.toPx(),
+                                            amount = 48f.dp.toPx(),
+                                            hasDepthEffect = true
+                                        )
+                                    },
+                                    onDrawSurface = {
+                                        drawRect(
+                                            color = capsuleContainer,
+                                            blendMode = BlendMode.Hue,
+                                        )
+                                    },
+                                    highlight = {
+                                        if (inspection) {
+                                            Highlight.Default
+                                        } else {
+                                            Highlight(
+                                                style = HighlightStyle.Default(
+                                                    angle = gravityAngle
+                                                ),
+                                            )
+                                        }
+                                    },
+                                )
+                                .clickable {
+
+                                }
                         ) {
-                            Row(
-                                modifier = Modifier.wrapContentSize(),
-                                verticalAlignment = Alignment.CenterVertically,
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center,
                             ) {
-                                Icon(
-                                    imageVector = Icons.Filled.Search,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(size = 20.dp),
-                                )
-                                Text(
-                                    text = "搜索",
-                                    modifier = Modifier
-                                        .wrapContentSize()
-                                        .padding(start = 6.dp),
-                                    fontSize = 13.sp,
-                                    textAlign = TextAlign.Center,
-                                )
+                                Row(
+                                    modifier = Modifier.wrapContentSize(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Search,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(size = 20.dp),
+                                    )
+                                    Text(
+                                        text = "搜索",
+                                        modifier = Modifier
+                                            .wrapContentSize()
+                                            .padding(start = 6.dp),
+                                        fontSize = 13.sp,
+                                        textAlign = TextAlign.Center,
+                                    )
+                                }
                             }
                         }
-                    }
-                },
-                actions = {
-                    Spacer(
-                        modifier = Modifier.padding(
-                            paddingValues = rememberCapsulePadding(
-                                excess = topBarPaddingExcess,
+                    },
+                    actions = {
+                        Spacer(
+                            modifier = Modifier.padding(
+                                paddingValues = rememberCapsulePadding(
+                                    excess = topBarPaddingExcess,
+                                ),
                             ),
-                        ),
-                    )
-                },
-            )
-        },
-        bottomBar = {
-            BottomAppBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                containerColor = Color.Transparent,
-                actions = {
-                    if (showDialog) AlertDialog(
-                        onDismissRequest = {
-                            showDialog = false
-                        },
-                        confirmButton = {
-                            TextButton(
-                                onClick = {
-                                    showDialog = false
-                                },
-                            ) {
-                                Text(text = "确定")
-                            }
-                        },
-                        icon = {
+                        )
+                    },
+                )
+            },
+            bottomBar = {
+                BottomAppBar(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    containerColor = Color.Transparent,
+                    actions = {
+                        if (showDialog) AlertDialog(
+                            onDismissRequest = {
+                                showDialog = false
+                            },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        showDialog = false
+                                    },
+                                ) {
+                                    Text(text = "确定")
+                                }
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.Filled.Android,
+                                    contentDescription = null,
+                                )
+                            },
+                            iconContentColor = androidGreen,
+                            title = {
+                                Text(text = "Android")
+                            },
+                            text = {
+                                Text(text = "Android API ${Build.VERSION.SDK_INT}")
+                            },
+                        )
+                        IconButton(
+                            onClick = {
+                                showDialog = true
+                            },
+                        ) {
                             Icon(
                                 imageVector = Icons.Filled.Android,
                                 contentDescription = null,
+                                tint = androidGreen,
                             )
-                        },
-                        iconContentColor = androidGreen,
-                        title = {
-                            Text(text = "Android")
-                        },
-                        text = {
-                            Text(text = "Android API ${Build.VERSION.SDK_INT}")
-                        },
-                    )
-                    IconButton(
-                        onClick = {
-                            showDialog = true
-                        },
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Android,
-                            contentDescription = null,
-                            tint = androidGreen,
-                        )
-                    }
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight(),
-                        text = "Android",
-                        style = MaterialTheme.typography.titleMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = Color.White,
-                        fontSize = 16.sp,
-                        textAlign = TextAlign.Left,
-                    )
-                },
-                floatingActionButton = {
-                    Row {
-                        Box(
+                        }
+                        Text(
                             modifier = Modifier
-                                .wrapContentSize()
-                                .sizeIn(minWidth = 80.dp),
-                        ) {
-                            Row(
+                                .fillMaxWidth()
+                                .wrapContentHeight(),
+                            text = "Android",
+                            style = MaterialTheme.typography.titleMedium,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            textAlign = TextAlign.Left,
+                        )
+                    },
+                    floatingActionButton = {
+                        Row {
+                            Box(
                                 modifier = Modifier
                                     .wrapContentSize()
-                                    .padding(end = 4.dp)
-                                    .defaultMinSize(minHeight = 56.dp)
+                                    .sizeIn(minWidth = 80.dp),
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .wrapContentSize()
+                                        .padding(end = 4.dp)
+                                        .defaultMinSize(minHeight = 56.dp)
+                                        .drawBackdrop(
+                                            backdrop = backdrop,
+                                            shape = {
+                                                ContinuousRoundedRectangle(size = 16.dp)
+                                            },
+                                            effects = {
+                                                vibrancy()
+                                                blur(blurRadius = 16f.dp.toPx())
+                                                refraction(
+                                                    height = 24f.dp.toPx(),
+                                                    amount = 48f.dp.toPx(),
+                                                    hasDepthEffect = true
+                                                )
+                                            },
+                                            onDrawSurface = {
+                                                drawRect(
+                                                    color = fabTint.copy(alpha = 0.5f),
+                                                    blendMode = BlendMode.Hue,
+                                                )
+                                            },
+                                            highlight = {
+                                                if (inspection) {
+                                                    Highlight.Default
+                                                } else {
+                                                    Highlight(
+                                                        style = HighlightStyle.Default(
+                                                            angle = gravityAngle
+                                                        ),
+                                                    )
+                                                }
+                                            }
+                                        ),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    appDestination.forEach { page ->
+                                        val isCurrent = pageState.isCurrentPagerDestination(
+                                            route = page.route,
+                                        )
+                                        val iconAlpha: Float by animateFloatAsState(
+                                            targetValue = if (isCurrent) 1f else 0.5f,
+                                            animationSpec = spring(
+                                                dampingRatio = 0.8f,
+                                                stiffness = 200f,
+                                            ),
+                                        )
+                                        IconButton(
+                                            onClick = {
+                                                if (!isCurrent) coroutineScope.launch {
+                                                    pageState.navigateToPagerRoute(
+                                                        route = page.route,
+                                                    )
+                                                }
+                                            },
+                                            modifier = Modifier.wrapContentSize(),
+                                            colors = IconButtonDefaults.iconButtonColors(
+                                                contentColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(
+                                                    alpha = iconAlpha,
+                                                ),
+                                            ),
+                                        ) {
+                                            Icon(
+                                                imageVector = if (isCurrent) {
+                                                    page.selectedIcon
+                                                } else {
+                                                    page.icon
+                                                },
+                                                contentDescription = null,
+                                                modifier = Modifier.wrapContentSize(),
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                            ExtendedFloatingActionButton(
+                                text = {
+                                    Text(
+                                        text = "返回",
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                                    )
+                                },
+                                icon = {
+                                    Icon(
+                                        imageVector = Icons.TwoTone.Home,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                                    )
+                                },
+                                onClick = NoOnClick,
+                                modifier = Modifier
+                                    .wrapContentSize()
+                                    .padding(start = 4.dp)
                                     .drawBackdrop(
                                         backdrop = backdrop,
                                         shape = {
@@ -320,145 +409,58 @@ fun ActivityMain() {
                                             }
                                         }
                                     ),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                appDestination.forEach { page ->
-                                    val isCurrent = pageState.isCurrentPagerDestination(
-                                        route = page.route,
-                                    )
-                                    val iconAlpha: Float by animateFloatAsState(
-                                        targetValue = if (isCurrent) 1f else 0.5f,
-                                        animationSpec = spring(
-                                            dampingRatio = 0.8f,
-                                            stiffness = 200f,
-                                        ),
-                                    )
-                                    IconButton(
-                                        onClick = {
-                                            if (!isCurrent) coroutineScope.launch {
-                                                pageState.navigateToPagerRoute(
-                                                    route = page.route,
-                                                )
-                                            }
-                                        },
-                                        modifier = Modifier.wrapContentSize(),
-                                        colors = IconButtonDefaults.iconButtonColors(
-                                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(
-                                                alpha = iconAlpha,
-                                            ),
-                                        ),
-                                    ) {
-                                        Icon(
-                                            imageVector = if (isCurrent) {
-                                                page.selectedIcon
-                                            } else {
-                                                page.icon
-                                            },
-                                            contentDescription = null,
-                                            modifier = Modifier.wrapContentSize(),
-                                        )
-                                    }
-                                }
-                            }
+                                containerColor = Color.Transparent,
+                                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                            )
                         }
-                        ExtendedFloatingActionButton(
-                            text = {
-                                Text(
-                                    text = "返回",
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    },
+                )
+            },
+            containerColor = Color.Transparent,
+        ) { innerPadding ->
+            HorizontalPager(
+                state = pageState,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues = innerPadding),
+                userScrollEnabled = false,
+            ) { page ->
+                when (appDestination[page].route) {
+                    DashboardDestination -> DashboardDestination(
+                        popBackStack = {},
+                        animateToEcosed = {
+                            coroutineScope.launch {
+                                pageState.navigateToPagerRoute(
+                                    route = PlatformDestination
                                 )
-                            },
-                            icon = {
-                                Icon(
-                                    imageVector = Icons.TwoTone.Home,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                            }
+                        },
+                    )
+
+                    PlatformDestination -> PlatformDestination(
+                        animateToDashboard = {
+                            coroutineScope.launch {
+                                pageState.navigateToPagerRoute(
+                                    route = DashboardDestination
                                 )
-                            },
-                            onClick = NoOnClick,
-                            modifier = Modifier
-                                .wrapContentSize()
-                                .padding(start = 4.dp)
-                                .drawBackdrop(
-                                    backdrop = backdrop,
-                                    shape = {
-                                        ContinuousRoundedRectangle(size = 16.dp)
-                                    },
-                                    effects = {
-                                        vibrancy()
-                                        blur(blurRadius = 16f.dp.toPx())
-                                        refraction(
-                                            height = 24f.dp.toPx(),
-                                            amount = 48f.dp.toPx(),
-                                            hasDepthEffect = true
-                                        )
-                                    },
-                                    onDrawSurface = {
-                                        drawRect(
-                                            color = fabTint.copy(alpha = 0.5f),
-                                            blendMode = BlendMode.Hue,
-                                        )
-                                    },
-                                    highlight = {
-                                        if (inspection) {
-                                            Highlight.Default
-                                        } else {
-                                            Highlight(
-                                                style = HighlightStyle.Default(
-                                                    angle = gravityAngle
-                                                ),
-                                            )
-                                        }
-                                    }
-                                ),
-                            containerColor = Color.Transparent,
-                            elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                            }
+                        },
+                    )
+
+                    else -> Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text = "未知页面",
+                            color = MaterialTheme.colorScheme.error,
+                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
                         )
                     }
-                },
-            )
-        },
-    ) {
-        HorizontalPager(
-            state = pageState,
-            modifier = Modifier.fillMaxSize(),
-            userScrollEnabled = false,
-        ) { page ->
-            when (appDestination[page].route) {
-                DashboardDestination -> DashboardDestination(
-                    popBackStack = {},
-                    animateToEcosed = {
-                        coroutineScope.launch {
-                            pageState.navigateToPagerRoute(
-                                route = PlatformDestination
-                            )
-                        }
-                    },
-                )
-
-                PlatformDestination -> PlatformDestination(
-                    animateToDashboard = {
-                        coroutineScope.launch {
-                            pageState.navigateToPagerRoute(
-                                route = DashboardDestination
-                            )
-                        }
-                    },
-                )
-
-                else -> Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = "未知页面",
-                        color = MaterialTheme.colorScheme.error,
-                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                    )
                 }
             }
         }
+        OverlayView()
     }
 }
 
