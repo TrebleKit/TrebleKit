@@ -87,7 +87,7 @@ class EffectView @JvmOverloads constructor(
         private var colorRunnable: Runnable? = null
 
         init {
-            val loadShader = loadShader(mResources, R.raw.bg_frag)
+            val loadShader = loadShader(mResources, R.raw.background_effect)
             mBgRuntimeShader = RuntimeShader(loadShader!!)
             mBgRuntimeShader.setFloatUniform("uTranslateY", uTranslateY)
             mBgRuntimeShader.setFloatUniform("uPoints", uPoints)
