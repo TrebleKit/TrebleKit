@@ -36,20 +36,24 @@ fun rememberGravityAngle(): Float {
             if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
                 val x = event.values[0]
                 val y = event.values[1]
-                val norm = sqrt(x * x + y * y + 9.81f * 9.81f)
+                val norm = sqrt(x = x * x + y * y + 9.81f * 9.81f)
 
-                val alpha = 0.5f // a factor used to smooth the sensor values
+                val alpha = 0.5f
                 gravityAngle =
                     gravityAngle * (1f - alpha) + atan2(y, x) * (180f / PI).toFloat() * alpha
-                gravity = gravity * (1f - alpha) + Offset(x / norm, y / norm) * alpha
+                gravity = gravity * (1f - alpha) + Offset(x = x / norm, y = y / norm) * alpha
             }
         }
 
         override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
     }
 
-    DisposableEffect(Unit) {
-        sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_UI)
+    DisposableEffect(key1 = Unit) {
+        sensorManager.registerListener(
+            listener,
+            accelerometer,
+            SensorManager.SENSOR_DELAY_UI,
+        )
         onDispose {
             sensorManager.unregisterListener(listener)
         }

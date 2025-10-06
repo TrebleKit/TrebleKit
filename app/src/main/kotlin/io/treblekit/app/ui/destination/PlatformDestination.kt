@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import com.kyant.capsule.ContinuousRoundedRectangle
 import io.treblekit.app.R
 import io.treblekit.app.ui.components.FlutterView
-import io.treblekit.app.ui.components.ViewFactory
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.utils.NoOnClick
 
@@ -75,8 +74,7 @@ fun PlatformDestination(
         ) {
             TopAppBar(
                 title = {
-//                    Text(text = "Treble平台")
-                    ViewFactory { getToolbarView }
+                    Text(text = "Treble平台")
                 },
                 modifier = Modifier
                     .fillMaxWidth()

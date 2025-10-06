@@ -48,17 +48,6 @@ class MainActivity : AppCompatActivity(), FactoryHost {
             )
         }
 
-        override val getToolbarView: MaterialToolbar by lazy {
-            return@lazy MaterialToolbar(
-                this@MainActivity,
-            ).apply {
-                setTitleTextColor(Color.White.toArgb())
-            }.let { toolbar ->
-                setSupportActionBar(toolbar)
-                return@let toolbar
-            }
-        }
-
         override val getEffectView: EffectView by lazy {
             return@lazy EffectView(
                 context = this@MainActivity,
