@@ -1,22 +1,22 @@
 package io.treblekit.app
 
+import android.app.Application
 import android.content.Context
 import android.os.Build
 import com.google.android.material.color.DynamicColors
-import io.treblekit.app.hybrid.HybridApplication
+import io.treblekit.app.hybrid.loadEngine
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 
-class MainApp : HybridApplication() {
+class MainApp : Application() {
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            HiddenApiBypass.addHiddenApiExemptions("L")
-        }
+        HiddenApiBypass.addHiddenApiExemptions("L")
     }
 
     override fun onCreate() {
         super.onCreate()
+        loadEngine()
         DynamicColors.applyToActivitiesIfAvailable(this@MainApp)
     }
 }
