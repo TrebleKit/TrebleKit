@@ -12,12 +12,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.core.view.WindowCompat
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.appbar.MaterialToolbar
 import io.flutter.embedding.android.FlutterFragment
 import io.treblekit.app.common.FactoryHost
 import io.treblekit.app.common.IViewFactory
-import io.treblekit.app.hybrid.FlutterAdapter
-import io.treblekit.app.hybrid.loadFragment
+import io.treblekit.app.hybrid.loadFlutterFragment
+import io.treblekit.app.hybrid.loadFlutterView
 import io.treblekit.app.ui.activity.ActivityMain
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.view.EffectView
@@ -43,27 +42,15 @@ class MainActivity : AppCompatActivity(), FactoryHost {
         }
 
         override val getOverlayView: OverlayView by lazy {
-            return@lazy OverlayView(
-                context = this@MainActivity,
-            )
+            return@lazy OverlayView(context = this@MainActivity)
         }
 
         override val getEffectView: EffectView by lazy {
-            return@lazy EffectView(
-                context = this@MainActivity,
-            )
+            return@lazy EffectView(context = this@MainActivity)
         }
 
         override val getFlutterView: ViewPager2 by lazy {
-            return@lazy ViewPager2(
-                this@MainActivity,
-            ).apply {
-                isUserInputEnabled = false
-                adapter = FlutterAdapter(
-                    activity = this@MainActivity,
-                    flutter = mFlutterFragment,
-                )
-            }
+            return@lazy loadFlutterView(flutter = mFlutterFragment)
         }
     }
 
@@ -71,7 +58,7 @@ class MainActivity : AppCompatActivity(), FactoryHost {
         super.onCreate(savedInstanceState)
         edgeToEdge()
 
-        mFlutterFragment = loadFragment()
+        mFlutterFragment = loadFlutterFragment()
         getViewFactory.getContentView.setContent {
             TrebleKitTheme {
                 ActivityMain()
@@ -105,28 +92,20 @@ class MainActivity : AppCompatActivity(), FactoryHost {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         mFlutterFragment?.onRequestPermissionsResult(
-            requestCode,
-            permissions,
-            grantResults
+            requestCode, permissions, grantResults
         )
     }
 
     override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?
+        requestCode: Int, resultCode: Int, data: Intent?
     ) {
         super.onActivityResult(requestCode, resultCode, data)
         mFlutterFragment?.onActivityResult(
-            requestCode,
-            resultCode,
-            data
+            requestCode, resultCode, data
         )
     }
 

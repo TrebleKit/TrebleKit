@@ -2,9 +2,8 @@ package io.treblekit.app
 
 import android.app.Application
 import android.content.Context
-import android.os.Build
 import com.google.android.material.color.DynamicColors
-import io.treblekit.app.hybrid.loadEngine
+import io.treblekit.app.hybrid.loadFlutterEngine
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 
 class MainApp : Application() {
@@ -16,7 +15,7 @@ class MainApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        loadEngine()
+        loadFlutterEngine()
         DynamicColors.applyToActivitiesIfAvailable(this@MainApp)
     }
 }
