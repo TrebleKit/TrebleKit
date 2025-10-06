@@ -28,6 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Header(),
           StateCard(),
 
+          TrebleKitLogo(),
           FreeFEOSLogo(),
           EcosedKitLogo(),
           EbKitLogo(),

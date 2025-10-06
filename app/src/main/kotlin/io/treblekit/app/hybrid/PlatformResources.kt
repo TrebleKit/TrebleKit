@@ -41,6 +41,7 @@ class PlatformResources : FlutterPlugin, MethodChannel.MethodCallHandler {
      */
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
+            "treblekit" -> result.success(drawableToByteArray(id = R.drawable.ic_treblekit))
             "freefeos" -> result.success(drawableToByteArray(id = R.drawable.ic_freefeos))
             "ecosedkit" -> result.success(drawableToByteArray(id = R.drawable.ic_ecosedkit))
             "ebkit" -> result.success(drawableToByteArray(id = R.drawable.ic_ebkit))

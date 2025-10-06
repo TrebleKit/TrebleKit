@@ -240,7 +240,7 @@ fun MPPlayer(
                 appIcon = rememberDrawablePainter(
                     drawable = AppCompatResources.getDrawable(
                         context,
-                        R.mipmap.ic_launcher,
+                        R.drawable.ic_treblekit,
                     ),
                 ),
                 appName = "TrebleKit",

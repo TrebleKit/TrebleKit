@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 enum ImageDrawable {
+  treblekit(method: 'treblekit'),
   freefeos(method: 'freefeos'),
   ecosedkit(method: 'ecosedkit'),
   ebkit(method: 'ebkit');
@@ -50,6 +51,13 @@ class _PlatformImageState extends State<_PlatformImage> {
       ),
     );
   }
+}
+
+class TrebleKitLogo extends _PlatformImage {
+  const TrebleKitLogo({super.key, super.size, super.radius});
+
+  @override
+  ImageDrawable get image => ImageDrawable.treblekit;
 }
 
 class FreeFEOSLogo extends _PlatformImage {
