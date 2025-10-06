@@ -61,7 +61,7 @@ import com.kyant.backdrop.backdrops.rememberCombinedBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.backdrop.drawBackdrop
 import com.kyant.backdrop.effects.blur
-import com.kyant.backdrop.effects.refraction
+import com.kyant.backdrop.effects.lens
 import com.kyant.backdrop.effects.vibrancy
 import com.kyant.backdrop.highlight.Highlight
 import com.kyant.backdrop.highlight.HighlightStyle
@@ -151,10 +151,10 @@ fun ActivityMain() {
                                     effects = {
                                         vibrancy()
                                         blur(blurRadius = 16f.dp.toPx())
-                                        refraction(
-                                            height = 24f.dp.toPx(),
-                                            amount = 48f.dp.toPx(),
-                                            hasDepthEffect = true
+                                        lens(
+                                            refractionHeight = 24f.dp.toPx(),
+                                            refractionAmount = 48f.dp.toPx(),
+                                            hasDepthEffect = true,
                                         )
                                     },
                                     onDrawSurface = {
@@ -293,9 +293,9 @@ fun ActivityMain() {
                                             effects = {
                                                 vibrancy()
                                                 blur(blurRadius = 16f.dp.toPx())
-                                                refraction(
-                                                    height = 24f.dp.toPx(),
-                                                    amount = 48f.dp.toPx(),
+                                                lens(
+                                                    refractionHeight = 24f.dp.toPx(),
+                                                    refractionAmount = 48f.dp.toPx(),
                                                     hasDepthEffect = true
                                                 )
                                             },
@@ -385,9 +385,9 @@ fun ActivityMain() {
                                         effects = {
                                             vibrancy()
                                             blur(blurRadius = 16f.dp.toPx())
-                                            refraction(
-                                                height = 24f.dp.toPx(),
-                                                amount = 48f.dp.toPx(),
+                                            lens(
+                                                refractionHeight = 24f.dp.toPx(),
+                                                refractionAmount = 48f.dp.toPx(),
                                                 hasDepthEffect = true
                                             )
                                         },

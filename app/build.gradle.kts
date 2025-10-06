@@ -55,7 +55,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.1")
     implementation("androidx.viewpager2:viewpager2:1.1.0")
     implementation("com.github.Kyant0:Capsule:2.1.0")
-    implementation("com.github.Kyant0:AndroidLiquidGlass:1.0.0-alpha15")
+    implementation("com.github.Kyant0:AndroidLiquidGlass:1.0.0-alpha16")
     implementation("com.google.accompanist:accompanist-coil:0.15.0")
     implementation("com.google.accompanist:accompanist-drawablepainter:0.37.3")
 
