@@ -15,7 +15,7 @@ class MainApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        loadFlutterEngine()
         DynamicColors.applyToActivitiesIfAvailable(this@MainApp)
+        loadFlutterEngine() // 初始化Flutter引擎
     }
 }
