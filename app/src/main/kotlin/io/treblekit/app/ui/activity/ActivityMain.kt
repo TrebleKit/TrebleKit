@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,10 +20,13 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.twotone.Home
 import androidx.compose.material3.AlertDialog
@@ -39,6 +43,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -79,6 +84,7 @@ import io.treblekit.app.ui.theme.appBackground
 import io.treblekit.app.ui.theme.capsuleContainer
 import io.treblekit.app.ui.theme.capsuleEdgePadding
 import io.treblekit.app.ui.theme.capsuleHeight
+import io.treblekit.app.ui.theme.capsuleIndent
 import io.treblekit.app.ui.theme.capsuleWidth
 import io.treblekit.app.ui.theme.topBarPaddingExcess
 import io.treblekit.app.ui.utils.NoOnClick
@@ -104,6 +110,8 @@ fun ActivityMain() {
         backdrop2 = effectBackdrop,
     )
     val fabTint = MaterialTheme.colorScheme.primaryContainer
+    val inspection = LocalInspectionMode.current
+//    val gravityAngle = rememberGravityAngle()
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -158,17 +166,6 @@ fun ActivityMain() {
                                             blendMode = BlendMode.Hue,
                                         )
                                     },
-//                                    highlight = {
-//                                        if (inspection) {
-//                                            Highlight.Default
-//                                        } else {
-//                                            Highlight(
-//                                                style = HighlightStyle.Default(
-//                                                    angle = gravityAngle
-//                                                ),
-//                                            )
-//                                        }
-//                                    },
                                 )
                                 .clickable {
 
@@ -199,13 +196,82 @@ fun ActivityMain() {
                         }
                     },
                     actions = {
-                        Spacer(
-                            modifier = Modifier.padding(
-                                paddingValues = rememberCapsulePadding(
-                                    excess = topBarPaddingExcess,
+                        if (inspection) {
+                            Box(
+                                modifier = Modifier
+                                    .padding(end = capsuleEdgePadding - topBarPaddingExcess)
+                                    .width(width = capsuleWidth)
+                                    .height(height = capsuleHeight)
+                                    .drawBackdrop(
+                                        backdrop = backdrop,
+                                        shape = {
+                                            ContinuousCapsule
+                                        },
+                                        effects = {
+                                            vibrancy()
+                                            blur(blurRadius = 16f.dp.toPx())
+                                            lens(
+                                                refractionHeight = 24f.dp.toPx(),
+                                                refractionAmount = 48f.dp.toPx(),
+                                                hasDepthEffect = true,
+                                            )
+                                        },
+                                        onDrawSurface = {
+                                            drawRect(
+                                                color = capsuleContainer,
+                                                blendMode = BlendMode.Hue,
+                                            )
+                                        },
+                                    ),
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxSize(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .weight(weight = 1f)
+                                            .fillMaxSize()
+                                            .clickable(onClick = NoOnClick),
+                                        contentAlignment = Alignment.Center,
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.MoreHoriz,
+                                            contentDescription = null,
+                                            tint = Color(color = 0xff8E8E9E),
+                                        )
+                                    }
+                                    VerticalDivider(
+                                        modifier = Modifier
+                                            .padding(vertical = capsuleIndent)
+                                            .wrapContentWidth()
+                                            .fillMaxHeight(),
+                                        color = Color(color = 0xff8E8E9E),
+                                    )
+                                    Box(
+                                        modifier = Modifier
+                                            .weight(weight = 1f)
+                                            .fillMaxSize()
+                                            .clickable(onClick = NoOnClick),
+                                        contentAlignment = Alignment.Center,
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.Close,
+                                            contentDescription = null,
+                                            tint = Color(color = 0xff8E8E9E),
+                                        )
+                                    }
+                                }
+                            }
+                        } else {
+                            Spacer(
+                                modifier = Modifier.padding(
+                                    paddingValues = rememberCapsulePadding(
+                                        excess = topBarPaddingExcess,
+                                    ),
                                 ),
-                            ),
-                        )
+                            )
+                        }
                     },
                 )
             },
