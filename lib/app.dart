@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:freefeos/freefeos.dart';
 import 'package:multi_builder/multi_builder.dart';
 
-import 'main.dart';
+import 'home.dart';
 import 'theme.dart';
 
 class TrebleKitApp extends StatelessWidget {
