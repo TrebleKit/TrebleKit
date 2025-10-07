@@ -47,11 +47,6 @@ android {
 
 dependencies {
     implementation(project(":flutter"))
-    implementation(libs.kotlinx.serialization.json)
-
-    implementation("com.google.android.material:material:1.13.0")
-    implementation("androidx.appcompat:appcompat:1.7.1")
-    implementation("androidx.viewpager2:viewpager2:1.1.0")
 
     implementation("com.google.accompanist:accompanist-coil:0.15.0")
     implementation("com.google.accompanist:accompanist-drawablepainter:0.37.3")
@@ -63,7 +58,12 @@ dependencies {
     implementation(libs.kyant.liquidglass)
     implementation(libs.blankj.utilcodex)
 
+    implementation(libs.material)
+    implementation(libs.kotlinx.serialization.json)
+
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.viewpager2)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
     implementation(libs.androidx.activity.compose)

@@ -63,8 +63,6 @@ import com.kyant.backdrop.drawBackdrop
 import com.kyant.backdrop.effects.blur
 import com.kyant.backdrop.effects.lens
 import com.kyant.backdrop.effects.vibrancy
-import com.kyant.backdrop.highlight.Highlight
-import com.kyant.backdrop.highlight.HighlightStyle
 import com.kyant.capsule.ContinuousCapsule
 import com.kyant.capsule.ContinuousRoundedRectangle
 import io.treblekit.app.R
@@ -87,7 +85,6 @@ import io.treblekit.app.ui.utils.NoOnClick
 import io.treblekit.app.ui.utils.isCurrentPagerDestination
 import io.treblekit.app.ui.utils.navigateToPagerRoute
 import io.treblekit.app.ui.utils.rememberCapsulePadding
-import io.treblekit.app.ui.utils.rememberGravityAngle
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -107,8 +104,6 @@ fun ActivityMain() {
         backdrop2 = effectBackdrop,
     )
     val fabTint = MaterialTheme.colorScheme.primaryContainer
-    val inspection = LocalInspectionMode.current
-    val gravityAngle = rememberGravityAngle()
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -163,22 +158,21 @@ fun ActivityMain() {
                                             blendMode = BlendMode.Hue,
                                         )
                                     },
-                                    highlight = {
-                                        if (inspection) {
-                                            Highlight.Default
-                                        } else {
-                                            Highlight(
-                                                style = HighlightStyle.Default(
-                                                    angle = gravityAngle
-                                                ),
-                                            )
-                                        }
-                                    },
+//                                    highlight = {
+//                                        if (inspection) {
+//                                            Highlight.Default
+//                                        } else {
+//                                            Highlight(
+//                                                style = HighlightStyle.Default(
+//                                                    angle = gravityAngle
+//                                                ),
+//                                            )
+//                                        }
+//                                    },
                                 )
                                 .clickable {
 
-                                }
-                        ) {
+                                }) {
                             Box(
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.Center,
@@ -305,17 +299,17 @@ fun ActivityMain() {
                                                     blendMode = BlendMode.Hue,
                                                 )
                                             },
-                                            highlight = {
-                                                if (inspection) {
-                                                    Highlight.Default
-                                                } else {
-                                                    Highlight(
-                                                        style = HighlightStyle.Default(
-                                                            angle = gravityAngle
-                                                        ),
-                                                    )
-                                                }
-                                            }
+//                                            highlight = {
+//                                                if (inspection) {
+//                                                    Highlight.Default
+//                                                } else {
+//                                                    Highlight(
+//                                                        style = HighlightStyle.Default(
+//                                                            angle = gravityAngle
+//                                                        ),
+//                                                    )
+//                                                }
+//                                            }
                                         ),
                                     horizontalArrangement = Arrangement.Center,
                                     verticalAlignment = Alignment.CenterVertically,
@@ -397,17 +391,17 @@ fun ActivityMain() {
                                                 blendMode = BlendMode.Hue,
                                             )
                                         },
-                                        highlight = {
-                                            if (inspection) {
-                                                Highlight.Default
-                                            } else {
-                                                Highlight(
-                                                    style = HighlightStyle.Default(
-                                                        angle = gravityAngle
-                                                    ),
-                                                )
-                                            }
-                                        }
+//                                        highlight = {
+//                                            if (inspection) {
+//                                                Highlight.Default
+//                                            } else {
+//                                                Highlight(
+//                                                    style = HighlightStyle.Default(
+//                                                        angle = gravityAngle
+//                                                    ),
+//                                                )
+//                                            }
+//                                        }
                                     ),
                                 containerColor = Color.Transparent,
                                 elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()

@@ -18,16 +18,18 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text('EcosedKit'),
         actions: const [CapsulePlaceholder()],
       ),
-      body: Column(
-        children: [
-          Header(),
-          StateCard(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Header(),
+            StateCard(),
 
-          TrebleKitLogo(),
-          FreeFEOSLogo(),
-          EcosedKitLogo(),
-          EbKitLogo(),
-        ],
+            TrebleKitLogo(),
+            FreeFEOSLogo(),
+            EcosedKitLogo(),
+            EbKitLogo(),
+          ],
+        ),
       ),
     );
   }
