@@ -51,6 +51,8 @@ dependencies {
     implementation("com.google.accompanist:accompanist-coil:0.15.0")
     implementation("com.google.accompanist:accompanist-drawablepainter:0.37.3")
 
+    implementation("com.github.kongzue:BaseFramework:7.0.7")
+
     implementation(libs.lsposed.hiddenapibypass)
     implementation(libs.rikka.shizuku.api)
     implementation(libs.rikka.shizuku.provider)

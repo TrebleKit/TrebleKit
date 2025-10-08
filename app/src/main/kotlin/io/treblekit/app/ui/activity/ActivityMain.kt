@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
@@ -61,6 +62,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kyant.backdrop.Backdrop
+import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.layerBackdrop
 import com.kyant.backdrop.backdrops.rememberCombinedBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
@@ -88,30 +91,26 @@ import io.treblekit.app.ui.theme.capsuleIndent
 import io.treblekit.app.ui.theme.capsuleWidth
 import io.treblekit.app.ui.theme.topBarPaddingExcess
 import io.treblekit.app.ui.utils.NoOnClick
-import io.treblekit.app.ui.utils.isCurrentPagerDestination
-import io.treblekit.app.ui.utils.navigateToPagerRoute
+import io.treblekit.app.ui.utils.isCurrentDestination
+import io.treblekit.app.ui.utils.navigateToRoute
 import io.treblekit.app.ui.utils.rememberCapsulePadding
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ActivityMain() {
-    val coroutineScope = rememberCoroutineScope()
-    val pageState = rememberPagerState(
-        pageCount = { appDestination.size },
-    )
-    var showDialog by remember {
-        mutableStateOf(value = false)
-    }
-    val backgroundBackdrop = rememberLayerBackdrop()
-    val effectBackdrop = rememberLayerBackdrop()
-    val backdrop = rememberCombinedBackdrop(
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val pageState: PagerState = rememberPagerState { appDestination.size }
+    var showDialog: Boolean by remember { mutableStateOf(value = false) }
+    val backgroundBackdrop: LayerBackdrop = rememberLayerBackdrop()
+    val effectBackdrop: LayerBackdrop = rememberLayerBackdrop()
+    val backdrop: Backdrop = rememberCombinedBackdrop(
         backdrop1 = backgroundBackdrop,
         backdrop2 = effectBackdrop,
     )
-    val fabTint = MaterialTheme.colorScheme.primaryContainer
-    val inspection = LocalInspectionMode.current
-//    val gravityAngle = rememberGravityAngle()
+    val fabTint: Color = MaterialTheme.colorScheme.primaryContainer
+    val inspection: Boolean = LocalInspectionMode.current
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -131,9 +130,6 @@ fun ActivityMain() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight(),
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.Transparent,
-                    ),
                     title = {
                         Text(
                             text = stringResource(id = R.string.app_name),
@@ -273,6 +269,9 @@ fun ActivityMain() {
                             )
                         }
                     },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Transparent,
+                    ),
                 )
             },
             bottomBar = {
@@ -280,7 +279,6 @@ fun ActivityMain() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight(),
-                    containerColor = Color.Transparent,
                     actions = {
                         if (showDialog) AlertDialog(
                             onDismissRequest = {
@@ -365,23 +363,12 @@ fun ActivityMain() {
                                                     blendMode = BlendMode.Hue,
                                                 )
                                             },
-//                                            highlight = {
-//                                                if (inspection) {
-//                                                    Highlight.Default
-//                                                } else {
-//                                                    Highlight(
-//                                                        style = HighlightStyle.Default(
-//                                                            angle = gravityAngle
-//                                                        ),
-//                                                    )
-//                                                }
-//                                            }
                                         ),
                                     horizontalArrangement = Arrangement.Center,
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
                                     appDestination.forEach { page ->
-                                        val isCurrent = pageState.isCurrentPagerDestination(
+                                        val isCurrent = pageState.isCurrentDestination(
                                             route = page.route,
                                         )
                                         val iconAlpha: Float by animateFloatAsState(
@@ -394,7 +381,7 @@ fun ActivityMain() {
                                         IconButton(
                                             onClick = {
                                                 if (!isCurrent) coroutineScope.launch {
-                                                    pageState.navigateToPagerRoute(
+                                                    pageState.navigateToRoute(
                                                         route = page.route,
                                                     )
                                                 }
@@ -457,23 +444,13 @@ fun ActivityMain() {
                                                 blendMode = BlendMode.Hue,
                                             )
                                         },
-//                                        highlight = {
-//                                            if (inspection) {
-//                                                Highlight.Default
-//                                            } else {
-//                                                Highlight(
-//                                                    style = HighlightStyle.Default(
-//                                                        angle = gravityAngle
-//                                                    ),
-//                                                )
-//                                            }
-//                                        }
                                     ),
                                 containerColor = Color.Transparent,
                                 elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
                             )
                         }
                     },
+                    containerColor = Color.Transparent,
                 )
             },
             containerColor = Color.Transparent,
@@ -490,7 +467,7 @@ fun ActivityMain() {
                         popBackStack = {},
                         animateToEcosed = {
                             coroutineScope.launch {
-                                pageState.navigateToPagerRoute(
+                                pageState.navigateToRoute(
                                     route = PlatformDestination
                                 )
                             }
@@ -500,7 +477,7 @@ fun ActivityMain() {
                     PlatformDestination -> PlatformDestination(
                         animateToDashboard = {
                             coroutineScope.launch {
-                                pageState.navigateToPagerRoute(
+                                pageState.navigateToRoute(
                                     route = DashboardDestination
                                 )
                             }

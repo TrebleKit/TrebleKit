@@ -8,6 +8,7 @@ import io.flutter.embedding.android.RenderMode
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
+import io.treblekit.app.common.FlutterHost
 
 /** Flutter引擎ID */
 private const val ENGINE_ID: String = "treblekit_flutter"
@@ -38,9 +39,9 @@ fun loadFlutterFragment(): FlutterFragment {
 /**
  * 加载Flutter视图
  */
-fun FragmentActivity.loadFlutterView(
-    flutter: FlutterFragment?,
-): ViewPager2 {
+fun FragmentActivity.loadFlutterView(): ViewPager2 {
+    if (this@loadFlutterView !is FlutterHost) error("未实现FlutterHost接口")
+    val flutter = getFlutterFragment
     return ViewPager2(this@loadFlutterView).apply {
         isUserInputEnabled = false
         adapter = FlutterAdapter(
