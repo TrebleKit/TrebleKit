@@ -179,42 +179,40 @@ class OverlayView @JvmOverloads constructor(
 
     override fun onViewAdded(child: View?) {
         super.onViewAdded(child)
-        child?.let { childView ->
-            when (childView.tag) {
-                MENU_BUTTON_TAG -> (childView as AppCompatImageButton).apply {
-                    setImageResource(R.drawable.baseline_more_horiz_24)
-                    setBackgroundColor(Color.Transparent.toArgb())
-                    setColorFilter(
-                        capsuleContent.toArgb(), PorterDuff.Mode.SRC_IN
-                    )
-                    setOnClickListener {
-                        Toast.makeText(
-                            child.context,
-                            "mMenuButton",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                    }
-                }
-
-                CLOSE_BUTTON_TAG -> (childView as AppCompatImageButton).apply {
-                    setImageResource(R.drawable.baseline_close_24)
-                    setBackgroundColor(Color.Transparent.toArgb())
-                    setColorFilter(
-                        capsuleContent.toArgb(), PorterDuff.Mode.SRC_IN
-                    )
-                    setOnClickListener {
-                        Toast.makeText(
-                            child.context,
-                            "mCloseButton",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                    }
-                }
-
-                else -> error(
-                    message = "unknown instance"
+        when (child?.tag) {
+            MENU_BUTTON_TAG -> if (child is AppCompatImageButton) child.apply {
+                setImageResource(R.drawable.baseline_more_horiz_24)
+                setBackgroundColor(Color.Transparent.toArgb())
+                setColorFilter(
+                    capsuleContent.toArgb(), PorterDuff.Mode.SRC_IN
                 )
+                setOnClickListener {
+                    Toast.makeText(
+                        child.context,
+                        "mMenuButton",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
             }
+
+            CLOSE_BUTTON_TAG -> if (child is AppCompatImageButton) child.apply {
+                setImageResource(R.drawable.baseline_close_24)
+                setBackgroundColor(Color.Transparent.toArgb())
+                setColorFilter(
+                    capsuleContent.toArgb(), PorterDuff.Mode.SRC_IN
+                )
+                setOnClickListener {
+                    Toast.makeText(
+                        child.context,
+                        "mCloseButton",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
+            }
+
+            else -> error(
+                message = "unknown instance"
+            )
         }
     }
 
