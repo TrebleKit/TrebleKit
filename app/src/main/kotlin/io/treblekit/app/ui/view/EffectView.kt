@@ -20,35 +20,35 @@ class EffectView @JvmOverloads constructor(
     defStyleAttr: Int = 0,
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private var mBgEffectPainter: BgEffectPainter? = null
+    private var mEffectPainter: EffectPainter? = null
     private val startTime = System.nanoTime().toFloat()
     private val mHandler = Handler(Looper.getMainLooper())
 
     init {
-        bgEffect(context)
+        applyEffect(context)
     }
 
-    private fun bgEffect(context: Context) = post {
+    private fun applyEffect(context: Context) = post {
         val appContext = context.applicationContext
-        mBgEffectPainter = BgEffectPainter(appContext)
-        mBgEffectPainter?.showRuntimeShader(appContext, this@EffectView)
+        mEffectPainter = EffectPainter(appContext)
+        mEffectPainter?.showRuntimeShader(appContext, this@EffectView)
         mHandler.post(mRunnableBgEffect)
     }
 
     private var mRunnableBgEffect: Runnable = Runnable {
-        mBgEffectPainter?.setAnimTime(
+        mEffectPainter?.setAnimTime(
             (((System.nanoTime().toFloat()) - startTime) / 1.0E9f) % 62.831852f
         )
-        mBgEffectPainter?.setResolution(floatArrayOf(width.toFloat(), height.toFloat()))
-        mBgEffectPainter?.updateMaterials()
-        setRenderEffect(mBgEffectPainter?.renderEffect)
+        mEffectPainter?.setResolution(floatArrayOf(width.toFloat(), height.toFloat()))
+        mEffectPainter?.updateMaterials()
+        setRenderEffect(mEffectPainter?.renderEffect)
         mHandler.postDelayed(mRunnableBgEffect, 16L)
     }
 
-    private inner class BgEffectPainter(context: Context) {
+    private inner class EffectPainter(context: Context) {
         private lateinit var bound: FloatArray
-        var mBgRuntimeShader: RuntimeShader
-        var mResources: Resources = context.resources
+        private var mBackgroundShader: RuntimeShader
+        private var mResources: Resources = context.resources
         private lateinit var uResolution: FloatArray
         private var uAnimTime = (System.nanoTime().toFloat()) / 1.0E9f
         private var uBgBound = floatArrayOf(0.0f, 0.4489f, 1.0f, 0.5511f)
@@ -88,30 +88,30 @@ class EffectView @JvmOverloads constructor(
 
         init {
             val loadShader = loadShader(mResources, R.raw.background_effect)
-            mBgRuntimeShader = RuntimeShader(loadShader!!)
-            mBgRuntimeShader.setFloatUniform("uTranslateY", uTranslateY)
-            mBgRuntimeShader.setFloatUniform("uPoints", uPoints)
-            mBgRuntimeShader.setFloatUniform("uColors", uColors)
-            mBgRuntimeShader.setFloatUniform("uNoiseScale", uNoiseScale)
-            mBgRuntimeShader.setFloatUniform("uPointOffset", uPointOffset)
-            mBgRuntimeShader.setFloatUniform("uPointRadiusMulti", uPointRadiusMulti)
-            mBgRuntimeShader.setFloatUniform("uSaturateOffset", uSaturateOffset)
-            mBgRuntimeShader.setFloatUniform("uShadowColorMulti", uShadowColorMulti)
-            mBgRuntimeShader.setFloatUniform("uShadowColorOffset", uShadowColorOffset)
-            mBgRuntimeShader.setFloatUniform("uShadowOffset", uShadowOffset)
-            mBgRuntimeShader.setFloatUniform("uBound", uBgBound)
-            mBgRuntimeShader.setFloatUniform("uAlphaMulti", uAlphaMulti)
-            mBgRuntimeShader.setFloatUniform("uLightOffset", uLightOffset)
-            mBgRuntimeShader.setFloatUniform("uAlphaOffset", uAlphaOffset)
-            mBgRuntimeShader.setFloatUniform("uShadowNoiseScale", uShadowNoiseScale)
+            mBackgroundShader = RuntimeShader(loadShader!!)
+            mBackgroundShader.setFloatUniform("uTranslateY", uTranslateY)
+            mBackgroundShader.setFloatUniform("uPoints", uPoints)
+            mBackgroundShader.setFloatUniform("uColors", uColors)
+            mBackgroundShader.setFloatUniform("uNoiseScale", uNoiseScale)
+            mBackgroundShader.setFloatUniform("uPointOffset", uPointOffset)
+            mBackgroundShader.setFloatUniform("uPointRadiusMulti", uPointRadiusMulti)
+            mBackgroundShader.setFloatUniform("uSaturateOffset", uSaturateOffset)
+            mBackgroundShader.setFloatUniform("uShadowColorMulti", uShadowColorMulti)
+            mBackgroundShader.setFloatUniform("uShadowColorOffset", uShadowColorOffset)
+            mBackgroundShader.setFloatUniform("uShadowOffset", uShadowOffset)
+            mBackgroundShader.setFloatUniform("uBound", uBgBound)
+            mBackgroundShader.setFloatUniform("uAlphaMulti", uAlphaMulti)
+            mBackgroundShader.setFloatUniform("uLightOffset", uLightOffset)
+            mBackgroundShader.setFloatUniform("uAlphaOffset", uAlphaOffset)
+            mBackgroundShader.setFloatUniform("uShadowNoiseScale", uShadowNoiseScale)
         }
 
         val renderEffect: RenderEffect
-            get() = RenderEffect.createRuntimeShaderEffect(mBgRuntimeShader, "uTex")
+            get() = RenderEffect.createRuntimeShaderEffect(mBackgroundShader, "uTex")
 
         fun updateMaterials() {
-            mBgRuntimeShader.setFloatUniform("uAnimTime", uAnimTime)
-            mBgRuntimeShader.setFloatUniform("uResolution", uResolution)
+            mBackgroundShader.setFloatUniform("uAnimTime", uAnimTime)
+            mBackgroundShader.setFloatUniform("uResolution", uResolution)
         }
 
         fun setAnimTime(f: Float) {
@@ -120,27 +120,27 @@ class EffectView @JvmOverloads constructor(
 
         fun setColors(fArr: FloatArray) {
             uColors = fArr
-            mBgRuntimeShader.setFloatUniform("uColors", fArr)
+            mBackgroundShader.setFloatUniform("uColors", fArr)
         }
 
         fun setPoints(fArr: FloatArray) {
             uPoints = fArr
-            mBgRuntimeShader.setFloatUniform("uPoints", fArr)
+            mBackgroundShader.setFloatUniform("uPoints", fArr)
         }
 
         fun setBound(fArr: FloatArray) {
             this.uBgBound = fArr
-            this.mBgRuntimeShader.setFloatUniform("uBound", fArr)
+            this.mBackgroundShader.setFloatUniform("uBound", fArr)
         }
 
         fun setLightOffset(f: Float) {
             this.uLightOffset = f
-            this.mBgRuntimeShader.setFloatUniform("uLightOffset", f)
+            this.mBackgroundShader.setFloatUniform("uLightOffset", f)
         }
 
         fun setSaturateOffset(f: Float) {
             this.uSaturateOffset = f
-            this.mBgRuntimeShader.setFloatUniform("uSaturateOffset", f)
+            this.mBackgroundShader.setFloatUniform("uSaturateOffset", f)
         }
 
         fun setPhoneDark(fArr: FloatArray) {

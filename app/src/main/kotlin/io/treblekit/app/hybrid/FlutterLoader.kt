@@ -36,17 +36,12 @@ fun loadFlutterFragment(): FlutterFragment {
     ).build()
 }
 
-/**
- * 加载Flutter视图
- */
-fun FragmentActivity.loadFlutterView(): ViewPager2 {
-    if (this@loadFlutterView !is FlutterHost) error("未实现FlutterHost接口")
-    val flutter = getFlutterFragment
-    return ViewPager2(this@loadFlutterView).apply {
-        isUserInputEnabled = false
-        adapter = FlutterAdapter(
-            activity = this@loadFlutterView,
-            flutter = flutter,
-        )
-    }
-}
+///**
+// * 加载Flutter视图
+// */
+//fun FragmentActivity.loadFlutterView(): ViewPager2 {
+//    return ViewPager2(this@loadFlutterView).apply {
+//        isUserInputEnabled = false
+//        adapter = FlutterAdapter(activity = this@loadFlutterView)
+//    }
+//}
