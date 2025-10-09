@@ -30,7 +30,7 @@ class FlutterWrapperView @JvmOverloads constructor(
                 message = "FlutterFragment为空",
             )
         } else error(
-            message = "FlutterWrapperView的父Activity必须是FragmentActivity或其子类, 并且实现FlutterHost接口",
+            message = "FlutterWrapperView的父Activity必须是FragmentActivity或其子类, 并且实现FlutterHost接口.",
         )
         addView(ViewPager2(context).apply {
             tag = FLUTTER_PAGER_VIEW_TAG
