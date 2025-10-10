@@ -14,7 +14,7 @@ import android.widget.FrameLayout
 import io.treblekit.app.R
 import java.util.Scanner
 
-class EffectView @JvmOverloads constructor(
+class StreamerEffectView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
@@ -77,7 +77,7 @@ class EffectView @JvmOverloads constructor(
     }
 
     private fun applyEffect(context: Context) = post {
-        showRuntimeShader(context, this@EffectView)
+        showRuntimeShader(context, this@StreamerEffectView)
         mHandler.post(mRunnableBgEffect)
     }
 

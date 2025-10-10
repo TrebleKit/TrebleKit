@@ -5,6 +5,7 @@ import com.google.android.material.color.DynamicColors
 import com.kongzue.baseframework.BaseApp
 import io.treblekit.app.hybrid.loadFlutterEngine
 import org.lsposed.hiddenapibypass.HiddenApiBypass
+import rikka.sui.Sui
 
 class MainApp : BaseApp<MainApp>() {
 
@@ -16,5 +17,6 @@ class MainApp : BaseApp<MainApp>() {
     override fun init() {
         DynamicColors.applyToActivitiesIfAvailable(this@MainApp)
         loadFlutterEngine() // 初始化Flutter引擎
+        Sui.init(BuildConfig.APPLICATION_ID)
     }
 }
