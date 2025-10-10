@@ -12,27 +12,25 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import io.treblekit.app.BuildConfig
 import io.treblekit.app.R
+import io.treblekit.app.ui.theme.actionBarExpandedHeight
 import io.treblekit.app.ui.theme.bannerContainer
 import io.treblekit.app.ui.theme.bannerContent
+import io.treblekit.app.ui.theme.bannerDistanceOriginPointLength
 import io.treblekit.app.ui.theme.bannerTextSize
+import io.treblekit.app.ui.theme.bannerWidth
 import io.treblekit.app.ui.theme.capsuleContainer
 import io.treblekit.app.ui.theme.capsuleContent
-import io.treblekit.app.ui.theme.capsuleStroke
-import io.treblekit.app.ui.theme.actionBarExpandedHeight
-import io.treblekit.app.ui.theme.bannerDistanceOriginPointLength
-import io.treblekit.app.ui.theme.bannerWidth
 import io.treblekit.app.ui.theme.capsuleEdgePadding
 import io.treblekit.app.ui.theme.capsuleHeight
 import io.treblekit.app.ui.theme.capsuleIndent
 import io.treblekit.app.ui.theme.capsuleRadius
+import io.treblekit.app.ui.theme.capsuleStroke
 import io.treblekit.app.ui.theme.capsuleStrokeWidth
 import io.treblekit.app.ui.theme.capsuleWidth
 import io.treblekit.app.ui.utils.convertDpToPx
@@ -44,10 +42,7 @@ class OverlayView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
-    content: @Composable () -> Unit = {},
 ) : FrameLayout(context, attrs, defStyleAttr) {
-
-    private val mContent = mutableStateOf<(@Composable () -> Unit)?>(value = null)
 
     private var viewWidth = 0
     private var viewHeight = 0
@@ -128,7 +123,7 @@ class OverlayView @JvmOverloads constructor(
     private var sdkBannerText: String = "TREBLE"
     private var debugBannerText: String = "DEBUG"
 
-    data class Point(
+    private data class Point(
         val x: Float,
         val y: Float,
     )
@@ -146,7 +141,6 @@ class OverlayView @JvmOverloads constructor(
      * 初始化
      */
     init {
-        mContent.value = content
         ViewCompat.setOnApplyWindowInsetsListener(this) { _, insets ->
             val currentSafeInsets = insets.getInsets(
                 WindowInsetsCompat.Type.systemBars(),
