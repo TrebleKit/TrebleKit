@@ -12,6 +12,8 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.ViewCompat
@@ -42,7 +44,10 @@ class OverlayView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
+    content: @Composable () -> Unit = {},
 ) : FrameLayout(context, attrs, defStyleAttr) {
+
+    private val mContent = mutableStateOf<(@Composable () -> Unit)?>(value = null)
 
     private var viewWidth = 0
     private var viewHeight = 0
@@ -141,6 +146,7 @@ class OverlayView @JvmOverloads constructor(
      * 初始化
      */
     init {
+        mContent.value = content
         ViewCompat.setOnApplyWindowInsetsListener(this) { _, insets ->
             val currentSafeInsets = insets.getInsets(
                 WindowInsetsCompat.Type.systemBars(),
@@ -160,19 +166,11 @@ class OverlayView @JvmOverloads constructor(
             AppCompatImageButton(context).apply {
                 tag = MENU_BUTTON_TAG
             },
-            LayoutParams(
-                LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT,
-            ),
         ) // 添加菜单按钮
         addView(
             AppCompatImageButton(context).apply {
                 tag = CLOSE_BUTTON_TAG
             },
-            LayoutParams(
-                LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT,
-            ),
         ) // 添加关闭按钮
         setWillNotDraw(false) // 启用内容绘制
     }
@@ -445,6 +443,9 @@ class OverlayView @JvmOverloads constructor(
         return debugBannerPointList
     }
 
+    /**
+     * 绘制调试横幅
+     */
     private fun drawDebugBanner(canvas: Canvas, pointList: List<Point>) {
         debugBannerPath.apply {
             reset()
@@ -459,6 +460,9 @@ class OverlayView @JvmOverloads constructor(
         canvas.drawPath(debugBannerPath, debugBannerPaint)
     }
 
+    /**
+     * 绘制调试文本
+     */
     private fun drawDebugText(canvas: Canvas, pointList: List<Point>) {
         // 测量欲绘制文字宽度
         val bannerTextWidth = debugBannerTextPaint.measureText(debugBannerText)
@@ -495,16 +499,25 @@ class OverlayView @JvmOverloads constructor(
         )
     }
 
+    /**
+     * 绘制胶囊按钮填充
+     */
     private fun drawCapsuleFill(canvas: Canvas) {
         setRoundRect(capsuleFillPath)
         canvas.drawPath(capsuleFillPath, capsuleFillPaint)
     }
 
+    /**
+     * 绘制胶囊按钮描边
+     */
     private fun drawCapsuleStroke(canvas: Canvas) {
         setRoundRect(capsuleStrokePath)
         canvas.drawPath(capsuleStrokePath, capsuleStrokePaint)
     }
 
+    /**
+     * 绘制胶囊按钮分割线
+     */
     private fun drawCapsuleDivider(canvas: Canvas) {
         canvas.drawLine(
             (viewWidth - (computingCapsuleWidth / 2) - computingCapsuleRightPadding - paddingRight).toFloat(),

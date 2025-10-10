@@ -153,7 +153,7 @@ fun ActivityMain() {
                                         lens(
                                             refractionHeight = 24f.dp.toPx(),
                                             refractionAmount = 48f.dp.toPx(),
-                                            hasDepthEffect = true,
+                                            depthEffect = false,
                                         )
                                     },
                                     onDrawSurface = {
@@ -209,7 +209,7 @@ fun ActivityMain() {
                                             lens(
                                                 refractionHeight = 24f.dp.toPx(),
                                                 refractionAmount = 48f.dp.toPx(),
-                                                hasDepthEffect = true,
+                                                depthEffect = false,
                                             )
                                         },
                                         onDrawSurface = {
@@ -336,34 +336,34 @@ fun ActivityMain() {
                             Box(
                                 modifier = Modifier
                                     .wrapContentSize()
-                                    .sizeIn(minWidth = 80.dp),
+                                    .sizeIn(minWidth = 80.dp)
+                                    .padding(end = 4.dp)
+                                    .drawBackdrop(
+                                        backdrop = backdrop,
+                                        shape = {
+                                            ContinuousRoundedRectangle(size = 16.dp)
+                                        },
+                                        effects = {
+                                            vibrancy()
+                                            blur(blurRadius = 16f.dp.toPx())
+                                            lens(
+                                                refractionHeight = 24f.dp.toPx(),
+                                                refractionAmount = 48f.dp.toPx(),
+                                                depthEffect = false,
+                                            )
+                                        },
+                                        onDrawSurface = {
+                                            drawRect(
+                                                color = fabTint.copy(alpha = 0.5f),
+                                                blendMode = BlendMode.Hue,
+                                            )
+                                        },
+                                    ),
                             ) {
                                 Row(
                                     modifier = Modifier
                                         .wrapContentSize()
-                                        .padding(end = 4.dp)
-                                        .defaultMinSize(minHeight = 56.dp)
-                                        .drawBackdrop(
-                                            backdrop = backdrop,
-                                            shape = {
-                                                ContinuousRoundedRectangle(size = 16.dp)
-                                            },
-                                            effects = {
-                                                vibrancy()
-                                                blur(blurRadius = 16f.dp.toPx())
-                                                lens(
-                                                    refractionHeight = 24f.dp.toPx(),
-                                                    refractionAmount = 48f.dp.toPx(),
-                                                    hasDepthEffect = true
-                                                )
-                                            },
-                                            onDrawSurface = {
-                                                drawRect(
-                                                    color = fabTint.copy(alpha = 0.5f),
-                                                    blendMode = BlendMode.Hue,
-                                                )
-                                            },
-                                        ),
+                                        .defaultMinSize(minHeight = 56.dp),
                                     horizontalArrangement = Arrangement.Center,
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
@@ -435,7 +435,7 @@ fun ActivityMain() {
                                             lens(
                                                 refractionHeight = 24f.dp.toPx(),
                                                 refractionAmount = 48f.dp.toPx(),
-                                                hasDepthEffect = true
+                                                depthEffect = false,
                                             )
                                         },
                                         onDrawSurface = {

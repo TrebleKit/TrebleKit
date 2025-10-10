@@ -1,6 +1,8 @@
 [versions]
+drawablepainter = "0.37.3"
 agp = "8.13.0"
 appcompat = "1.7.1"
+baseframework = "7.0.7"
 kotlin = "2.2.20"
 
 coreKtx = "1.17.0"
@@ -9,23 +11,26 @@ junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.9.4"
 activityCompose = "1.11.0"
-composeBom = "2025.09.01"
+composeBom = "2025.10.00"
 kotlinxSerializationJson = "1.9.0"
-
 material = "1.13.0"
 materialIconsExtended = "1.7.8"
+viewpager2 = "1.1.0"
+
 shizuku = "13.1.5"
 hiddenapibypass = "6.1"
 utilcodex = "1.31.1"
-liquidglass = "1.0.0-alpha16"
+liquidglass = "1.0.0-beta01"
 capsule = "2.1.0"
-viewpager2 = "1.1.0"
+
 
 [libraries]
+
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
+
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -41,14 +46,17 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+accompanist-drawablepainter = { module = "com.google.accompanist:accompanist-drawablepainter", version.ref = "drawablepainter" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
+
 
 lsposed-hiddenapibypass = { group = "org.lsposed.hiddenapibypass", name = "hiddenapibypass", version.ref = "hiddenapibypass" }
-material = { module = "com.google.android.material:material", version.ref = "material" }
 rikka-shizuku-provider = { group = "dev.rikka.shizuku", name = "provider", version.ref = "shizuku" }
 rikka-shizuku-api = { group = "dev.rikka.shizuku", name = "api", version.ref = "shizuku" }
 blankj-utilcodex = { group = "com.blankj", name = "utilcodex", version.ref = "utilcodex" }
 kyant-capsule = { group = "com.github.Kyant0", name = "Capsule", version.ref = "capsule" }
 kyant-liquidglass = { group = "com.github.Kyant0", name = "AndroidLiquidGlass", version.ref = "liquidglass" }
+kongzue-baseframework = { module = "com.github.kongzue:BaseFramework", version.ref = "baseframework" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -49,9 +49,9 @@ dependencies {
     implementation(project(":flutter"))
 
     implementation("com.google.accompanist:accompanist-coil:0.15.0")
-    implementation("com.google.accompanist:accompanist-drawablepainter:0.37.3")
+    implementation(libs.accompanist.drawablepainter)
 
-    implementation("com.github.kongzue:BaseFramework:7.0.7")
+    implementation(libs.kongzue.baseframework)
 
     implementation(libs.lsposed.hiddenapibypass)
     implementation(libs.rikka.shizuku.api)
