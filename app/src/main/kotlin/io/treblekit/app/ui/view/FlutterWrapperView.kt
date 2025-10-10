@@ -32,43 +32,45 @@ class FlutterWrapperView @JvmOverloads constructor(
         } else error(
             message = "FlutterWrapperView的父Activity必须是FragmentActivity或其子类, 并且实现FlutterHost接口.",
         )
-        addView(ViewPager2(context).apply {
-            tag = FLUTTER_PAGER_VIEW_TAG
-        })
+        addView(
+            ViewPager2(context).apply {
+                tag = FLUTTER_CONTAINER_TAG
+            },
+        )
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
+        // 遍历子View
         for (index in 0 until childCount) {
             when (index) {
                 0 -> {
+                    // 布局承载Flutter的ViewPager2
                     getChildAt(index).layout(
                         0,
                         0,
                         right - left,
                         bottom - top,
                     )
-                } // 仅布局ViewPager2
-
-                else -> continue // 跳出循环,拒绝其他子视图布局
+                }
+                // 跳出循环,拒绝其他子视图布局
+                else -> continue
             }
         }
     }
 
     override fun onViewAdded(child: View?) {
         super.onViewAdded(child)
-        when (child?.tag) {
-            FLUTTER_PAGER_VIEW_TAG -> if (child is ViewPager2) child.apply {
-                isUserInputEnabled = false // 禁用滑动
-                adapter = object : FragmentStateAdapter(mFragmentActivity) {
-                    override fun getItemCount(): Int = 1
-                    override fun createFragment(position: Int): Fragment = mFlutterFragment
-                }
-            }
+        if (child?.tag == FLUTTER_CONTAINER_TAG && child is ViewPager2) child.apply {
+            isUserInputEnabled = false // 禁用滑动
+            adapter = object : FragmentStateAdapter(mFragmentActivity) {
+                override fun getItemCount(): Int = 1 // 只显示一个页面
+                override fun createFragment(position: Int): Fragment = mFlutterFragment
+            } // 适配器
         }
     }
 
     private companion object {
-        const val FLUTTER_PAGER_VIEW_TAG: String = "FlutterPagerView"
+        const val FLUTTER_CONTAINER_TAG: String = "FlutterContainer"
     }
 }
