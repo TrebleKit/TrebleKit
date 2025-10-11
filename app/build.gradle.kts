@@ -52,7 +52,8 @@ dependencies {
     implementation(libs.accompanist.drawablepainter)
 
     implementation(libs.kongzue.baseframework)
-
+    implementation(libs.kongzue.dialogx)
+    implementation(libs.kongzue.dialogx.material3)
     implementation(libs.lsposed.hiddenapibypass)
     implementation(libs.rikka.shizuku.api)
     implementation(libs.rikka.shizuku.provider)

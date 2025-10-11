@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.kongzue.dialogx.dialogs.PopTip
 import io.treblekit.app.BuildConfig
 import io.treblekit.app.R
 import io.treblekit.app.ui.theme.actionBarExpandedHeight
@@ -179,11 +180,12 @@ class OverlayView @JvmOverloads constructor(
                     capsuleContent.toArgb(), PorterDuff.Mode.SRC_IN
                 )
                 setOnClickListener {
-                    Toast.makeText(
-                        child.context,
-                        "mMenuButton",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                    PopTip.show("mMenuButton")
+//                    Toast.makeText(
+//                        child.context,
+//                        "mMenuButton",
+//                        Toast.LENGTH_SHORT,
+//                    ).show()
                 }
             }
 
@@ -194,11 +196,12 @@ class OverlayView @JvmOverloads constructor(
                     capsuleContent.toArgb(), PorterDuff.Mode.SRC_IN
                 )
                 setOnClickListener {
-                    Toast.makeText(
-                        child.context,
-                        "mCloseButton",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                    PopTip.show("mCloseButton")
+//                    Toast.makeText(
+//                        child.context,
+//                        "mCloseButton",
+//                        Toast.LENGTH_SHORT,
+//                    ).show()
                 }
             }
 

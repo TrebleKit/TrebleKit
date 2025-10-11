@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
-        android:name=".MainApp"
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -22,7 +22,7 @@
         </activity>
 
         <provider
-            android:name="rikka.shizuku.ShizukuProvider"
+            android:name=".EmbedderProvider"
             android:authorities="${applicationId}.shizuku"
             android:enabled="true"
             android:exported="true"

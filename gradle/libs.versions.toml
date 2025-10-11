@@ -1,4 +1,5 @@
 [versions]
+dialogx = "0.0.50"
 drawablepainter = "0.37.3"
 agp = "8.13.0"
 appcompat = "1.7.1"
@@ -31,6 +32,8 @@ androidx-compose-material-icons-extended = { module = "androidx.compose.material
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
 
+
+
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -57,6 +60,8 @@ blankj-utilcodex = { group = "com.blankj", name = "utilcodex", version.ref = "ut
 kyant-capsule = { group = "com.github.Kyant0", name = "Capsule", version.ref = "capsule" }
 kyant-liquidglass = { group = "com.github.Kyant0", name = "AndroidLiquidGlass", version.ref = "liquidglass" }
 kongzue-baseframework = { module = "com.github.kongzue:BaseFramework", version.ref = "baseframework" }
+kongzue-dialogx = { module = "com.github.kongzue.DialogX:DialogX", version.ref = "dialogx" }
+kongzue-dialogx-material3 = { module = "com.github.kongzue.DialogX:DialogXMaterialYou", version.ref = "dialogx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
