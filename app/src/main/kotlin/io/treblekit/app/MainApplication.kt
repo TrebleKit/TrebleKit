@@ -9,7 +9,13 @@ import com.kongzue.baseframework.util.AppManager
 import com.kongzue.dialogx.DialogX
 import com.kongzue.dialogx.dialogs.MessageDialog
 import com.kongzue.dialogxmaterialyou.style.MaterialYouStyle
+import com.tencent.bugly.crashreport.CrashReport
+import io.treblekit.app.di.appModules
 import io.treblekit.app.hybrid.loadFlutterEngine
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import rikka.sui.Sui
 import java.io.File
@@ -22,17 +28,20 @@ class MainApplication : BaseApp<MainApplication>() {
     }
 
     override fun init() {
-        BaseFrameworkSettings.DEBUGMODE = BuildConfig.DEBUG // 调试配置
-        BaseFrameworkSettings.BETA_PLAN = true
+       initBaseFramework()
 
         DynamicColors.applyToActivitiesIfAvailable(this@MainApplication)
         loadFlutterEngine() // 初始化Flutter引擎
         Sui.init(BuildConfig.APPLICATION_ID)
+        CrashReport.initCrashReport(applicationContext, "5d88a322af", BuildConfig.DEBUG)
 
-        setOnSDKInitializedCallBack {
-            toast("SDK已加载完毕")
+
+        startKoin {
+            androidLogger()
+            androidContext(this@MainApplication)
+            modules(appModules)
+            modules(module { single { this@MainApplication } })
         }
-        setOnCrashListener(mCrash)
     }
 
     private val mCrash: OnBugReportListener = object : OnBugReportListener() {
@@ -54,6 +63,12 @@ class MainApplication : BaseApp<MainApplication>() {
     override fun initSDKs() {
         super.initSDKs()
         initDialogX() // 初始化DialogX
+    }
+
+    private fun initBaseFramework() {
+        BaseFrameworkSettings.DEBUGMODE = BuildConfig.DEBUG // 调试配置
+        BaseFrameworkSettings.BETA_PLAN = true
+        setOnCrashListener(mCrash)
     }
 
     private fun initDialogX() {

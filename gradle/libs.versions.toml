@@ -23,6 +23,7 @@ hiddenapibypass = "6.1"
 utilcodex = "1.31.1"
 liquidglass = "1.0.0-beta01"
 capsule = "2.1.0"
+koin = "4.1.1"
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -56,6 +57,9 @@ kyant-liquidglass = { group = "com.github.Kyant0", name = "AndroidLiquidGlass", 
 kongzue-baseframework = { module = "com.github.kongzue:BaseFramework", version.ref = "baseframework" }
 kongzue-dialogx = { module = "com.github.kongzue.DialogX:DialogX", version.ref = "dialogx" }
 kongzue-dialogx-material3 = { module = "com.github.kongzue.DialogX:DialogXMaterialYou", version.ref = "dialogx" }
+insert-koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+insert-koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+insert-koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

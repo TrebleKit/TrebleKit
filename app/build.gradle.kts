@@ -33,11 +33,13 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
     }
     buildFeatures {
         compose = true
@@ -60,6 +62,12 @@ dependencies {
     implementation(libs.kyant.capsule)
     implementation(libs.kyant.liquidglass)
     implementation(libs.blankj.utilcodex)
+    implementation(libs.insert.koin.core)
+    implementation(libs.insert.koin.android)
+    implementation(libs.insert.koin.compose)
+    implementation("com.tencent.bugly:crashreport:4.1.9.3")
+
+
 
     implementation(libs.material)
     implementation(libs.kotlinx.serialization.json)
