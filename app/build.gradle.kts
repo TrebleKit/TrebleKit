@@ -17,6 +17,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64")
+        }
     }
     dependenciesInfo {
         includeInApk = false
@@ -65,7 +69,6 @@ dependencies {
     implementation(libs.insert.koin.core)
     implementation(libs.insert.koin.android)
     implementation(libs.insert.koin.compose)
-    implementation("com.tencent.bugly:crashreport:4.1.9.3")
 
 
 

@@ -9,7 +9,6 @@ import com.kongzue.baseframework.util.AppManager
 import com.kongzue.dialogx.DialogX
 import com.kongzue.dialogx.dialogs.MessageDialog
 import com.kongzue.dialogxmaterialyou.style.MaterialYouStyle
-import com.tencent.bugly.crashreport.CrashReport
 import io.treblekit.app.di.appModules
 import io.treblekit.app.hybrid.loadFlutterEngine
 import org.koin.android.ext.koin.androidContext
@@ -33,7 +32,6 @@ class MainApplication : BaseApp<MainApplication>() {
         DynamicColors.applyToActivitiesIfAvailable(this@MainApplication)
         loadFlutterEngine() // 初始化Flutter引擎
         Sui.init(BuildConfig.APPLICATION_ID)
-        CrashReport.initCrashReport(applicationContext, "5d88a322af", BuildConfig.DEBUG)
 
 
         startKoin {
