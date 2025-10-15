@@ -21,15 +21,15 @@ dialogx = "0.0.50"
 shizuku = "13.1.5"
 hiddenapibypass = "6.1"
 utilcodex = "1.31.1"
-liquidglass = "1.0.0-beta01"
+liquidglass = "1.0.0-beta02"
 capsule = "2.1.0"
 koin = "4.1.1"
 
 [libraries]
-androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
-androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
+androidx-viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -45,8 +45,8 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
-accompanist-drawablepainter = { module = "com.google.accompanist:accompanist-drawablepainter", version.ref = "drawablepainter" }
-material = { module = "com.google.android.material:material", version.ref = "material" }
+accompanist-drawablepainter = { group = "com.google.accompanist", name = "accompanist-drawablepainter", version.ref = "drawablepainter" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 lsposed-hiddenapibypass = { group = "org.lsposed.hiddenapibypass", name = "hiddenapibypass", version.ref = "hiddenapibypass" }
 rikka-shizuku-provider = { group = "dev.rikka.shizuku", name = "provider", version.ref = "shizuku" }
@@ -54,9 +54,9 @@ rikka-shizuku-api = { group = "dev.rikka.shizuku", name = "api", version.ref = "
 blankj-utilcodex = { group = "com.blankj", name = "utilcodex", version.ref = "utilcodex" }
 kyant-capsule = { group = "com.github.Kyant0", name = "Capsule", version.ref = "capsule" }
 kyant-liquidglass = { group = "com.github.Kyant0", name = "AndroidLiquidGlass", version.ref = "liquidglass" }
-kongzue-baseframework = { module = "com.github.kongzue:BaseFramework", version.ref = "baseframework" }
-kongzue-dialogx = { module = "com.github.kongzue.DialogX:DialogX", version.ref = "dialogx" }
-kongzue-dialogx-material3 = { module = "com.github.kongzue.DialogX:DialogXMaterialYou", version.ref = "dialogx" }
+kongzue-baseframework = { group = "com.github.kongzue", name = "BaseFramework", version.ref = "baseframework" }
+kongzue-dialogx = { group = "com.github.kongzue.DialogX", name = "DialogX", version.ref = "dialogx" }
+kongzue-dialogx-material3 = { group = "com.github.kongzue.DialogX", name = "DialogXMaterialYou", version.ref = "dialogx" }
 insert-koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 insert-koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 insert-koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
