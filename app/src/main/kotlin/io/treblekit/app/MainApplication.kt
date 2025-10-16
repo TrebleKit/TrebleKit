@@ -66,6 +66,7 @@ class MainApplication : BaseApp<MainApplication>() {
     private fun initBaseFramework() {
         BaseFrameworkSettings.DEBUGMODE = BuildConfig.DEBUG // 调试配置
         BaseFrameworkSettings.BETA_PLAN = true
+
         setOnCrashListener(mCrash)
     }
 
