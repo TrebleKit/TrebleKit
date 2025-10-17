@@ -93,7 +93,7 @@ fun PlatformDestination(
                     },
                     onDrawSurface = {
                         drawRect(
-                            color = primaryContainerTint.copy(alpha = 0.5f),
+                            color = primaryContainerTint.copy(alpha = 0.8f),
                             blendMode = BlendMode.Hue,
                         )
                     },

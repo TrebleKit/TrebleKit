@@ -1,6 +1,5 @@
 package io.treblekit.app.ui.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -51,78 +50,74 @@ fun OverlayLayer(
         modifier = modifier.fillMaxSize(),
     ) {
         content()
-        OverlayView()
-        AnimatedVisibility(
-            visible = inspection,
-            modifier = Modifier.align(Alignment.TopEnd)
+        if (!inspection) OverlayView()
+        if (inspection) Box(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(
+                    vertical = (TopAppBarDefaults.TopAppBarExpandedHeight - capsuleHeight) / 2,
+                    horizontal = capsuleEdgePadding,
+                )
+                .width(width = capsuleWidth)
+                .height(height = capsuleHeight)
+                .drawBackdrop(
+                    backdrop = backdrop,
+                    shape = {
+                        ContinuousCapsule
+                    },
+                    effects = {
+                        vibrancy()
+                        blur(blurRadius = 16f.dp.toPx())
+                        lens(
+                            refractionHeight = 24f.dp.toPx(),
+                            refractionAmount = 48f.dp.toPx(),
+                            depthEffect = false,
+                        )
+                    },
+                    onDrawSurface = {
+                        drawRect(
+                            color = capsuleContainer,
+                            blendMode = BlendMode.Hue,
+                        )
+                    },
+                ),
         ) {
-            Box(
-                modifier = Modifier
-                    .padding(
-                        vertical = (TopAppBarDefaults.TopAppBarExpandedHeight - capsuleHeight) / 2,
-                        horizontal = capsuleEdgePadding,
-                    )
-                    .width(width = capsuleWidth)
-                    .height(height = capsuleHeight)
-                    .drawBackdrop(
-                        backdrop = backdrop,
-                        shape = {
-                            ContinuousCapsule
-                        },
-                        effects = {
-                            vibrancy()
-                            blur(blurRadius = 16f.dp.toPx())
-                            lens(
-                                refractionHeight = 24f.dp.toPx(),
-                                refractionAmount = 48f.dp.toPx(),
-                                depthEffect = false,
-                            )
-                        },
-                        onDrawSurface = {
-                            drawRect(
-                                color = capsuleContainer,
-                                blendMode = BlendMode.Hue,
-                            )
-                        },
-                    ),
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically,
+                Box(
+                    modifier = Modifier
+                        .weight(weight = 1f)
+                        .fillMaxSize()
+                        .clickable(onClick = NoOnClick),
+                    contentAlignment = Alignment.Center,
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .weight(weight = 1f)
-                            .fillMaxSize()
-                            .clickable(onClick = NoOnClick),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.MoreHoriz,
-                            contentDescription = null,
-                            tint = Color.White,
-                        )
-                    }
-                    VerticalDivider(
-                        modifier = Modifier
-                            .padding(vertical = capsuleIndent)
-                            .wrapContentWidth()
-                            .fillMaxHeight(),
-                        color = Color.White,
+                    Icon(
+                        imageVector = Icons.Filled.MoreHoriz,
+                        contentDescription = null,
+                        tint = Color.White,
                     )
-                    Box(
-                        modifier = Modifier
-                            .weight(weight = 1f)
-                            .fillMaxSize()
-                            .clickable(onClick = NoOnClick),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Close,
-                            contentDescription = null,
-                            tint = Color.White,
-                        )
-                    }
+                }
+                VerticalDivider(
+                    modifier = Modifier
+                        .padding(vertical = capsuleIndent)
+                        .wrapContentWidth()
+                        .fillMaxHeight(),
+                    color = Color.White
+                )
+                Box(
+                    modifier = Modifier
+                        .weight(weight = 1f)
+                        .fillMaxSize()
+                        .clickable(onClick = NoOnClick),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = null,
+                        tint = Color.White,
+                    )
                 }
             }
         }

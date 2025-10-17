@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import com.kyant.backdrop.Backdrop
 import com.kyant.backdrop.backdrops.LayerBackdrop
@@ -23,6 +24,7 @@ fun Background(
     modifier: Modifier = Modifier,
     content: @Composable BoxScope.(Backdrop) -> Unit = {},
 ) {
+    val inspection: Boolean = LocalInspectionMode.current
     val backgroundBackdrop: LayerBackdrop = rememberLayerBackdrop()
     val effectBackdrop: LayerBackdrop = rememberLayerBackdrop()
     val backdrop: Backdrop = rememberCombinedBackdrop(
@@ -38,7 +40,7 @@ fun Background(
                 .background(color = appBackground)
                 .layerBackdrop(backdrop = backgroundBackdrop),
         )
-        EffectView(
+        if (!inspection) EffectView(
             modifier = Modifier.layerBackdrop(backdrop = effectBackdrop)
         )
         content(backdrop)
@@ -65,7 +67,7 @@ private fun EffectView(modifier: Modifier = Modifier) {
                     y = with(
                         receiver = LocalDensity.current,
                     ) {
-                        return@with (constraints.maxHeight / 4).toDp()
+                        return@with (constraints.maxHeight / 7 * 2).toDp()
                     }
                 ),
         ) {

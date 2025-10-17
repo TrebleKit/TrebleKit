@@ -126,7 +126,7 @@ fun DashboardDestination(
                     },
                     onDrawSurface = {
                         drawRect(
-                            color = primaryContainerTint.copy(alpha = 0.5f),
+                            color = primaryContainerTint.copy(alpha = 0.8f),
                             blendMode = BlendMode.Hue,
                         )
                     },
@@ -460,7 +460,7 @@ fun RecentPlayer(
                     },
                     onDrawSurface = {
                         drawRect(
-                            color = tint.copy(alpha = 0.5f),
+                            color = tint.copy(alpha = 0.8f),
                             blendMode = BlendMode.Hue,
                         )
                     },
