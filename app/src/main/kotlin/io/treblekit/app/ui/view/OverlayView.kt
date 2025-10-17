@@ -193,7 +193,8 @@ class OverlayView @JvmOverloads constructor(
                 setImageResource(R.drawable.baseline_close_24)
                 setBackgroundColor(Color.Transparent.toArgb())
                 setColorFilter(
-                    capsuleContent.toArgb(), PorterDuff.Mode.SRC_IN
+                    capsuleContent.toArgb(),
+                    PorterDuff.Mode.SRC_IN,
                 )
                 setOnClickListener {
                     PopTip.show("mCloseButton")
