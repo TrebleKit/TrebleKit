@@ -2,9 +2,14 @@ package io.treblekit.app.ui.destination
 
 import android.content.Context
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,11 +36,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -43,18 +53,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.lerp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.accompanist.imageloading.rememberDrawablePainter
+import com.kyant.backdrop.Backdrop
+import com.kyant.backdrop.backdrops.rememberLayerBackdrop
+import com.kyant.backdrop.drawBackdrop
+import com.kyant.backdrop.effects.blur
+import com.kyant.backdrop.effects.lens
+import com.kyant.backdrop.effects.vibrancy
 import com.kyant.capsule.ContinuousCapsule
 import com.kyant.capsule.ContinuousRoundedRectangle
 import io.treblekit.app.R
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.utils.NoOnClick
+import kotlinx.coroutines.launch
 
 @Composable
 fun DashboardDestination(
     modifier: Modifier = Modifier,
+    backdrop: Backdrop = rememberLayerBackdrop(),
     popBackStack: () -> Unit = NoOnClick,
     animateToEcosed: () -> Unit = NoOnClick,
 ) {
@@ -77,10 +96,12 @@ fun DashboardDestination(
         )
         MPPlayer(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+            backdrop = backdrop,
             popBackStack = popBackStack,
             animateToFlutter = animateToEcosed,
         )
-        Surface(
+        val primaryContainerTint = MaterialTheme.colorScheme.primaryContainer
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
@@ -89,9 +110,27 @@ fun DashboardDestination(
                     top = 15.dp,
                     end = 16.dp,
                     bottom = 15.dp,
-                ),
-            shape = ContinuousRoundedRectangle(size = 16.dp),
-            color = MaterialTheme.colorScheme.secondaryContainer,
+                )
+                .drawBackdrop(
+                    backdrop = backdrop,
+                    shape = {
+                        ContinuousRoundedRectangle(size = 16.dp)
+                    },
+                    effects = {
+                        vibrancy()
+                        blur(blurRadius = 2f.dp.toPx())
+                        lens(
+                            refractionHeight = 12f.dp.toPx(),
+                            refractionAmount = 24f.dp.toPx(),
+                        )
+                    },
+                    onDrawSurface = {
+                        drawRect(
+                            color = primaryContainerTint.copy(alpha = 0.5f),
+                            blendMode = BlendMode.Hue,
+                        )
+                    },
+                )
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
@@ -183,6 +222,109 @@ fun DashboardDestination(
                 }
             }
         }
+//        Surface(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .wrapContentHeight()
+//                .padding(
+//                    start = 16.dp,
+//                    top = 15.dp,
+//                    end = 16.dp,
+//                    bottom = 15.dp,
+//                ),
+//            shape = ContinuousRoundedRectangle(size = 16.dp),
+//            color = MaterialTheme.colorScheme.secondaryContainer,
+//        ) {
+//            Column(
+//                modifier = Modifier.padding(16.dp),
+//            ) {
+//                Row {
+//                    Text(
+//                        text = "互联互通",
+//                        fontSize = 14.sp,
+//                    )
+//                }
+//                Row(
+//                    modifier = Modifier,
+//                    horizontalArrangement = Arrangement.spacedBy(space = 10.dp),
+//                ) {
+//                    Column(
+//                        modifier = Modifier.wrapContentSize(),
+//                        horizontalAlignment = Alignment.CenterHorizontally,
+//                    ) {
+//                        Box(
+//                            modifier = Modifier
+//                                .size(size = 40.dp)
+//                                .clip(shape = RoundedCornerShape(size = 35.dp))
+//                                .background(color = Color(color = 0xFF8E8E9E))
+//                                .clickable(onClick = {}),
+//                            contentAlignment = Alignment.Center,
+//                        ) {
+//                            Icon(
+//                                imageVector = Icons.Filled.Add,
+//                                contentDescription = null,
+//                            )
+//                        }
+//                        Text(
+//                            text = "app",
+//                            fontSize = 15.sp,
+//                            color = Color.White,
+//                            textAlign = TextAlign.Center,
+//                        )
+//                    }
+//                    Column(
+//                        modifier = Modifier.wrapContentSize(),
+//                        horizontalAlignment = Alignment.CenterHorizontally,
+//                    ) {
+//                        Box(
+//                            modifier = Modifier
+//                                .size(size = 40.dp)
+//                                .clip(shape = RoundedCornerShape(size = 35.dp))
+//                                .background(color = Color(color = 0xFF8E8E9E))
+//                                .clickable(onClick = {}),
+//                            contentAlignment = Alignment.Center,
+//                        ) {
+//                            Icon(
+//                                imageVector = Icons.Filled.Add,
+//                                contentDescription = null,
+//                            )
+//                        }
+//                        Text(
+//                            text = "app",
+//                            fontSize = 15.sp,
+//                            color = Color.White,
+//                            textAlign = TextAlign.Center,
+//                        )
+//                    }
+//                    Column(
+//                        modifier = Modifier.wrapContentSize(),
+//                        horizontalAlignment = Alignment.CenterHorizontally,
+//                    ) {
+//                        Box(
+//                            modifier = Modifier
+//                                .size(size = 40.dp)
+//                                .clip(shape = RoundedCornerShape(size = 35.dp))
+//                                .background(color = Color(color = 0xFF8E8E9E))
+//                                .clickable(onClick = {}),
+//                            contentAlignment = Alignment.Center,
+//                        ) {
+//                            Icon(
+//                                imageVector = Icons.Filled.Add,
+//                                contentDescription = null,
+//                            )
+//                        }
+//                        Text(
+//                            text = "app",
+//                            fontSize = 15.sp,
+//                            color = Color.White,
+//                            textAlign = TextAlign.Center,
+//                        )
+//                    }
+//
+//
+//                }
+//            }
+//        }
         Text(
             text = "常用应用",
             modifier = Modifier.padding(
@@ -217,6 +359,7 @@ fun DashboardDestinationPreview() {
 @Composable
 fun MPPlayer(
     modifier: Modifier = Modifier,
+    backdrop: Backdrop = rememberLayerBackdrop(),
     popBackStack: () -> Unit = NoOnClick,
     animateToFlutter: () -> Unit = NoOnClick,
 ) {
@@ -265,6 +408,7 @@ fun MPPlayer(
                 .weight(weight = 1f)
                 .padding(start = 16.dp)
                 .fillMaxSize(),
+            backdrop = backdrop,
             animateToFlutter = animateToFlutter,
         )
     }
@@ -281,44 +425,90 @@ fun MPPlayerPreview() {
 @Composable
 fun RecentPlayer(
     modifier: Modifier = Modifier,
+    backdrop: Backdrop = rememberLayerBackdrop(),
     animateToFlutter: () -> Unit = NoOnClick,
 ) {
+    val tint = MaterialTheme.colorScheme.primaryContainer
+    val animationScope = rememberCoroutineScope()
+    val progressAnimation = remember { Animatable(initialValue = 0f) }
     Column(
         modifier = modifier.wrapContentSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Surface(
+        Box(
             modifier = Modifier
+                .fillMaxWidth()
                 .height(height = 60.dp)
-                .fillMaxWidth(),
-            shape = ContinuousCapsule,
-            color = MaterialTheme.colorScheme.primaryContainer,
-            onClick = animateToFlutter,
-        ) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center,
-            ) {
-                Row(
-                    modifier = Modifier.wrapContentSize(),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        imageVector = Icons.TwoTone.Category,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.size(size = 30.dp),
-                    )
-                    Text(
-                        text = "软件平台",
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .padding(start = 10.dp),
-                        fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        textAlign = TextAlign.Center,
-                    )
+                .graphicsLayer {
+                    val progress = progressAnimation.value
+                    val scale = lerp(1f, 1.05f, progress)
+                    scaleX = scale
+                    scaleY = scale
                 }
+                .drawBackdrop(
+                    backdrop = backdrop,
+                    shape = {
+                        ContinuousCapsule
+                    },
+                    effects = {
+                        vibrancy()
+                        blur(blurRadius = 2f.dp.toPx())
+                        lens(
+                            refractionHeight = 12f.dp.toPx(),
+                            refractionAmount = 24f.dp.toPx(),
+                        )
+                    },
+                    onDrawSurface = {
+                        drawRect(
+                            color = tint.copy(alpha = 0.5f),
+                            blendMode = BlendMode.Hue,
+                        )
+                    },
+                    layerBlock = {
+                        val progress = progressAnimation.value
+                        val scale = lerp(1f, 1.05f, progress)
+                        scaleX = scale
+                        scaleY = scale
+                    }
+                )
+                .clickable(onClick = animateToFlutter)
+                .pointerInput(animationScope) {
+                    val animationSpec = spring(0.5f, 300f, 0.001f)
+                    awaitEachGesture {
+                        // press
+                        awaitFirstDown()
+                        animationScope.launch {
+                            progressAnimation.animateTo(1f, animationSpec)
+                        }
+
+                        // release
+                        waitForUpOrCancellation()
+                        animationScope.launch {
+                            progressAnimation.animateTo(0f, animationSpec)
+                        }
+                    }
+                },
+            contentAlignment = Alignment.Center,
+        ) {
+            Row(
+                modifier = Modifier.wrapContentSize(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    imageVector = Icons.TwoTone.Category,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.size(size = 30.dp),
+                )
+                Text(
+                    text = "软件平台",
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .padding(start = 10.dp),
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    textAlign = TextAlign.Center,
+                )
             }
         }
         Text(
