@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
@@ -19,7 +20,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,8 +40,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kyant.backdrop.Backdrop
-import com.kyant.backdrop.backdrops.LayerBackdrop
-import com.kyant.backdrop.backdrops.layerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.backdrop.drawBackdrop
 import com.kyant.backdrop.effects.blur
@@ -49,16 +48,20 @@ import com.kyant.backdrop.effects.vibrancy
 import com.kyant.capsule.ContinuousRoundedRectangle
 import io.treblekit.app.R
 import io.treblekit.app.ui.components.FlutterView
+import io.treblekit.app.ui.navigation.DashboardDestination
 import io.treblekit.app.ui.theme.TrebleKitTheme
-import io.treblekit.app.ui.utils.NoOnClick
+import io.treblekit.app.ui.utils.navigateToRoute
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlatformDestination(
     modifier: Modifier = Modifier,
-    animateToDashboard: () -> Unit = NoOnClick,
+    pageState: PagerState? = null,
     backdrop: Backdrop = rememberLayerBackdrop(),
 ) {
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val inspection: Boolean = LocalInspectionMode.current
     var dropdownExpanded: Boolean by remember { mutableStateOf(value = false) }
     var aboutExpanded: Boolean by remember { mutableStateOf(value = false) }
@@ -70,7 +73,8 @@ fun PlatformDestination(
             title = {
                 Text(text = "Treble平台")
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(
                     start = 16.dp,
                     top = 16.dp,
@@ -100,7 +104,11 @@ fun PlatformDestination(
                 ),
             navigationIcon = {
                 IconButton(
-                    onClick = animateToDashboard,
+                    onClick = {
+                        coroutineScope.launch {
+                            pageState.navigateToRoute(route = DashboardDestination)
+                        }
+                    },
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,

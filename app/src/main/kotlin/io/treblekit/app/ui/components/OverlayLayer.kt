@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -96,7 +97,7 @@ fun OverlayLayer(
                     Icon(
                         imageVector = Icons.Filled.MoreHoriz,
                         contentDescription = null,
-                        tint = Color.White,
+                        tint = MaterialTheme.colorScheme.onBackground,
                     )
                 }
                 VerticalDivider(
@@ -104,7 +105,7 @@ fun OverlayLayer(
                         .padding(vertical = capsuleIndent)
                         .wrapContentWidth()
                         .fillMaxHeight(),
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 Box(
                     modifier = Modifier
@@ -116,7 +117,7 @@ fun OverlayLayer(
                     Icon(
                         imageVector = Icons.Filled.Close,
                         contentDescription = null,
-                        tint = Color.White,
+                        tint = MaterialTheme.colorScheme.onBackground,
                     )
                 }
             }

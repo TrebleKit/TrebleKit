@@ -2,14 +2,9 @@ package io.treblekit.app.ui.destination
 
 import android.content.Context
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +20,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -33,19 +29,16 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.twotone.Category
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -53,7 +46,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.util.lerp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.accompanist.imageloading.rememberDrawablePainter
@@ -66,16 +58,19 @@ import com.kyant.backdrop.effects.vibrancy
 import com.kyant.capsule.ContinuousCapsule
 import com.kyant.capsule.ContinuousRoundedRectangle
 import io.treblekit.app.R
+import io.treblekit.app.ui.navigation.PlatformDestination
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.utils.NoOnClick
+import io.treblekit.app.ui.utils.navigateToRoute
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun DashboardDestination(
     modifier: Modifier = Modifier,
+    pageState: PagerState? = null,
     backdrop: Backdrop = rememberLayerBackdrop(),
     popBackStack: () -> Unit = NoOnClick,
-    animateToEcosed: () -> Unit = NoOnClick,
 ) {
     val scrollState = rememberScrollState()
     Column(
@@ -92,13 +87,13 @@ fun DashboardDestination(
                 bottom = 15.dp,
             ),
             fontSize = 14.sp,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground,
         )
         MPPlayer(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+            pageState = pageState,
             backdrop = backdrop,
             popBackStack = popBackStack,
-            animateToFlutter = animateToEcosed,
         )
         val primaryContainerTint = MaterialTheme.colorScheme.primaryContainer
         Box(
@@ -139,6 +134,7 @@ fun DashboardDestination(
                     Text(
                         text = "互联互通",
                         fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                 }
                 Row(
@@ -165,7 +161,7 @@ fun DashboardDestination(
                         Text(
                             text = "app",
                             fontSize = 15.sp,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
                             textAlign = TextAlign.Center,
                         )
                     }
@@ -189,7 +185,7 @@ fun DashboardDestination(
                         Text(
                             text = "app",
                             fontSize = 15.sp,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
                             textAlign = TextAlign.Center,
                         )
                     }
@@ -213,7 +209,7 @@ fun DashboardDestination(
                         Text(
                             text = "app",
                             fontSize = 15.sp,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
                             textAlign = TextAlign.Center,
                         )
                     }
@@ -342,6 +338,7 @@ fun DashboardDestination(
                 end = 16.dp,
                 bottom = 16.dp,
             ),
+            backdrop = backdrop,
             list = miniProgramList,
         )
     }
@@ -359,9 +356,9 @@ fun DashboardDestinationPreview() {
 @Composable
 fun MPPlayer(
     modifier: Modifier = Modifier,
+    pageState: PagerState? = null,
     backdrop: Backdrop = rememberLayerBackdrop(),
     popBackStack: () -> Unit = NoOnClick,
-    animateToFlutter: () -> Unit = NoOnClick,
 ) {
     val context: Context = LocalContext.current
     Row(
@@ -378,6 +375,7 @@ fun MPPlayer(
                 modifier = Modifier
                     .weight(weight = 1f)
                     .fillMaxSize(),
+                backdrop = backdrop,
                 onLaunch = popBackStack,
                 style = AppItemStyle.Image,
                 appIcon = rememberDrawablePainter(
@@ -392,6 +390,7 @@ fun MPPlayer(
                 modifier = Modifier
                     .weight(weight = 1f)
                     .fillMaxSize(),
+                backdrop = backdrop,
                 onLaunch = {},
                 style = AppItemStyle.Image,
                 appIcon = rememberDrawablePainter(
@@ -408,8 +407,8 @@ fun MPPlayer(
                 .weight(weight = 1f)
                 .padding(start = 16.dp)
                 .fillMaxSize(),
+            pageState = pageState,
             backdrop = backdrop,
-            animateToFlutter = animateToFlutter,
         )
     }
 }
@@ -425,12 +424,11 @@ fun MPPlayerPreview() {
 @Composable
 fun RecentPlayer(
     modifier: Modifier = Modifier,
+    pageState: PagerState? = null,
     backdrop: Backdrop = rememberLayerBackdrop(),
-    animateToFlutter: () -> Unit = NoOnClick,
 ) {
-    val tint = MaterialTheme.colorScheme.primaryContainer
-    val animationScope = rememberCoroutineScope()
-    val progressAnimation = remember { Animatable(initialValue = 0f) }
+    val primaryContainerTint: Color = MaterialTheme.colorScheme.primaryContainer
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
     Column(
         modifier = modifier.wrapContentSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -439,12 +437,6 @@ fun RecentPlayer(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(height = 60.dp)
-                .graphicsLayer {
-                    val progress = progressAnimation.value
-                    val scale = lerp(1f, 1.05f, progress)
-                    scaleX = scale
-                    scaleY = scale
-                }
                 .drawBackdrop(
                     backdrop = backdrop,
                     shape = {
@@ -460,32 +452,14 @@ fun RecentPlayer(
                     },
                     onDrawSurface = {
                         drawRect(
-                            color = tint.copy(alpha = 0.8f),
+                            color = primaryContainerTint.copy(alpha = 0.8f),
                             blendMode = BlendMode.Hue,
                         )
                     },
-                    layerBlock = {
-                        val progress = progressAnimation.value
-                        val scale = lerp(1f, 1.05f, progress)
-                        scaleX = scale
-                        scaleY = scale
-                    }
                 )
-                .clickable(onClick = animateToFlutter)
-                .pointerInput(animationScope) {
-                    val animationSpec = spring(0.5f, 300f, 0.001f)
-                    awaitEachGesture {
-                        // press
-                        awaitFirstDown()
-                        animationScope.launch {
-                            progressAnimation.animateTo(1f, animationSpec)
-                        }
-
-                        // release
-                        waitForUpOrCancellation()
-                        animationScope.launch {
-                            progressAnimation.animateTo(0f, animationSpec)
-                        }
+                .clickable {
+                    coroutineScope.launch {
+                        pageState.navigateToRoute(route = PlatformDestination)
                     }
                 },
             contentAlignment = Alignment.Center,
@@ -540,6 +514,7 @@ data class MiniProgramItem(
 @Composable
 fun AppsGrid(
     modifier: Modifier = Modifier,
+    backdrop: Backdrop = rememberLayerBackdrop(),
     list: ArrayList<MiniProgramItem>,
 ) {
     LazyVerticalGrid(
@@ -554,6 +529,7 @@ fun AppsGrid(
         items(items = list) { item ->
             Box {
                 AppItem(
+                    backdrop = backdrop,
                     style = AppItemStyle.Image,
                     appIcon = rememberImagePainter(data = item.icon),
                     appName = item.title,
@@ -605,44 +581,57 @@ enum class AppItemStyle {
 @Composable
 fun AppItem(
     modifier: Modifier = Modifier,
+    backdrop: Backdrop = rememberLayerBackdrop(),
     onLaunch: () -> Unit = NoOnClick,
     style: AppItemStyle,
     appIcon: Painter,
     appName: String,
 ) {
+    val surfaceContainerHighestTint = MaterialTheme.colorScheme.surfaceContainerHighest
     Column(
         modifier = modifier.wrapContentSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Surface(
-            modifier = Modifier.size(size = 60.dp),
-            shape = ContinuousCapsule,
-            color = MaterialTheme.colorScheme.surfaceContainerHighest,
-            onClick = onLaunch,
-        ) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center,
-            ) {
-                Image(
-                    painter = appIcon,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = when (style) {
-                        AppItemStyle.Image -> Modifier
-                            .fillMaxSize()
-                            .clip(
-                                shape = RoundedCornerShape(
-                                    size = 35.dp,
-                                ),
-                            )
-
-                        AppItemStyle.Icon -> Modifier.size(
-                            size = 30.dp,
+        Box(
+            modifier = Modifier
+                .size(size = 60.dp)
+                .drawBackdrop(
+                    backdrop = backdrop,
+                    shape = {
+                        ContinuousCapsule
+                    },
+                    effects = {
+                        vibrancy()
+                        blur(blurRadius = 2f.dp.toPx())
+                        lens(
+                            refractionHeight = 12f.dp.toPx(),
+                            refractionAmount = 24f.dp.toPx(),
                         )
-                    }
+                    },
+                    onDrawSurface = {
+                        drawRect(
+                            color = surfaceContainerHighestTint.copy(alpha = 0.8f),
+                            blendMode = BlendMode.Hue,
+                        )
+                    },
                 )
-            }
+                .clickable(onClick = onLaunch),
+            contentAlignment = Alignment.Center,
+        ) {
+            Image(
+                painter = appIcon,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = when (style) {
+                    AppItemStyle.Image -> Modifier
+                        .fillMaxSize()
+                        .clip(shape = ContinuousCapsule)
+
+                    AppItemStyle.Icon -> Modifier.size(
+                        size = 30.dp,
+                    )
+                }.alpha(alpha = 0.8f)
+            )
         }
         Text(
             text = appName,

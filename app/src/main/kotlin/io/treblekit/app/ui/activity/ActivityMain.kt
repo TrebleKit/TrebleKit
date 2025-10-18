@@ -1,20 +1,10 @@
 package io.treblekit.app.ui.activity
 
 import android.os.Build
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
@@ -22,7 +12,6 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.twotone.Home
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
@@ -32,7 +21,6 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -42,9 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
@@ -58,12 +44,13 @@ import com.kyant.backdrop.drawBackdrop
 import com.kyant.backdrop.effects.blur
 import com.kyant.backdrop.effects.lens
 import com.kyant.backdrop.effects.vibrancy
-import com.kyant.capsule.ContinuousCapsule
 import com.kyant.capsule.ContinuousRoundedRectangle
 import io.treblekit.app.R
 import io.treblekit.app.ui.components.Background
 import io.treblekit.app.ui.components.CapsuleSpacer
+import io.treblekit.app.ui.components.NavBlock
 import io.treblekit.app.ui.components.OverlayLayer
+import io.treblekit.app.ui.components.SearchCapsule
 import io.treblekit.app.ui.destination.DashboardDestination
 import io.treblekit.app.ui.destination.PlatformDestination
 import io.treblekit.app.ui.destination.UnknownDestination
@@ -72,21 +59,14 @@ import io.treblekit.app.ui.navigation.PlatformDestination
 import io.treblekit.app.ui.navigation.appDestination
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.theme.androidGreen
-import io.treblekit.app.ui.theme.capsuleContainer
 import io.treblekit.app.ui.theme.capsuleEdgePadding
-import io.treblekit.app.ui.theme.capsuleHeight
-import io.treblekit.app.ui.theme.capsuleWidth
 import io.treblekit.app.ui.theme.topBarPaddingExcess
 import io.treblekit.app.ui.utils.NoOnClick
-import io.treblekit.app.ui.utils.isCurrentDestination
-import io.treblekit.app.ui.utils.navigateToRoute
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ActivityMain() {
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+
     val pageState: PagerState = rememberPagerState { appDestination.size }
     var showDialog: Boolean by remember { mutableStateOf(value = false) }
     val primaryContainerTint: Color = MaterialTheme.colorScheme.primaryContainer
@@ -102,65 +82,17 @@ fun ActivityMain() {
                         title = {
                             Text(
                                 text = stringResource(id = R.string.app_name),
-                                color = Color.White,
+                                color = MaterialTheme.colorScheme.onBackground,
                             )
                         },
                         navigationIcon = {
-                            Box(
-                                modifier = Modifier
-                                    .padding(start = capsuleEdgePadding - topBarPaddingExcess)
-                                    .width(width = capsuleWidth)
-                                    .height(height = capsuleHeight)
-                                    .drawBackdrop(
-                                        backdrop = backdrop,
-                                        shape = {
-                                            ContinuousCapsule
-                                        },
-                                        effects = {
-                                            vibrancy()
-                                            blur(blurRadius = 2f.dp.toPx())
-                                            lens(
-                                                refractionHeight = 12f.dp.toPx(),
-                                                refractionAmount = 24f.dp.toPx(),
-                                            )
-                                        },
-                                        onDrawSurface = {
-                                            drawRect(
-                                                color = capsuleContainer,
-                                                blendMode = BlendMode.Hue,
-                                            )
-                                        },
-                                    )
-                                    .clickable {
-
-                                    },
-                            ) {
-                                Box(
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    Row(
-                                        modifier = Modifier.wrapContentSize(),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Filled.Search,
-                                            contentDescription = null,
-                                            modifier = Modifier.size(size = 20.dp),
-                                            tint = Color.White,
-                                        )
-                                        Text(
-                                            text = "搜索",
-                                            modifier = Modifier
-                                                .wrapContentSize()
-                                                .padding(start = 6.dp),
-                                            color = Color.White,
-                                            fontSize = 13.sp,
-                                            textAlign = TextAlign.Center,
-                                        )
-                                    }
-                                }
-                            }
+                            SearchCapsule(
+                                modifier = Modifier.padding(
+                                    start = capsuleEdgePadding - topBarPaddingExcess,
+                                ),
+                                backdrop = backdrop,
+                                onClick = {}
+                            )
                         },
                         actions = {
                             CapsuleSpacer()
@@ -222,85 +154,18 @@ fun ActivityMain() {
                                 style = MaterialTheme.typography.titleMedium,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                color = Color.White,
+                                color = MaterialTheme.colorScheme.onBackground,
                                 fontSize = 16.sp,
                                 textAlign = TextAlign.Left,
                             )
                         },
                         floatingActionButton = {
                             Row {
-                                Box(
-                                    modifier = Modifier
-                                        .wrapContentSize()
-                                        .sizeIn(minWidth = 80.dp)
-                                        .padding(end = 4.dp)
-                                        .drawBackdrop(
-                                            backdrop = backdrop,
-                                            shape = {
-                                                ContinuousRoundedRectangle(size = 16.dp)
-                                            },
-                                            effects = {
-                                                vibrancy()
-                                                blur(blurRadius = 2f.dp.toPx())
-                                                lens(
-                                                    refractionHeight = 12f.dp.toPx(),
-                                                    refractionAmount = 24f.dp.toPx(),
-                                                )
-                                            },
-                                            onDrawSurface = {
-                                                drawRect(
-                                                    color = primaryContainerTint.copy(alpha = 0.8f),
-                                                    blendMode = BlendMode.Hue,
-                                                )
-                                            },
-                                        ),
-                                ) {
-                                    Row(
-                                        modifier = Modifier
-                                            .wrapContentSize()
-                                            .defaultMinSize(minHeight = 56.dp),
-                                        horizontalArrangement = Arrangement.Center,
-                                        verticalAlignment = Alignment.CenterVertically,
-                                    ) {
-                                        appDestination.forEach { page ->
-                                            val isCurrent = pageState.isCurrentDestination(
-                                                route = page.route,
-                                            )
-                                            val iconAlpha: Float by animateFloatAsState(
-                                                targetValue = if (isCurrent) 1f else 0.5f,
-                                                animationSpec = spring(
-                                                    dampingRatio = 0.8f,
-                                                    stiffness = 200f,
-                                                ),
-                                            )
-                                            IconButton(
-                                                onClick = {
-                                                    if (!isCurrent) coroutineScope.launch {
-                                                        pageState.navigateToRoute(
-                                                            route = page.route,
-                                                        )
-                                                    }
-                                                },
-                                                modifier = Modifier.wrapContentSize(),
-                                                colors = IconButtonDefaults.iconButtonColors(
-                                                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(
-                                                        alpha = iconAlpha,
-                                                    ),
-                                                ),
-                                            ) {
-                                                Icon(
-                                                    imageVector = if (isCurrent) {
-                                                        page.selectedIcon
-                                                    } else {
-                                                        page.icon
-                                                    },
-                                                    contentDescription = null,
-                                                    modifier = Modifier.wrapContentSize(),
-                                                )
-                                            }
-                                        }
-                                    }
-                                }
+                                NavBlock(
+                                    modifier = Modifier.padding(end = 4.dp),
+                                    pageState = pageState,
+                                    backdrop = backdrop,
+                                )
                                 ExtendedFloatingActionButton(
                                     text = {
                                         Text(
@@ -358,26 +223,13 @@ fun ActivityMain() {
                 ) { page ->
                     when (appDestination[page].route) {
                         DashboardDestination -> DashboardDestination(
-                            popBackStack = {},
-                            animateToEcosed = {
-                                coroutineScope.launch {
-                                    pageState.navigateToRoute(
-                                        route = PlatformDestination
-                                    )
-                                }
-                            },
-                            backdrop = backdrop
+                            pageState = pageState,
+                            backdrop = backdrop,
                         )
 
                         PlatformDestination -> PlatformDestination(
-                            animateToDashboard = {
-                                coroutineScope.launch {
-                                    pageState.navigateToRoute(
-                                        route = DashboardDestination
-                                    )
-                                }
-                            },
-                            backdrop = backdrop
+                            pageState = pageState,
+                            backdrop = backdrop,
                         )
 
                         else -> UnknownDestination()
