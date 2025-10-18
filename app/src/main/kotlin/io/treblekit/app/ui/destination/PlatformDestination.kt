@@ -20,7 +20,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -66,6 +65,7 @@ fun PlatformDestination(
     var dropdownExpanded: Boolean by remember { mutableStateOf(value = false) }
     var aboutExpanded: Boolean by remember { mutableStateOf(value = false) }
     val primaryContainerTint = MaterialTheme.colorScheme.primaryContainer
+    val backgroundTint = MaterialTheme.colorScheme.background
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -184,7 +184,7 @@ fun PlatformDestination(
                 actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
             ),
         )
-        Surface(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
@@ -192,9 +192,27 @@ fun PlatformDestination(
                     top = 8.dp,
                     end = 16.dp,
                     bottom = 16.dp,
+                )
+                .drawBackdrop(
+                    backdrop = backdrop,
+                    shape = {
+                        ContinuousRoundedRectangle(size = 16.dp)
+                    },
+                    effects = {
+                        vibrancy()
+                        blur(blurRadius = 2f.dp.toPx())
+                        lens(
+                            refractionHeight = 12f.dp.toPx(),
+                            refractionAmount = 24f.dp.toPx(),
+                        )
+                    },
+                    onDrawSurface = {
+                        drawRect(
+                            color = backgroundTint.copy(alpha = 0.8f),
+                            blendMode = BlendMode.Hue,
+                        )
+                    },
                 ),
-            color = MaterialTheme.colorScheme.background,
-            shape = ContinuousRoundedRectangle(size = 16.dp),
         ) {
             if (!inspection) {
                 FlutterView()
@@ -203,7 +221,10 @@ fun PlatformDestination(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(text = stringResource(id = R.string.inspection_mode_text))
+                    Text(
+                        text = stringResource(id = R.string.inspection_mode_text),
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
                 }
             }
         }
