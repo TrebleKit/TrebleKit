@@ -66,7 +66,6 @@ import io.treblekit.app.ui.utils.NoOnClick
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ActivityMain() {
-
     val pageState: PagerState = rememberPagerState { appDestination.size }
     var showDialog: Boolean by remember { mutableStateOf(value = false) }
     val primaryContainerTint: Color = MaterialTheme.colorScheme.primaryContainer
