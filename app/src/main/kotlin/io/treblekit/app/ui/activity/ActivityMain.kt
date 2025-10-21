@@ -190,7 +190,7 @@ fun ActivityMain() {
                                             },
                                             effects = {
                                                 vibrancy()
-                                                blur(blurRadius = 2f.dp.toPx())
+                                                blur(radius = 2f.dp.toPx())
                                                 lens(
                                                     refractionHeight = 12f.dp.toPx(),
                                                     refractionAmount = 24f.dp.toPx(),

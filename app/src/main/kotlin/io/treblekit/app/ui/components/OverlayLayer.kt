@@ -68,7 +68,7 @@ fun OverlayLayer(
                     },
                     effects = {
                         vibrancy()
-                        blur(blurRadius = 16f.dp.toPx())
+                        blur(radius = 16f.dp.toPx())
                         lens(
                             refractionHeight = 24f.dp.toPx(),
                             refractionAmount = 48f.dp.toPx(),

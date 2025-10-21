@@ -113,10 +113,11 @@ fun DashboardDestination(
                     },
                     effects = {
                         vibrancy()
-                        blur(blurRadius = 2f.dp.toPx())
+                        blur(radius = 2f.dp.toPx())
                         lens(
                             refractionHeight = 12f.dp.toPx(),
                             refractionAmount = 24f.dp.toPx(),
+                            depthEffect = true,
                         )
                     },
                     onDrawSurface = {
@@ -330,7 +331,7 @@ fun DashboardDestination(
                 bottom = 15.dp,
             ),
             fontSize = 14.sp,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground,
         )
         AppsGrid(
             modifier = Modifier.padding(
@@ -444,10 +445,11 @@ fun RecentPlayer(
                     },
                     effects = {
                         vibrancy()
-                        blur(blurRadius = 2f.dp.toPx())
+                        blur(radius = 2f.dp.toPx())
                         lens(
                             refractionHeight = 12f.dp.toPx(),
                             refractionAmount = 24f.dp.toPx(),
+                            depthEffect = false,
                         )
                     },
                     onDrawSurface = {
@@ -602,10 +604,11 @@ fun AppItem(
                     },
                     effects = {
                         vibrancy()
-                        blur(blurRadius = 2f.dp.toPx())
+                        blur(radius = 2f.dp.toPx())
                         lens(
                             refractionHeight = 12f.dp.toPx(),
                             refractionAmount = 24f.dp.toPx(),
+                            depthEffect = false,
                         )
                     },
                     onDrawSurface = {
@@ -636,7 +639,7 @@ fun AppItem(
         Text(
             text = appName,
             fontSize = 15.sp,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
