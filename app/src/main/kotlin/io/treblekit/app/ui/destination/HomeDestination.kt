@@ -156,7 +156,6 @@ fun HomeDestination(
                         fontSize = 16.sp,
                         textAlign = TextAlign.Left,
                     )
-
                 },
                 floatingActionButton = {
                     Row {
