@@ -48,7 +48,7 @@ import com.kyant.backdrop.effects.blur
 import com.kyant.backdrop.effects.lens
 import com.kyant.backdrop.effects.vibrancy
 import com.kyant.capsule.ContinuousRoundedRectangle
-import io.treblekit.app.FloatFlutterActivity
+import io.treblekit.app.NormalFlutterActivity
 import io.treblekit.app.R
 import io.treblekit.app.ui.components.FlutterView
 import io.treblekit.app.ui.navigation.DashboardDestination
@@ -169,7 +169,7 @@ fun PlatformDestination(
                             context.startActivity(
                                 Intent(
                                     context,
-                                    FloatFlutterActivity().javaClass,
+                                    NormalFlutterActivity().javaClass,
                                 ),
                             )
                             dropdownExpanded = false

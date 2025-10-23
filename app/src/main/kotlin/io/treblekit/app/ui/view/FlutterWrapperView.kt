@@ -70,6 +70,6 @@ class FlutterWrapperView @JvmOverloads constructor(
     }
 
     private companion object {
-        const val FLUTTER_CONTAINER_TAG: String = "FlutterContainer"
+        private const val FLUTTER_CONTAINER_TAG: String = "FlutterContainer"
     }
 }

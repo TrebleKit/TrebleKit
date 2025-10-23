@@ -19,9 +19,8 @@ fun Application.loadFlutterEngine() {
                 DartExecutor.DartEntrypoint(
                     FlutterInjector.instance().flutterLoader().findAppBundlePath(),
                     when (config) {
-                        MultipleConfig.Embed -> MultipleConfig.Embed.entrypoint
-                        MultipleConfig.Float -> MultipleConfig.Float.entrypoint
-                        MultipleConfig.Normal -> MultipleConfig.Normal.entrypoint
+                        MultipleConfig.EMBED -> MultipleConfig.EMBED.entrypoint
+                        MultipleConfig.NORMAL -> MultipleConfig.NORMAL.entrypoint
                     },
                 ),
             ).let { engine ->
@@ -37,7 +36,7 @@ fun Application.loadFlutterEngine() {
  */
 fun loadFlutterFragment(): FlutterFragment {
     return FlutterFragment.withCachedEngine(
-        MultipleConfig.Embed.engineId,
+        MultipleConfig.EMBED.engineId,
     ).renderMode(
         RenderMode.texture,
     ).build()

@@ -5,17 +5,12 @@ enum class MultipleConfig(
     val entrypoint: String,
 ) {
 
-    Embed(
+    EMBED(
         engineId = "treblekit_flutter_embed",
-        entrypoint = "mainEmbed",
+        entrypoint = "embed",
     ),
 
-    Float(
-        engineId = "treblekit_flutter_float",
-        entrypoint = "mainFloat",
-    ),
-
-    Normal(
+    NORMAL(
         engineId = "treblekit_flutter_normal",
         entrypoint = "main",
     ),

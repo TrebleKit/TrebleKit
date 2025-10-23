@@ -5,7 +5,7 @@ import androidx.core.view.WindowCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.treblekit.app.hybrid.MultipleConfig
 
-class FloatFlutterActivity : FlutterActivity() {
+class NormalFlutterActivity : FlutterActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -14,6 +14,6 @@ class FloatFlutterActivity : FlutterActivity() {
     }
 
     override fun getCachedEngineId(): String? {
-        return MultipleConfig.Float.engineId
+        return MultipleConfig.NORMAL.engineId
     }
 }

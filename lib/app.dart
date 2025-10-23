@@ -3,10 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:freefeos/freefeos.dart';
 import 'package:multi_builder/multi_builder.dart';
 
+import 'app_mode.dart';
 import 'home.dart';
 import 'theme.dart';
-
-enum AppMode { embed, float, normal }
 
 class TrebleKitApp extends StatelessWidget {
   const TrebleKitApp({super.key, required this.mode});
@@ -20,16 +19,18 @@ class TrebleKitApp extends StatelessWidget {
   ThemeData customTheme(BuildContext context, ThemeData origin) {
     return origin.copyWith(
       appBarTheme: AppBarTheme(
-        systemOverlayStyle: mode == AppMode.embed ? SystemUiOverlayStyle(
-          systemNavigationBarColor: Colors.transparent,
-          systemNavigationBarDividerColor: Colors.transparent,
-          systemNavigationBarIconBrightness: Brightness.light,
-          systemNavigationBarContrastEnforced: false,
-          statusBarColor: Colors.transparent,
-          statusBarBrightness: Brightness.light,
-          statusBarIconBrightness: Brightness.light,
-          systemStatusBarContrastEnforced: false,
-        ) : null,
+        systemOverlayStyle: mode == AppMode.embed
+            ? SystemUiOverlayStyle(
+                systemNavigationBarColor: Colors.transparent,
+                systemNavigationBarDividerColor: Colors.transparent,
+                systemNavigationBarIconBrightness: Brightness.light,
+                systemNavigationBarContrastEnforced: false,
+                statusBarColor: Colors.transparent,
+                statusBarBrightness: Brightness.light,
+                statusBarIconBrightness: Brightness.light,
+                systemStatusBarContrastEnforced: false,
+              )
+            : null,
       ),
     );
   }

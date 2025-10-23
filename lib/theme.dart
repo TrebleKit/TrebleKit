@@ -3,7 +3,7 @@ import "package:flutter/material.dart";
 class TrebleKitTheme {
   const TrebleKitTheme();
 
-  static ColorScheme lightScheme() {
+  static ColorScheme _lightScheme() {
     return const ColorScheme(
       brightness: Brightness.light,
       primary: Color(0xff36618e),
@@ -54,7 +54,7 @@ class TrebleKitTheme {
     );
   }
 
-  static ColorScheme darkScheme() {
+  static ColorScheme _darkScheme() {
     return const ColorScheme(
       brightness: Brightness.dark,
       primary: Color(0xffa0cafd),
@@ -105,7 +105,7 @@ class TrebleKitTheme {
     );
   }
 
-  ThemeData theme(ColorScheme colorScheme) => ThemeData(
+  ThemeData _theme(ColorScheme colorScheme) => ThemeData(
     useMaterial3: true,
     brightness: colorScheme.brightness,
     colorScheme: colorScheme,
@@ -113,10 +113,10 @@ class TrebleKitTheme {
   );
 
   ThemeData light() {
-    return theme(lightScheme());
+    return _theme(_lightScheme());
   }
 
   ThemeData dark() {
-    return theme(darkScheme());
+    return _theme(_darkScheme());
   }
 }
