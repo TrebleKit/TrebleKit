@@ -13,6 +13,7 @@ composeBom = "2025.10.01"
 kotlinxSerializationJson = "1.9.0"
 material = "1.13.0"
 materialIconsExtended = "1.7.8"
+navigation = "2.9.5"
 viewpager2 = "1.1.0"
 drawablepainter = "0.37.3"
 
@@ -21,7 +22,7 @@ dialogx = "0.0.50"
 shizuku = "13.1.5"
 hiddenapibypass = "6.1"
 utilcodex = "1.31.1"
-liquidglass = "1.0.0-rc01"
+backdrop = "1.0.0-rc01"
 capsule = "2.1.0"
 koin = "4.1.1"
 
@@ -29,6 +30,7 @@ koin = "4.1.1"
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 androidx-viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -53,7 +55,7 @@ rikka-shizuku-provider = { group = "dev.rikka.shizuku", name = "provider", versi
 rikka-shizuku-api = { group = "dev.rikka.shizuku", name = "api", version.ref = "shizuku" }
 blankj-utilcodex = { group = "com.blankj", name = "utilcodex", version.ref = "utilcodex" }
 kyant-capsule = { group = "com.github.Kyant0", name = "Capsule", version.ref = "capsule" }
-kyant-liquidglass = { group = "com.github.Kyant0", name = "AndroidLiquidGlass", version.ref = "liquidglass" }
+kyant-backdrop = { group = "com.github.Kyant0", name = "AndroidLiquidGlass", version.ref = "backdrop" }
 kongzue-baseframework = { group = "com.github.kongzue", name = "BaseFramework", version.ref = "baseframework" }
 kongzue-dialogx = { group = "com.github.kongzue.DialogX", name = "DialogX", version.ref = "dialogx" }
 kongzue-dialogx-material3 = { group = "com.github.kongzue.DialogX", name = "DialogXMaterialYou", version.ref = "dialogx" }

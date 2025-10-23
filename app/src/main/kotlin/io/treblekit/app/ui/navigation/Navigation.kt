@@ -12,6 +12,9 @@ import kotlinx.serialization.Serializable
 data object HomeDestination
 
 @Serializable
+data object FlutterDestination
+
+@Serializable
 data object DashboardDestination
 
 @Serializable

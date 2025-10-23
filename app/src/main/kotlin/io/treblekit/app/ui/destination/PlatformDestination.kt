@@ -1,6 +1,5 @@
 package io.treblekit.app.ui.destination
 
-import android.content.Intent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -36,11 +35,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.kyant.backdrop.Backdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.backdrop.drawBackdrop
@@ -48,10 +47,10 @@ import com.kyant.backdrop.effects.blur
 import com.kyant.backdrop.effects.lens
 import com.kyant.backdrop.effects.vibrancy
 import com.kyant.capsule.ContinuousRoundedRectangle
-import io.treblekit.app.NormalFlutterActivity
 import io.treblekit.app.R
 import io.treblekit.app.ui.components.FlutterView
 import io.treblekit.app.ui.navigation.DashboardDestination
+import io.treblekit.app.ui.navigation.FlutterDestination
 import io.treblekit.app.ui.theme.TrebleKitTheme
 import io.treblekit.app.ui.utils.navigateToRoute
 import kotlinx.coroutines.CoroutineScope
@@ -61,6 +60,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun PlatformDestination(
     modifier: Modifier = Modifier,
+    navController: NavHostController? = null,
     pageState: PagerState? = null,
     backdrop: Backdrop = rememberLayerBackdrop(),
 ) {
@@ -154,7 +154,6 @@ fun PlatformDestination(
                         dropdownExpanded = false
                     },
                 ) {
-                    val context = LocalContext.current
                     DropdownMenuItem(
                         leadingIcon = {
                             Icon(
@@ -166,12 +165,7 @@ fun PlatformDestination(
                             Text(text = "open in new")
                         },
                         onClick = {
-                            context.startActivity(
-                                Intent(
-                                    context,
-                                    NormalFlutterActivity().javaClass,
-                                ),
-                            )
+                            navController?.navigate(route = FlutterDestination)
                             dropdownExpanded = false
                         },
                     )
