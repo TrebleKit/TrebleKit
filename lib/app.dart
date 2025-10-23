@@ -6,8 +6,12 @@ import 'package:multi_builder/multi_builder.dart';
 import 'home.dart';
 import 'theme.dart';
 
+enum AppMode { embed, float, normal }
+
 class TrebleKitApp extends StatelessWidget {
-  const TrebleKitApp({super.key});
+  const TrebleKitApp({super.key, required this.mode});
+
+  final AppMode mode;
 
   /// 主题
   final TrebleKitTheme theme = const TrebleKitTheme();
@@ -16,7 +20,7 @@ class TrebleKitApp extends StatelessWidget {
   ThemeData customTheme(BuildContext context, ThemeData origin) {
     return origin.copyWith(
       appBarTheme: AppBarTheme(
-        systemOverlayStyle: SystemUiOverlayStyle(
+        systemOverlayStyle: mode == AppMode.embed ? SystemUiOverlayStyle(
           systemNavigationBarColor: Colors.transparent,
           systemNavigationBarDividerColor: Colors.transparent,
           systemNavigationBarIconBrightness: Brightness.light,
@@ -25,7 +29,7 @@ class TrebleKitApp extends StatelessWidget {
           statusBarBrightness: Brightness.light,
           statusBarIconBrightness: Brightness.light,
           systemStatusBarContrastEnforced: false,
-        ),
+        ) : null,
       ),
     );
   }

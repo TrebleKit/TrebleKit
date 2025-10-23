@@ -5,7 +5,7 @@ import 'package:treblekit/app.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const TrebleKitApp());
+    await tester.pumpWidget(const TrebleKitApp(mode: AppMode.normal));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

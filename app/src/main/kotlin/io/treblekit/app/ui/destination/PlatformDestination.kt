@@ -1,5 +1,6 @@
 package io.treblekit.app.ui.destination
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.twotone.Category
@@ -34,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,6 +48,7 @@ import com.kyant.backdrop.effects.blur
 import com.kyant.backdrop.effects.lens
 import com.kyant.backdrop.effects.vibrancy
 import com.kyant.capsule.ContinuousRoundedRectangle
+import io.treblekit.app.FloatFlutterActivity
 import io.treblekit.app.R
 import io.treblekit.app.ui.components.FlutterView
 import io.treblekit.app.ui.navigation.DashboardDestination
@@ -150,6 +154,27 @@ fun PlatformDestination(
                         dropdownExpanded = false
                     },
                 ) {
+                    val context = LocalContext.current
+                    DropdownMenuItem(
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
+                                contentDescription = null,
+                            )
+                        },
+                        text = {
+                            Text(text = "open in new")
+                        },
+                        onClick = {
+                            context.startActivity(
+                                Intent(
+                                    context,
+                                    FloatFlutterActivity().javaClass,
+                                ),
+                            )
+                            dropdownExpanded = false
+                        },
+                    )
                     DropdownMenuItem(
                         leadingIcon = {
                             Icon(

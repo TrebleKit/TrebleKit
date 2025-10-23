@@ -9,6 +9,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.serialization.Serializable
 
 @Serializable
+data object HomeDestination
+
+@Serializable
 data object DashboardDestination
 
 @Serializable
