@@ -148,7 +148,7 @@ fun HomeDestination(
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentHeight(),
-                        text = "Android",
+                        text = stringResource(id = R.string.android),
                         style = MaterialTheme.typography.titleMedium,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -156,6 +156,7 @@ fun HomeDestination(
                         fontSize = 16.sp,
                         textAlign = TextAlign.Left,
                     )
+
                 },
                 floatingActionButton = {
                     Row {
