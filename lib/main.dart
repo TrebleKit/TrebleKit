@@ -4,7 +4,12 @@ import 'app.dart';
 import 'app_mode.dart';
 
 @pragma('vm:entry-point')
-void main() => runApp(const TrebleKitApp(mode: AppMode.normal));
+void main() => run(AppMode.normal);
 
 @pragma('vm:entry-point')
-void embed() => runApp(const TrebleKitApp(mode: AppMode.embed));
+void embed() => run(AppMode.embed);
+
+// 启动应用
+void run(AppMode mode) {
+  runApp(TrebleKitApp(mode: mode));
+}
