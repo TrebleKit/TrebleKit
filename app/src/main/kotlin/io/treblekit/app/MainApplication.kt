@@ -9,8 +9,9 @@ import com.kongzue.baseframework.util.AppManager
 import com.kongzue.dialogx.DialogX
 import com.kongzue.dialogx.dialogs.MessageDialog
 import com.kongzue.dialogxmaterialyou.style.MaterialYouStyle
-import io.treblekit.app.di.appModules
-import io.treblekit.app.hybrid.loadFlutterEngine
+import io.treblekit.BuildConfig
+import io.treblekit.di.appModules
+import io.treblekit.hybrid.loadFlutterEngine
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin

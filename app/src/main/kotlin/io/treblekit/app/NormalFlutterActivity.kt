@@ -3,7 +3,7 @@ package io.treblekit.app
 import android.os.Bundle
 import androidx.core.view.WindowCompat
 import io.flutter.embedding.android.FlutterActivity
-import io.treblekit.app.hybrid.MultipleConfig
+import io.treblekit.hybrid.MultipleConfig
 
 class NormalFlutterActivity : FlutterActivity() {
 

@@ -3,9 +3,9 @@ package io.treblekit.app
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
-import io.treblekit.app.base.ComposableActivity
-import io.treblekit.app.ui.activity.ActivityMain
-import io.treblekit.app.ui.theme.TrebleKitTheme
+import io.treblekit.base.ComposableActivity
+import io.treblekit.ui.activity.ActivityMain
+import io.treblekit.ui.theme.TrebleKitTheme
 
 class MainActivity : ComposableActivity() {
 

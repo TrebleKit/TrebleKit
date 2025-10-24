@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "io.treblekit.app"
+    namespace = "io.treblekit"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "io.treblekit.app"
+        applicationId = "io.treblekit"
         minSdk = 33
         targetSdk = 36
         versionCode = 1
