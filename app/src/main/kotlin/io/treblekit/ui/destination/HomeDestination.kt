@@ -1,5 +1,6 @@
 package io.treblekit.ui.destination
 
+import android.content.Intent
 import android.os.Build
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -164,6 +166,7 @@ fun HomeDestination(
                             pageState = pageState,
                             backdrop = backdrop,
                         )
+                        val context = LocalContext.current
                         ExtendedFloatingActionButton(
                             text = {
                                 Text(
@@ -178,7 +181,14 @@ fun HomeDestination(
                                     tint = MaterialTheme.colorScheme.onPrimaryContainer
                                 )
                             },
-                            onClick = NoOnClick,
+                            onClick = {
+                                val intent = Intent().apply {
+                                    action = Intent.ACTION_MAIN
+                                    addCategory(Intent.CATEGORY_HOME)
+                                    setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                }
+                                context.startActivity(intent)
+                            },
                             modifier = Modifier
                                 .wrapContentSize()
                                 .padding(start = 4.dp)
