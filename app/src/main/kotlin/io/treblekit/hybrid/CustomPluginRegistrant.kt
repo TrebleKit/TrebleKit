@@ -3,15 +3,22 @@ package io.treblekit.hybrid
 import android.util.Log
 import io.flutter.embedding.engine.FlutterEngine
 
-class CustomPluginRegistrant {
+object CustomPluginRegistrant {
+
+    private const val TAG: String = "CustomPluginRegistrant"
+
+    private val mPlugins = arrayListOf(
+        PlatformResources(),
+        AndroidToFlutter(),
+    )
 
     /**
      * 注册插件
      *
      * @param engine Flutter引擎
      */
-    fun registerWith(engine: FlutterEngine) {
-        arrayListOf(PlatformResources(), AndroidToFlutter()).forEach { plugin ->
+    internal fun registerWith(engine: FlutterEngine) {
+        mPlugins.forEach { plugin ->
             try {
                 engine.plugins.add(plugin)
             } catch (e: Exception) {
@@ -22,9 +29,5 @@ class CustomPluginRegistrant {
                 )
             }
         }
-    }
-
-    companion object {
-        const val TAG: String = "CustomPluginRegistrant"
     }
 }

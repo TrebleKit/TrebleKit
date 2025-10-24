@@ -28,7 +28,7 @@ class MainApplication : BaseApp<MainApplication>() {
     }
 
     override fun init() {
-       initBaseFramework()
+        initBaseFramework()
 
         DynamicColors.applyToActivitiesIfAvailable(this@MainApplication)
         loadFlutterEngine() // 初始化Flutter引擎
@@ -68,7 +68,7 @@ class MainApplication : BaseApp<MainApplication>() {
         BaseFrameworkSettings.DEBUGMODE = BuildConfig.DEBUG // 调试配置
         BaseFrameworkSettings.BETA_PLAN = true
 
-        setOnCrashListener(mCrash)
+//        setOnCrashListener(mCrash)
     }
 
     private fun initDialogX() {

@@ -22,8 +22,8 @@ dialogx = "0.0.50"
 shizuku = "13.1.5"
 hiddenapibypass = "6.1"
 utilcodex = "1.31.1"
-backdrop = "1.0.0-rc01"
-capsule = "2.1.0"
+backdrop = "1.0.0-rc02"
+capsule = "2.1.1"
 koin = "4.1.1"
 
 [libraries]
@@ -54,8 +54,8 @@ lsposed-hiddenapibypass = { group = "org.lsposed.hiddenapibypass", name = "hidde
 rikka-shizuku-provider = { group = "dev.rikka.shizuku", name = "provider", version.ref = "shizuku" }
 rikka-shizuku-api = { group = "dev.rikka.shizuku", name = "api", version.ref = "shizuku" }
 blankj-utilcodex = { group = "com.blankj", name = "utilcodex", version.ref = "utilcodex" }
-kyant-capsule = { group = "com.github.Kyant0", name = "Capsule", version.ref = "capsule" }
-kyant-backdrop = { group = "com.github.Kyant0", name = "AndroidLiquidGlass", version.ref = "backdrop" }
+kyant-capsule = { group = "io.github.kyant0", name = "capsule", version.ref = "capsule" }
+kyant-backdrop = { group = "io.github.kyant0", name = "backdrop", version.ref = "backdrop" }
 kongzue-baseframework = { group = "com.github.kongzue", name = "BaseFramework", version.ref = "baseframework" }
 kongzue-dialogx = { group = "com.github.kongzue.DialogX", name = "DialogX", version.ref = "dialogx" }
 kongzue-dialogx-material3 = { group = "com.github.kongzue.DialogX", name = "DialogXMaterialYou", version.ref = "dialogx" }

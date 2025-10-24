@@ -24,7 +24,7 @@ fun Application.loadFlutterEngine() {
                     },
                 ),
             ).let { engine ->
-                CustomPluginRegistrant().registerWith(engine = engine)
+                CustomPluginRegistrant.registerWith(engine = engine)
                 FlutterEngineCache.getInstance().put(config.engineId, engine)
             }
         }
