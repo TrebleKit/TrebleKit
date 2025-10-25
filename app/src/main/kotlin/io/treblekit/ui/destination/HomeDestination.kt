@@ -206,6 +206,7 @@ fun HomeDestination(
                                         lens(
                                             refractionHeight = 12f.dp.toPx(),
                                             refractionAmount = 24f.dp.toPx(),
+                                            depthEffect = false,
                                         )
                                     },
                                     onDrawSurface = {
