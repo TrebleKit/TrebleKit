@@ -41,7 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -58,6 +58,7 @@ import com.kyant.backdrop.effects.vibrancy
 import com.kyant.capsule.ContinuousCapsule
 import com.kyant.capsule.ContinuousRoundedRectangle
 import io.treblekit.R
+import io.treblekit.ui.components.AppItem
 import io.treblekit.ui.navigation.PlatformDestination
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.utils.NoOnClick
@@ -378,7 +379,6 @@ fun MPPlayer(
                     .fillMaxSize(),
                 backdrop = backdrop,
                 onLaunch = popBackStack,
-                style = AppItemStyle.Image,
                 appIcon = rememberDrawablePainter(
                     drawable = AppCompatResources.getDrawable(
                         context,
@@ -393,7 +393,6 @@ fun MPPlayer(
                     .fillMaxSize(),
                 backdrop = backdrop,
                 onLaunch = {},
-                style = AppItemStyle.Image,
                 appIcon = rememberDrawablePainter(
                     drawable = AppCompatResources.getDrawable(
                         context,
@@ -532,7 +531,6 @@ fun AppsGrid(
             Box {
                 AppItem(
                     backdrop = backdrop,
-                    style = AppItemStyle.Image,
                     appIcon = rememberImagePainter(data = item.icon),
                     appName = item.title,
                 )
@@ -575,85 +573,3 @@ val miniProgramList: ArrayList<MiniProgramItem> = arrayListOf(
         icon = "https://img2.baidu.com/it/u=620052409,134315960&fm=253&fmt=auto&app=138&f=PNG?w=190&h=190"
     ),
 )
-
-enum class AppItemStyle {
-    Image, Icon,
-}
-
-@Composable
-fun AppItem(
-    modifier: Modifier = Modifier,
-    backdrop: Backdrop = rememberLayerBackdrop(),
-    onLaunch: () -> Unit = NoOnClick,
-    style: AppItemStyle,
-    appIcon: Painter,
-    appName: String,
-) {
-    val surfaceContainerHighestTint = MaterialTheme.colorScheme.surfaceContainerHighest
-    Column(
-        modifier = modifier.wrapContentSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Box(
-            modifier = Modifier
-                .size(size = 60.dp)
-                .drawBackdrop(
-                    backdrop = backdrop,
-                    shape = {
-                        ContinuousCapsule
-                    },
-                    effects = {
-                        vibrancy()
-                        blur(radius = 2f.dp.toPx())
-                        lens(
-                            refractionHeight = 12f.dp.toPx(),
-                            refractionAmount = 24f.dp.toPx(),
-                            depthEffect = false,
-                        )
-                    },
-                    onDrawSurface = {
-                        drawRect(
-                            color = surfaceContainerHighestTint.copy(alpha = 0.8f),
-                            blendMode = BlendMode.Hue,
-                        )
-                    },
-                )
-                .clickable(onClick = onLaunch),
-            contentAlignment = Alignment.Center,
-        ) {
-            Image(
-                painter = appIcon,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = when (style) {
-                    AppItemStyle.Image -> Modifier
-                        .fillMaxSize()
-                        .clip(shape = ContinuousCapsule)
-
-                    AppItemStyle.Icon -> Modifier.size(
-                        size = 30.dp,
-                    )
-                }.alpha(alpha = 0.8f)
-            )
-        }
-        Text(
-            text = appName,
-            fontSize = 15.sp,
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun AppItemPreview() {
-    TrebleKitTheme {
-        AppItem(
-            style = AppItemStyle.Icon,
-            appIcon = painterResource(id = R.drawable.baseline_preview_24),
-            appName = "Preview",
-        )
-    }
-}

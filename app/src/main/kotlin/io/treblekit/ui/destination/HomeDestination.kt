@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -57,6 +58,7 @@ import io.treblekit.ui.components.SearchCapsule
 import io.treblekit.ui.navigation.DashboardDestination
 import io.treblekit.ui.navigation.PlatformDestination
 import io.treblekit.ui.navigation.appDestination
+import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.theme.androidGreen
 import io.treblekit.ui.theme.capsuleEdgePadding
 import io.treblekit.ui.theme.topBarPaddingExcess
@@ -91,7 +93,7 @@ fun HomeDestination(
                             start = capsuleEdgePadding - topBarPaddingExcess,
                         ),
                         backdrop = backdrop,
-                        onClick = {}
+                        onClick = {},
                     )
                 },
                 actions = {
@@ -244,5 +246,13 @@ fun HomeDestination(
                 else -> UnknownDestination()
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun HomeDestinationPreview() {
+    TrebleKitTheme {
+        HomeDestination()
     }
 }

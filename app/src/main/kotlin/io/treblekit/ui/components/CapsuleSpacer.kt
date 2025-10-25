@@ -22,7 +22,7 @@ fun CapsuleSpacer(modifier: Modifier = Modifier) {
 
 @Preview
 @Composable
-fun CapsuleSpacerPreview() {
+private fun CapsuleSpacerPreview() {
     TrebleKitTheme {
         CapsuleSpacer()
     }

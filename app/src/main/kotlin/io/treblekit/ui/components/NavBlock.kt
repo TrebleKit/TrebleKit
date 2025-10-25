@@ -9,10 +9,17 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -20,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kyant.backdrop.Backdrop
@@ -36,12 +44,14 @@ import io.treblekit.ui.utils.navigateToRoute
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavBlock(
     modifier: Modifier = Modifier,
     pageState: PagerState? = null,
     backdrop: Backdrop = rememberLayerBackdrop(),
 ) {
+
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val primaryContainerTint: Color = MaterialTheme.colorScheme.primaryContainer
     Box(
@@ -88,30 +98,51 @@ fun NavBlock(
                         stiffness = 200f,
                     ),
                 )
-                IconButton(
-                    onClick = {
-                        if (!isCurrent) coroutineScope.launch {
-                            pageState.navigateToRoute(
-                                route = page.route,
+                val tooltipState = rememberTooltipState()
+                TooltipBox(
+                    modifier = Modifier.wrapContentSize(),
+                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                        positioning = TooltipAnchorPosition.Above,
+                        spacingBetweenTooltipAndAnchor = 12.dp
+                    ),
+                    tooltip = {
+                        PlainTooltip {
+                            Text(
+                                text = stringResource(
+                                    id = page.label,
+                                ),
                             )
                         }
                     },
-                    modifier = Modifier.wrapContentSize(),
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(
-                            alpha = iconAlpha,
-                        ),
-                    ),
+                    state = tooltipState,
                 ) {
-                    Icon(
-                        imageVector = if (isCurrent) {
-                            page.selectedIcon
-                        } else {
-                            page.icon
+                    IconButton(
+                        onClick = {
+                            if (!isCurrent) coroutineScope.launch {
+                                pageState.navigateToRoute(
+                                    route = page.route,
+                                )
+                            }
                         },
-                        contentDescription = null,
                         modifier = Modifier.wrapContentSize(),
-                    )
+                        colors = IconButtonDefaults.iconButtonColors(
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(
+                                alpha = iconAlpha,
+                            ),
+                        ),
+                    ) {
+                        Icon(
+                            imageVector = if (isCurrent) {
+                                page.selectedIcon
+                            } else {
+                                page.icon
+                            },
+                            contentDescription = stringResource(
+                                id = page.label,
+                            ),
+                            modifier = Modifier.wrapContentSize(),
+                        )
+                    }
                 }
             }
         }
