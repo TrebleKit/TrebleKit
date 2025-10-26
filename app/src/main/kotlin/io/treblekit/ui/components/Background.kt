@@ -11,10 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
-import com.kyant.backdrop.Backdrop
+import androidx.compose.ui.unit.Density
 import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.layerBackdrop
-import com.kyant.backdrop.backdrops.rememberCombinedBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.theme.appBackground
@@ -22,27 +21,32 @@ import io.treblekit.ui.theme.appBackground
 @Composable
 fun Background(
     modifier: Modifier = Modifier,
-    content: @Composable BoxScope.(Backdrop) -> Unit = {},
+    content: @Composable BoxScope.(LayerBackdrop) -> Unit = {},
 ) {
+    val backdrop: LayerBackdrop = rememberLayerBackdrop()
+    val density: Density = LocalDensity.current
     val inspection: Boolean = LocalInspectionMode.current
-    val backgroundBackdrop: LayerBackdrop = rememberLayerBackdrop()
-    val effectBackdrop: LayerBackdrop = rememberLayerBackdrop()
-    val backdrop: Backdrop = rememberCombinedBackdrop(
-        backdrop1 = backgroundBackdrop,
-        backdrop2 = effectBackdrop,
-    )
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        Box(
-            modifier = Modifier
+        BoxWithConstraints(
+            modifier = modifier
                 .fillMaxSize()
                 .background(color = appBackground)
-                .layerBackdrop(backdrop = backgroundBackdrop),
-        )
-        if (!inspection) EffectView(
-            modifier = Modifier.layerBackdrop(backdrop = effectBackdrop)
-        )
+                .layerBackdrop(backdrop = backdrop),
+        ) {
+            if (!inspection) ViewFactory(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .offset(
+                        y = with(receiver = density) {
+                            return@with (constraints.maxHeight / 7 * 2).toDp()
+                        }
+                    ),
+            ) {
+                getEffectView
+            }
+        }
         content(backdrop)
     }
 }
@@ -52,34 +56,5 @@ fun Background(
 private fun BackgroundPreview() {
     TrebleKitTheme {
         Background()
-    }
-}
-
-@Composable
-private fun EffectView(modifier: Modifier = Modifier) {
-    BoxWithConstraints(
-        modifier = modifier.fillMaxSize(),
-    ) {
-        ViewFactory(
-            modifier = Modifier
-                .fillMaxSize()
-                .offset(
-                    y = with(
-                        receiver = LocalDensity.current,
-                    ) {
-                        return@with (constraints.maxHeight / 7 * 2).toDp()
-                    }
-                ),
-        ) {
-            getEffectView
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun EffectViewPreview() {
-    TrebleKitTheme {
-        EffectView()
     }
 }

@@ -50,6 +50,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.accompanist.imageloading.rememberDrawablePainter
 import com.kyant.backdrop.Backdrop
+import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.backdrop.drawBackdrop
 import com.kyant.backdrop.effects.blur
@@ -70,7 +71,7 @@ import kotlinx.coroutines.launch
 fun DashboardDestination(
     modifier: Modifier = Modifier,
     pageState: PagerState? = null,
-    backdrop: Backdrop = rememberLayerBackdrop(),
+    backdrop: LayerBackdrop = rememberLayerBackdrop(),
     popBackStack: () -> Unit = NoOnClick,
 ) {
     val scrollState = rememberScrollState()
@@ -359,7 +360,7 @@ fun DashboardDestinationPreview() {
 fun MPPlayer(
     modifier: Modifier = Modifier,
     pageState: PagerState? = null,
-    backdrop: Backdrop = rememberLayerBackdrop(),
+    backdrop: LayerBackdrop = rememberLayerBackdrop(),
     popBackStack: () -> Unit = NoOnClick,
 ) {
     val context: Context = LocalContext.current
@@ -425,7 +426,7 @@ fun MPPlayerPreview() {
 fun RecentPlayer(
     modifier: Modifier = Modifier,
     pageState: PagerState? = null,
-    backdrop: Backdrop = rememberLayerBackdrop(),
+    backdrop: LayerBackdrop = rememberLayerBackdrop(),
 ) {
     val primaryContainerTint: Color = MaterialTheme.colorScheme.primaryContainer
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
@@ -515,7 +516,7 @@ data class MiniProgramItem(
 @Composable
 fun AppsGrid(
     modifier: Modifier = Modifier,
-    backdrop: Backdrop = rememberLayerBackdrop(),
+    backdrop: LayerBackdrop = rememberLayerBackdrop(),
     list: ArrayList<MiniProgramItem>,
 ) {
     LazyVerticalGrid(

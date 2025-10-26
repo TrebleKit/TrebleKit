@@ -23,12 +23,16 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,9 +47,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.kyant.backdrop.Backdrop
+import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.backdrop.drawBackdrop
 import com.kyant.backdrop.effects.blur
@@ -53,9 +57,9 @@ import com.kyant.backdrop.effects.lens
 import com.kyant.backdrop.effects.vibrancy
 import com.kyant.capsule.ContinuousRoundedRectangle
 import io.treblekit.R
+import io.treblekit.ui.components.CapsuleSearch
 import io.treblekit.ui.components.CapsuleSpacer
 import io.treblekit.ui.components.NavBlock
-import io.treblekit.ui.components.SearchCapsule
 import io.treblekit.ui.navigation.DashboardDestination
 import io.treblekit.ui.navigation.PlatformDestination
 import io.treblekit.ui.navigation.appDestination
@@ -63,14 +67,13 @@ import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.theme.androidGreen
 import io.treblekit.ui.theme.capsuleEdgePadding
 import io.treblekit.ui.theme.topBarPaddingExcess
-import io.treblekit.ui.utils.NoOnClick
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeDestination(
     modifier: Modifier = Modifier,
     navController: NavHostController? = null,
-    backdrop: Backdrop = rememberLayerBackdrop(),
+    backdrop: LayerBackdrop = rememberLayerBackdrop(),
 ) {
     val pageState: PagerState = rememberPagerState { appDestination.size }
     var showDialog: Boolean by remember { mutableStateOf(value = false) }
@@ -89,7 +92,7 @@ fun HomeDestination(
                     )
                 },
                 navigationIcon = {
-                    SearchCapsule(
+                    CapsuleSearch(
                         modifier = Modifier.padding(
                             start = capsuleEdgePadding - topBarPaddingExcess,
                         ),
@@ -170,55 +173,73 @@ fun HomeDestination(
                             backdrop = backdrop,
                         )
                         val context = LocalContext.current
-                        ExtendedFloatingActionButton(
-                            text = {
-                                Text(
-                                    text = "返回",
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                                )
-                            },
-                            icon = {
-                                Icon(
-                                    imageVector = Icons.TwoTone.Home,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onPrimaryContainer
-                                )
-                            },
-                            onClick = {
-                                val intent = Intent().apply {
-                                    action = Intent.ACTION_MAIN
-                                    addCategory(Intent.CATEGORY_HOME)
-                                    setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        val tooltipState = rememberTooltipState()
+                        TooltipBox(
+                            modifier = Modifier.wrapContentSize(),
+                            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                positioning = TooltipAnchorPosition.Above,
+                                spacingBetweenTooltipAndAnchor = 8.dp
+                            ),
+                            tooltip = {
+                                PlainTooltip {
+                                    Text(
+                                        text = "FAB",
+                                        modifier = Modifier.padding(all = 4.dp),
+                                    )
                                 }
-                                context.startActivity(intent)
                             },
-                            modifier = Modifier
-                                .wrapContentSize()
-                                .padding(start = 4.dp)
-                                .drawBackdrop(
-                                    backdrop = backdrop,
-                                    shape = {
-                                        ContinuousRoundedRectangle(size = 16.dp)
-                                    },
-                                    effects = {
-                                        vibrancy()
-                                        blur(radius = 2f.dp.toPx())
-                                        lens(
-                                            refractionHeight = 12f.dp.toPx(),
-                                            refractionAmount = 24f.dp.toPx(),
-                                            depthEffect = false,
-                                        )
-                                    },
-                                    onDrawSurface = {
-                                        drawRect(
-                                            color = primaryContainerTint.copy(alpha = 0.8f),
-                                            blendMode = BlendMode.Hue,
-                                        )
-                                    },
-                                ),
-                            containerColor = Color.Transparent,
-                            elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
-                        )
+                            state = tooltipState,
+                        ) {
+                            ExtendedFloatingActionButton(
+                                text = {
+                                    Text(
+                                        text = "返回",
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                                    )
+                                },
+                                icon = {
+                                    Icon(
+                                        imageVector = Icons.TwoTone.Home,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                                    )
+                                },
+                                onClick = {
+                                    val intent = Intent().apply {
+                                        action = Intent.ACTION_MAIN
+                                        addCategory(Intent.CATEGORY_HOME)
+                                        setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    }
+                                    context.startActivity(intent)
+                                },
+                                modifier = Modifier
+                                    .wrapContentSize()
+                                    .padding(start = 4.dp)
+                                    .drawBackdrop(
+                                        backdrop = backdrop,
+                                        shape = {
+                                            ContinuousRoundedRectangle(size = 16.dp)
+                                        },
+                                        effects = {
+                                            vibrancy()
+                                            blur(radius = 2f.dp.toPx())
+                                            lens(
+                                                refractionHeight = 12f.dp.toPx(),
+                                                refractionAmount = 24f.dp.toPx(),
+                                                depthEffect = false,
+                                            )
+                                        },
+                                        onDrawSurface = {
+                                            drawRect(
+                                                color = primaryContainerTint.copy(alpha = 0.8f),
+                                                blendMode = BlendMode.Hue,
+                                            )
+                                        },
+                                    ),
+                                containerColor = Color.Transparent,
+                                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                            )
+                        }
                     }
                 },
                 containerColor = Color.Transparent,

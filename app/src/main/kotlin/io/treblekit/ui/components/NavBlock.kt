@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.PagerState
@@ -31,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kyant.backdrop.Backdrop
+import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.backdrop.drawBackdrop
 import com.kyant.backdrop.effects.blur
@@ -49,9 +51,8 @@ import kotlinx.coroutines.launch
 fun NavBlock(
     modifier: Modifier = Modifier,
     pageState: PagerState? = null,
-    backdrop: Backdrop = rememberLayerBackdrop(),
+    backdrop: LayerBackdrop = rememberLayerBackdrop(),
 ) {
-
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val primaryContainerTint: Color = MaterialTheme.colorScheme.primaryContainer
     Box(
@@ -108,9 +109,8 @@ fun NavBlock(
                     tooltip = {
                         PlainTooltip {
                             Text(
-                                text = stringResource(
-                                    id = page.label,
-                                ),
+                                text = stringResource(id = page.label),
+                                modifier = Modifier.padding(all = 4.dp),
                             )
                         }
                     },
@@ -119,9 +119,7 @@ fun NavBlock(
                     IconButton(
                         onClick = {
                             if (!isCurrent) coroutineScope.launch {
-                                pageState.navigateToRoute(
-                                    route = page.route,
-                                )
+                                pageState.navigateToRoute(route = page.route)
                             }
                         },
                         modifier = Modifier.wrapContentSize(),
@@ -137,9 +135,7 @@ fun NavBlock(
                             } else {
                                 page.icon
                             },
-                            contentDescription = stringResource(
-                                id = page.label,
-                            ),
+                            contentDescription = stringResource(id = page.label),
                             modifier = Modifier.wrapContentSize(),
                         )
                     }

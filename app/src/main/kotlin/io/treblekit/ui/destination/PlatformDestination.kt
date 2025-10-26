@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.kyant.backdrop.Backdrop
+import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.backdrop.drawBackdrop
 import com.kyant.backdrop.effects.blur
@@ -62,7 +63,7 @@ fun PlatformDestination(
     modifier: Modifier = Modifier,
     navController: NavHostController? = null,
     pageState: PagerState? = null,
-    backdrop: Backdrop = rememberLayerBackdrop(),
+    backdrop: LayerBackdrop = rememberLayerBackdrop(),
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val inspection: Boolean = LocalInspectionMode.current

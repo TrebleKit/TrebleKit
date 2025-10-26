@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kyant.backdrop.Backdrop
+import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.backdrop.drawBackdrop
 import com.kyant.backdrop.effects.blur
@@ -30,14 +30,15 @@ import com.kyant.backdrop.effects.vibrancy
 import com.kyant.capsule.ContinuousCapsule
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.theme.capsuleContainer
+import io.treblekit.ui.theme.capsuleContent
 import io.treblekit.ui.theme.capsuleHeight
 import io.treblekit.ui.theme.capsuleWidth
 import io.treblekit.ui.utils.NoOnClick
 
 @Composable
-fun SearchCapsule(
+fun CapsuleSearch(
     modifier: Modifier = Modifier,
-    backdrop: Backdrop = rememberLayerBackdrop(),
+    backdrop: LayerBackdrop = rememberLayerBackdrop(),
     onClick: () -> Unit = NoOnClick,
 ) {
     Box(
@@ -76,14 +77,14 @@ fun SearchCapsule(
                 imageVector = Icons.Filled.Search,
                 contentDescription = null,
                 modifier = Modifier.size(size = 20.dp),
-                tint = MaterialTheme.colorScheme.onBackground,
+                tint = capsuleContent,
             )
             Text(
                 text = "搜索",
                 modifier = Modifier
                     .wrapContentSize()
                     .padding(start = 6.dp),
-                color = MaterialTheme.colorScheme.onBackground,
+                color = capsuleContent,
                 fontSize = 13.sp,
                 textAlign = TextAlign.Center,
             )
@@ -93,8 +94,8 @@ fun SearchCapsule(
 
 @Preview
 @Composable
-private fun SearchCapsulePreview() {
+private fun CapsuleSearchPreview() {
     TrebleKitTheme {
-        SearchCapsule()
+        CapsuleSearch()
     }
 }
