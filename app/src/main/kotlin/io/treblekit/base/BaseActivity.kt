@@ -12,8 +12,6 @@ abstract class BaseActivity : BaseActivity() {
     override fun initViews() {
         edgeToEdge()
         initFlutter()
-
-//        throw RuntimeException("err")
     }
 
     override fun initDatas(p0: JumpParameter?) {

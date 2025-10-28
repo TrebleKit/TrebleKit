@@ -9,7 +9,7 @@ import androidx.navigation.activity
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import io.treblekit.app.NormalFlutterActivity
+import io.treblekit.hybrid.NormalActivity
 import io.treblekit.ui.components.Background
 import io.treblekit.ui.components.OverlayLayer
 import io.treblekit.ui.destination.HomeDestination
@@ -35,7 +35,7 @@ fun ActivityMain() {
                     )
                 }
                 activity<FlutterDestination> {
-                    activityClass = NormalFlutterActivity::class
+                    activityClass = NormalActivity::class
                 }
             }
         }

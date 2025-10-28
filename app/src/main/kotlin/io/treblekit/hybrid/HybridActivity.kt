@@ -13,7 +13,7 @@ abstract class HybridActivity : BaseActivity(), FlutterHost {
         get() = mFlutterFragment
 
     override fun initFlutter() {
-        mFlutterFragment = loadFlutterFragment()
+        mFlutterFragment = loadEmbedFragment()
     }
 
     override fun onPostResume() {

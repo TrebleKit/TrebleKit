@@ -2,12 +2,13 @@ package io.treblekit.hybrid
 
 import android.util.Log
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.embedding.engine.plugins.FlutterPlugin
 
 object CustomPluginRegistrant {
 
     private const val TAG: String = "CustomPluginRegistrant"
 
-    private val mPlugins = arrayListOf(
+    private val mPlugins: ArrayList<FlutterPlugin> = arrayListOf(
         PlatformResources(),
         AndroidToFlutter(),
     )

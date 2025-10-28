@@ -34,7 +34,7 @@ fun Application.loadFlutterEngine() {
 /**
  * 加载Flutter片段
  */
-fun loadFlutterFragment(): FlutterFragment {
+fun loadEmbedFragment(): FlutterFragment {
     return FlutterFragment.withCachedEngine(
         MultipleConfig.EMBED.engineId,
     ).renderMode(

@@ -1,11 +1,10 @@
-package io.treblekit.app
+package io.treblekit.hybrid
 
 import android.os.Bundle
 import androidx.core.view.WindowCompat
 import io.flutter.embedding.android.FlutterActivity
-import io.treblekit.hybrid.MultipleConfig
 
-class NormalFlutterActivity : FlutterActivity() {
+class NormalActivity : FlutterActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
