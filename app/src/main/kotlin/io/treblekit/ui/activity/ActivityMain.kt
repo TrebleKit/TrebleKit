@@ -1,41 +1,201 @@
 package io.treblekit.ui.activity
 
+import android.content.Intent
+import android.os.Build
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Android
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.activity
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import io.treblekit.hybrid.NormalActivity
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import io.treblekit.R
 import io.treblekit.ui.components.Background
+import io.treblekit.ui.components.CapsuleSearch
+import io.treblekit.ui.components.CapsuleSpacer
+import io.treblekit.ui.components.HomeFAB
+import io.treblekit.ui.components.NavBlock
 import io.treblekit.ui.components.OverlayLayer
-import io.treblekit.ui.destination.HomeDestination
-import io.treblekit.ui.navigation.FlutterDestination
-import io.treblekit.ui.navigation.HomeDestination
+import io.treblekit.ui.destination.DashboardDestination
+import io.treblekit.ui.destination.PlatformDestination
+import io.treblekit.ui.destination.UnknownDestination
+import io.treblekit.ui.navigation.DashboardDestination
+import io.treblekit.ui.navigation.PlatformDestination
+import io.treblekit.ui.navigation.appDestination
 import io.treblekit.ui.theme.TrebleKitTheme
+import io.treblekit.ui.theme.androidGreen
+import io.treblekit.ui.theme.capsuleEdgePadding
+import io.treblekit.ui.theme.topBarPaddingExcess
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ActivityMain() {
-    val navController = rememberNavController()
+    val pageState: PagerState = rememberPagerState { appDestination.size }
+    var showDialog: Boolean by remember { mutableStateOf(value = false) }
     Background { backdrop ->
         OverlayLayer(backdrop = backdrop) {
-            NavHost(
-                navController = navController,
-                startDestination = HomeDestination,
+            Scaffold(
                 modifier = Modifier.fillMaxSize(),
-            ) {
-                composable<HomeDestination> {
-                    HomeDestination(
-                        navController = navController,
-                        backdrop = backdrop,
+                topBar = {
+                    CenterAlignedTopAppBar(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                        title = {
+                            Text(
+                                text = stringResource(id = R.string.app_name),
+                                color = MaterialTheme.colorScheme.onBackground,
+                            )
+                        },
+                        navigationIcon = {
+                            CapsuleSearch(
+                                modifier = Modifier.padding(
+                                    start = capsuleEdgePadding - topBarPaddingExcess,
+                                ),
+                                backdrop = backdrop,
+                                onClick = {},
+                            )
+                        },
+                        actions = {
+                            CapsuleSpacer()
+                        },
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = Color.Transparent,
+                        ),
                     )
-                }
-                activity<FlutterDestination> {
-                    activityClass = NormalActivity::class
+                },
+                bottomBar = {
+                    BottomAppBar(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                        actions = {
+                            if (showDialog) AlertDialog(
+                                onDismissRequest = {
+                                    showDialog = false
+                                },
+                                confirmButton = {
+                                    TextButton(
+                                        onClick = {
+                                            showDialog = false
+                                        },
+                                    ) {
+                                        Text(text = "确定")
+                                    }
+                                },
+                                icon = {
+                                    Icon(
+                                        imageVector = Icons.Filled.Android,
+                                        contentDescription = null,
+                                    )
+                                },
+                                iconContentColor = androidGreen,
+                                title = {
+                                    Text(text = "Android")
+                                },
+                                text = {
+                                    Text(text = "Android API ${Build.VERSION.SDK_INT}")
+                                },
+                            )
+                            IconButton(
+                                onClick = {
+                                    showDialog = true
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Android,
+                                    contentDescription = null,
+                                    tint = androidGreen,
+                                )
+                            }
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight(),
+                                text = stringResource(id = R.string.android),
+                                style = MaterialTheme.typography.titleMedium,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                color = MaterialTheme.colorScheme.onBackground,
+                                fontSize = 16.sp,
+                                textAlign = TextAlign.Left,
+                            )
+                        },
+                        floatingActionButton = {
+                            Row {
+                                NavBlock(
+                                    modifier = Modifier.padding(end = 4.dp),
+                                    pageState = pageState,
+                                    backdrop = backdrop,
+                                )
+                                val context = LocalContext.current
+                                HomeFAB(
+                                    modifier = Modifier.padding(start = 4.dp),
+                                    backdrop = backdrop,
+                                    onClick = {
+                                        val intent = Intent().apply {
+                                            action = Intent.ACTION_MAIN
+                                            addCategory(Intent.CATEGORY_HOME)
+                                            setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        }
+                                        context.startActivity(intent)
+                                    }
+                                )
+                            }
+                        },
+                        containerColor = Color.Transparent,
+                    )
+                },
+                containerColor = Color.Transparent,
+            ) { innerPadding ->
+                HorizontalPager(
+                    state = pageState,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues = innerPadding),
+                    userScrollEnabled = false,
+                ) { page ->
+                    when (appDestination[page].route) {
+                        DashboardDestination -> DashboardDestination(
+                            pageState = pageState,
+                            backdrop = backdrop,
+                        )
+
+                        PlatformDestination -> PlatformDestination(
+                            pageState = pageState,
+                            backdrop = backdrop,
+                        )
+
+                        else -> UnknownDestination()
+                    }
                 }
             }
         }

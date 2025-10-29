@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.twotone.Category
@@ -39,8 +38,6 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import com.kyant.backdrop.Backdrop
 import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.backdrop.drawBackdrop
@@ -51,7 +48,6 @@ import com.kyant.capsule.ContinuousRoundedRectangle
 import io.treblekit.R
 import io.treblekit.ui.components.FlutterView
 import io.treblekit.ui.navigation.DashboardDestination
-import io.treblekit.ui.navigation.FlutterDestination
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.utils.navigateToRoute
 import kotlinx.coroutines.CoroutineScope
@@ -61,7 +57,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun PlatformDestination(
     modifier: Modifier = Modifier,
-    navController: NavHostController? = null,
     pageState: PagerState? = null,
     backdrop: LayerBackdrop = rememberLayerBackdrop(),
 ) {
@@ -117,8 +112,7 @@ fun PlatformDestination(
                     },
                 ) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = null
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null
                     )
                 }
             },
@@ -155,21 +149,6 @@ fun PlatformDestination(
                         dropdownExpanded = false
                     },
                 ) {
-                    DropdownMenuItem(
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
-                                contentDescription = null,
-                            )
-                        },
-                        text = {
-                            Text(text = "open in new")
-                        },
-                        onClick = {
-                            navController?.navigate(route = FlutterDestination)
-                            dropdownExpanded = false
-                        },
-                    )
                     DropdownMenuItem(
                         leadingIcon = {
                             Icon(

@@ -193,7 +193,7 @@ class StreamerEffectView @JvmOverloads constructor(
     }
 
     private fun setResolution(fArr: FloatArray) {
-        this.uResolution = fArr
+        uResolution = fArr
     }
 
     private fun loadShader(resources: Resources, id: Int): String? {
@@ -222,7 +222,7 @@ class StreamerEffectView @JvmOverloads constructor(
 
     private fun showRuntimeShader(context: Context, view: View) {
         calcAnimationBound(context, view)
-        setPhoneDark(this.bound)
+        setPhoneDark(bound)
     }
 
     private fun calcAnimationBound(context: Context, view: View) {
@@ -233,10 +233,10 @@ class StreamerEffectView @JvmOverloads constructor(
         )
         val height2 = height / (view.parent as ViewGroup).height
         val width = (view.parent as ViewGroup).width.toFloat()
-        if (width <= height) {
-            this.bound = floatArrayOf(0.0f, 1.0f - height2, 1.0f, height2)
+        bound = if (width <= height) {
+            floatArrayOf(0.0f, 1.0f - height2, 1.0f, height2)
         } else {
-            this.bound = floatArrayOf(
+            floatArrayOf(
                 ((width - height) / 2.0f) / width, 1.0f - height2, height / width, height2
             )
         }

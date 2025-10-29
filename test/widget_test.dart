@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:treblekit/app.dart';
-import 'package:treblekit/app_mode.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const TrebleKitApp(mode: AppMode.normal));
+    await tester.pumpWidget(const TrebleKitApp());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

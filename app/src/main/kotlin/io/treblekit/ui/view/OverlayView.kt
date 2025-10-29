@@ -49,10 +49,6 @@ class OverlayView @JvmOverloads constructor(
     private var viewHeight = 0
 
 
-    /** 是否显示调试信息 */
-    private val show: Boolean = BuildConfig.DEBUG
-
-
     /** 边角横幅画笔 */
     private val sdkBannerPaint: Paint = Paint(
         Paint.ANTI_ALIAS_FLAG,
@@ -279,7 +275,7 @@ class OverlayView @JvmOverloads constructor(
      */
     override fun onDrawForeground(canvas: Canvas) {
         super.onDrawForeground(canvas)
-        if (show) {
+        if (BuildConfig.DEBUG) {
             // 绘制SDK标识角标
             val sdkPointList = generatorSdkPointByPosition()
             drawSdkBanner(canvas, sdkPointList)

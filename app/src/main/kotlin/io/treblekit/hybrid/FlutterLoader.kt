@@ -4,30 +4,23 @@ import android.app.Application
 import io.flutter.FlutterInjector
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.android.RenderMode
+import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
-import io.flutter.embedding.engine.FlutterEngineGroup
 import io.flutter.embedding.engine.dart.DartExecutor
 
 /**
  * 初始化Flutter引擎
  */
 fun Application.loadFlutterEngine() {
-    FlutterEngineGroup(this@loadFlutterEngine).let { group ->
-        MultipleConfig.entries.forEach { config ->
-            group.createAndRunEngine(
-                this@loadFlutterEngine,
-                DartExecutor.DartEntrypoint(
-                    FlutterInjector.instance().flutterLoader().findAppBundlePath(),
-                    when (config) {
-                        MultipleConfig.EMBED -> MultipleConfig.EMBED.entrypoint
-                        MultipleConfig.NORMAL -> MultipleConfig.NORMAL.entrypoint
-                    },
-                ),
-            ).let { engine ->
-                CustomPluginRegistrant.registerWith(engine = engine)
-                FlutterEngineCache.getInstance().put(config.engineId, engine)
-            }
-        }
+    FlutterEngine(this@loadFlutterEngine).let { engine ->
+        engine.dartExecutor.executeDartEntrypoint(
+            DartExecutor.DartEntrypoint(
+                FlutterInjector.instance().flutterLoader().findAppBundlePath(),
+                EngineConfig.ENTRYPOINT
+            )
+        )
+        CustomPluginRegistrant.registerWith(engine = engine)
+        FlutterEngineCache.getInstance().put(EngineConfig.ENGINE_ID, engine)
     }
 }
 
@@ -36,7 +29,7 @@ fun Application.loadFlutterEngine() {
  */
 fun loadEmbedFragment(): FlutterFragment {
     return FlutterFragment.withCachedEngine(
-        MultipleConfig.EMBED.engineId,
+        EngineConfig.ENGINE_ID,
     ).renderMode(
         RenderMode.texture,
     ).build()
