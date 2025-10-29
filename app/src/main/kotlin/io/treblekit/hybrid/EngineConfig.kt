@@ -1,6 +1,6 @@
 package io.treblekit.hybrid
 
 object EngineConfig {
-    const val ENGINE_ID = "treblekit_flutter_embed"
-    const val ENTRYPOINT = "embed"
+    internal const val ENGINE_ID: String = "treblekit_flutter_embed"
+    internal const val ENTRYPOINT: String = "embed"
 }
