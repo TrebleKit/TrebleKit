@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,7 +27,7 @@ fun OverlayLayer(
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
-        content()
+        content.invoke(this@Box)
         if (!inspection) ViewFactory(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -35,6 +36,7 @@ fun OverlayLayer(
         if (inspection) CapsuleButton(
             modifier = Modifier
                 .align(Alignment.TopEnd)
+                .systemBarsPadding()
                 .padding(
                     vertical = (TopAppBarDefaults.TopAppBarExpandedHeight - capsuleHeight) / 2,
                     horizontal = capsuleEdgePadding,

@@ -10,12 +10,6 @@ import io.treblekit.R
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object HomeDestination
-
-@Serializable
-data object FlutterDestination
-
-@Serializable
 data object DashboardDestination
 
 @Serializable

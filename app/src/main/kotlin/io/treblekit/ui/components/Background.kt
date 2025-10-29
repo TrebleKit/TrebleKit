@@ -47,7 +47,7 @@ fun Background(
                 getEffectView
             }
         }
-        content(backdrop)
+        content.invoke(this@Box, backdrop)
     }
 }
 
