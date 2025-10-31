@@ -38,7 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.treblekit.R
-import io.treblekit.ui.components.Background
+import io.treblekit.ui.components.AppBackground
 import io.treblekit.ui.components.CapsuleSearch
 import io.treblekit.ui.components.CapsuleSpacer
 import io.treblekit.ui.components.HomeFAB
@@ -60,7 +60,7 @@ import io.treblekit.ui.theme.topBarPaddingExcess
 fun ActivityMain() {
     val pageState: PagerState = rememberPagerState { appDestination.size }
     var showDialog: Boolean by remember { mutableStateOf(value = false) }
-    Background { backdrop ->
+    AppBackground { backdrop ->
         OverlayLayer(backdrop = backdrop) {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),

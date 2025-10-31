@@ -18,22 +18,28 @@ import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.theme.appBackground
 
+/**
+ * AppBackground 是应用的背景, 包括背景色,和流光背景效果
+ *
+ * @param modifier 修饰符
+ * @param content 前景内容
+ */
 @Composable
-fun Background(
+fun AppBackground(
     modifier: Modifier = Modifier,
     content: @Composable BoxScope.(LayerBackdrop) -> Unit = {},
 ) {
-    val backdrop: LayerBackdrop = rememberLayerBackdrop()
-    val density: Density = LocalDensity.current
-    val inspection: Boolean = LocalInspectionMode.current
+    val backdrop: LayerBackdrop = rememberLayerBackdrop() // Backdrop
+    val density: Density = LocalDensity.current // Density
+    val inspection: Boolean = LocalInspectionMode.current // 检查模式
     Box(
         modifier = modifier.fillMaxSize()
     ) {
         BoxWithConstraints(
             modifier = modifier
                 .fillMaxSize()
-                .background(color = appBackground)
-                .layerBackdrop(backdrop = backdrop),
+                .background(color = appBackground) // 背景色
+                .layerBackdrop(backdrop = backdrop), // Backdrop
         ) {
             if (!inspection) ViewFactory(
                 modifier = Modifier
@@ -41,20 +47,23 @@ fun Background(
                     .offset(
                         y = with(receiver = density) {
                             return@with (constraints.maxHeight / 7 * 2).toDp()
-                        }
+                        } // 偏移到屏幕高度7分之2处
                     ),
             ) {
-                getEffectView
+                getEffectView // 流光背景效果
             }
         }
-        content.invoke(this@Box, backdrop)
+        content.invoke(this@Box, backdrop) // 前景内容
     }
 }
 
+/**
+ * AppBackground 的预览
+ */
 @Preview
 @Composable
-private fun BackgroundPreview() {
+private fun AppBackgroundPreview() {
     TrebleKitTheme {
-        Background()
+        AppBackground()
     }
 }
