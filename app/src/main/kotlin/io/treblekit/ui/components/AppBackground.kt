@@ -22,7 +22,7 @@ import io.treblekit.ui.theme.appBackground
  * AppBackground 是应用的背景, 包括背景色,和流光背景效果
  *
  * @param modifier 修饰符
- * @param content 前景内容
+ * @param content 子视图内容
  */
 @Composable
 fun AppBackground(
@@ -41,16 +41,19 @@ fun AppBackground(
                 .background(color = appBackground) // 背景色
                 .layerBackdrop(backdrop = backdrop), // Backdrop
         ) {
-            if (!inspection) ViewFactory(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .offset(
-                        y = with(receiver = density) {
-                            return@with (constraints.maxHeight / 7 * 2).toDp()
-                        } // 偏移到屏幕高度7分之2处
-                    ),
-            ) {
-                return@ViewFactory getEffectView // 流光背景效果
+            if (!inspection) {
+                // 非检查模式下, 显示流光背景效果
+                ViewFactory(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .offset(
+                            y = with(receiver = density) {
+                                return@with (constraints.maxHeight / 7 * 2).toDp()
+                            } // 偏移到屏幕高度7分之2处
+                        ),
+                ) {
+                    getEffectView // 流光背景效果
+                }
             }
         }
         content.invoke(this@Box, backdrop) // 前景内容

@@ -17,35 +17,52 @@ import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.theme.capsuleEdgePadding
 import io.treblekit.ui.theme.capsuleHeight
 
+/**
+ * 应用叠加层, 用于显示角标和胶囊按钮, 在检查模式下显示由Compose实现的胶囊按钮.
+ *
+ * @param modifier 修饰符
+ * @param backdrop Backdrop
+ * @param content 子视图内容
+ */
 @Composable
 fun OverlayLayer(
     modifier: Modifier = Modifier,
     backdrop: LayerBackdrop = rememberLayerBackdrop(),
     content: @Composable BoxScope.() -> Unit = {},
 ) {
-    val inspection: Boolean = LocalInspectionMode.current
+    val inspection: Boolean = LocalInspectionMode.current // 检查模式
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
-        content.invoke(this@Box)
-        if (!inspection) ViewFactory(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            getOverlayView
+        content.invoke(this@Box) // 子视图内容
+        if (!inspection) {
+            // 非检查模式下, 显示叠加层视图
+            ViewFactory(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                getOverlayView // 叠加层视图
+            }
+        } else {
+            // 检查模式下, 显示胶囊按钮
+            CapsuleButton(
+                modifier = Modifier
+                    .align(Alignment.TopEnd) // 右上角
+                    .systemBarsPadding() // 系统栏内边距
+                    .padding(
+                        // 根据顶部应用栏高度和胶囊按钮高度计算垂直内边距, 使胶囊按钮垂直居中
+                        vertical = (TopAppBarDefaults.TopAppBarExpandedHeight - capsuleHeight) / 2,
+                        // 水平内边距
+                        horizontal = capsuleEdgePadding,
+                    ),
+                backdrop = backdrop // Backdrop
+            )
         }
-        if (inspection) CapsuleButton(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .systemBarsPadding()
-                .padding(
-                    vertical = (TopAppBarDefaults.TopAppBarExpandedHeight - capsuleHeight) / 2,
-                    horizontal = capsuleEdgePadding,
-                ),
-            backdrop = backdrop
-        )
     }
 }
 
+/**
+ * OverlayLayer 的预览
+ */
 @Preview
 @Composable
 private fun OverlayLayerPreview() {
