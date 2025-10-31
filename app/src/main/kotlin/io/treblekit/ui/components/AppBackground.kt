@@ -50,7 +50,7 @@ fun AppBackground(
                         } // 偏移到屏幕高度7分之2处
                     ),
             ) {
-                getEffectView // 流光背景效果
+                return@ViewFactory getEffectView // 流光背景效果
             }
         }
         content.invoke(this@Box, backdrop) // 前景内容
