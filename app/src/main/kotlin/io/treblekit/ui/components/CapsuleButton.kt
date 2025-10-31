@@ -1,5 +1,6 @@
 package io.treblekit.ui.components
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -17,15 +18,9 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
-import com.kyant.backdrop.drawBackdrop
-import com.kyant.backdrop.effects.blur
-import com.kyant.backdrop.effects.lens
-import com.kyant.backdrop.effects.vibrancy
 import com.kyant.capsule.ContinuousCapsule
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.theme.capsuleContainer
@@ -35,6 +30,7 @@ import io.treblekit.ui.theme.capsuleIndent
 import io.treblekit.ui.theme.capsuleStroke
 import io.treblekit.ui.theme.capsuleWidth
 import io.treblekit.ui.utils.NoOnClick
+import io.treblekit.ui.utils.backdropEffects
 
 @Composable
 fun CapsuleButton(
@@ -45,26 +41,12 @@ fun CapsuleButton(
         modifier = modifier
             .width(width = capsuleWidth)
             .height(height = capsuleHeight)
-            .drawBackdrop(
+            .backdropEffects(
                 backdrop = backdrop,
-                shape = {
-                    ContinuousCapsule
-                },
-                effects = {
-                    vibrancy()
-                    blur(radius = 16f.dp.toPx())
-                    lens(
-                        refractionHeight = 24f.dp.toPx(),
-                        refractionAmount = 48f.dp.toPx(),
-                        depthEffect = false,
-                    )
-                },
-                onDrawSurface = {
-                    drawRect(
-                        color = capsuleContainer,
-                        blendMode = BlendMode.Hue,
-                    )
-                },
+                shape = ContinuousCapsule,
+                color = capsuleContainer,
+                alpha = capsuleContainer.alpha,
+                bigBlock = false,
             ),
     ) {
         Row(

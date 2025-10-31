@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -25,26 +24,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.imageloading.rememberDrawablePainter
-import com.kyant.backdrop.Backdrop
+import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
-import com.kyant.backdrop.drawBackdrop
-import com.kyant.backdrop.effects.blur
-import com.kyant.backdrop.effects.lens
-import com.kyant.backdrop.effects.vibrancy
 import com.kyant.capsule.ContinuousCapsule
 import io.treblekit.R
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.utils.NoOnClick
+import io.treblekit.ui.utils.backdropEffects
 
 @Composable
 fun AppItem(
     modifier: Modifier = Modifier,
-    backdrop: Backdrop = rememberLayerBackdrop(),
+    backdrop: LayerBackdrop = rememberLayerBackdrop(),
     onLaunch: () -> Unit = NoOnClick,
     appIcon: Painter,
     appName: String,
 ) {
-    val surfaceContainerHighestTint = MaterialTheme.colorScheme.surfaceContainerHighest
     Column(
         modifier = modifier.wrapContentSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,26 +47,12 @@ fun AppItem(
         Box(
             modifier = Modifier
                 .size(size = 60.dp)
-                .drawBackdrop(
+                .backdropEffects(
                     backdrop = backdrop,
-                    shape = {
-                        ContinuousCapsule
-                    },
-                    effects = {
-                        vibrancy()
-                        blur(radius = 2f.dp.toPx())
-                        lens(
-                            refractionHeight = 12f.dp.toPx(),
-                            refractionAmount = 24f.dp.toPx(),
-                            depthEffect = false,
-                        )
-                    },
-                    onDrawSurface = {
-                        drawRect(
-                            color = surfaceContainerHighestTint.copy(alpha = 0.8f),
-                            blendMode = BlendMode.Hue,
-                        )
-                    },
+                    shape = ContinuousCapsule,
+                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    alpha = 0.8f,
+                    bigBlock = false,
                 )
                 .clickable(onClick = onLaunch),
             contentAlignment = Alignment.Center,

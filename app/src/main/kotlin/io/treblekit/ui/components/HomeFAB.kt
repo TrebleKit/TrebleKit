@@ -17,19 +17,15 @@ import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
-import com.kyant.backdrop.drawBackdrop
-import com.kyant.backdrop.effects.blur
-import com.kyant.backdrop.effects.lens
-import com.kyant.backdrop.effects.vibrancy
 import com.kyant.capsule.ContinuousRoundedRectangle
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.utils.NoOnClick
+import io.treblekit.ui.utils.backdropEffects
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,9 +34,7 @@ fun HomeFAB(
     backdrop: LayerBackdrop = rememberLayerBackdrop(),
     onClick: () -> Unit = NoOnClick,
 ) {
-
     val tooltipState = rememberTooltipState()
-    val primaryContainerTint: Color = MaterialTheme.colorScheme.primaryContainer
     TooltipBox(
         modifier = modifier.wrapContentSize(),
         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
@@ -74,26 +68,12 @@ fun HomeFAB(
             onClick = onClick,
             modifier = Modifier
                 .wrapContentSize()
-                .drawBackdrop(
+                .backdropEffects(
                     backdrop = backdrop,
-                    shape = {
-                        ContinuousRoundedRectangle(size = 16.dp)
-                    },
-                    effects = {
-                        vibrancy()
-                        blur(radius = 2f.dp.toPx())
-                        lens(
-                            refractionHeight = 12f.dp.toPx(),
-                            refractionAmount = 24f.dp.toPx(),
-                            depthEffect = false,
-                        )
-                    },
-                    onDrawSurface = {
-                        drawRect(
-                            color = primaryContainerTint.copy(alpha = 0.8f),
-                            blendMode = BlendMode.Hue,
-                        )
-                    },
+                    shape = ContinuousRoundedRectangle(size = 16.dp),
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    alpha = 0.8f,
+                    bigBlock = false,
                 ),
             containerColor = Color.Transparent,
             elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()

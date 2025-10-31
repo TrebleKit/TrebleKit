@@ -15,18 +15,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kyant.backdrop.Backdrop
 import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
-import com.kyant.backdrop.drawBackdrop
-import com.kyant.backdrop.effects.blur
-import com.kyant.backdrop.effects.lens
-import com.kyant.backdrop.effects.vibrancy
 import com.kyant.capsule.ContinuousCapsule
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.theme.capsuleContainer
@@ -34,6 +28,7 @@ import io.treblekit.ui.theme.capsuleContent
 import io.treblekit.ui.theme.capsuleHeight
 import io.treblekit.ui.theme.capsuleWidth
 import io.treblekit.ui.utils.NoOnClick
+import io.treblekit.ui.utils.backdropEffects
 
 @Composable
 fun CapsuleSearch(
@@ -45,26 +40,12 @@ fun CapsuleSearch(
         modifier = modifier
             .width(width = capsuleWidth)
             .height(height = capsuleHeight)
-            .drawBackdrop(
+            .backdropEffects(
                 backdrop = backdrop,
-                shape = {
-                    ContinuousCapsule
-                },
-                effects = {
-                    vibrancy()
-                    blur(radius = 2f.dp.toPx())
-                    lens(
-                        refractionHeight = 12f.dp.toPx(),
-                        refractionAmount = 24f.dp.toPx(),
-                        depthEffect = false,
-                    )
-                },
-                onDrawSurface = {
-                    drawRect(
-                        color = capsuleContainer,
-                        blendMode = BlendMode.Hue,
-                    )
-                },
+                shape = ContinuousCapsule,
+                color = capsuleContainer,
+                alpha = capsuleContainer.alpha,
+                bigBlock = false,
             )
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
