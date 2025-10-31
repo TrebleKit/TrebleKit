@@ -2,11 +2,13 @@ package io.treblekit.ui.activity
 
 import android.content.Intent
 import android.os.Build
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -150,15 +152,16 @@ fun ActivityMain() {
                             )
                         },
                         floatingActionButton = {
-                            Row {
+                            Row(
+                                modifier = Modifier.wrapContentSize(),
+                                horizontalArrangement = Arrangement.spacedBy(space = 8.dp),
+                            ) {
                                 NavBlock(
-                                    modifier = Modifier.padding(end = 4.dp),
                                     pageState = pageState,
                                     backdrop = backdrop,
                                 )
                                 val context = LocalContext.current
                                 HomeFAB(
-                                    modifier = Modifier.padding(start = 4.dp),
                                     backdrop = backdrop,
                                     onClick = {
                                         val intent = Intent().apply {

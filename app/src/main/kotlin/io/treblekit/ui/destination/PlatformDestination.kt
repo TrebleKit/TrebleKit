@@ -32,7 +32,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
@@ -40,15 +39,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
-import com.kyant.backdrop.drawBackdrop
-import com.kyant.backdrop.effects.blur
-import com.kyant.backdrop.effects.lens
-import com.kyant.backdrop.effects.vibrancy
 import com.kyant.capsule.ContinuousRoundedRectangle
 import io.treblekit.R
 import io.treblekit.ui.components.FlutterView
 import io.treblekit.ui.navigation.DashboardDestination
 import io.treblekit.ui.theme.TrebleKitTheme
+import io.treblekit.ui.utils.backdropEffects
 import io.treblekit.ui.utils.navigateToRoute
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -64,8 +60,6 @@ fun PlatformDestination(
     val inspection: Boolean = LocalInspectionMode.current
     var dropdownExpanded: Boolean by remember { mutableStateOf(value = false) }
     var aboutExpanded: Boolean by remember { mutableStateOf(value = false) }
-    val primaryContainerTint = MaterialTheme.colorScheme.primaryContainer
-    val backgroundTint = MaterialTheme.colorScheme.background
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -82,26 +76,12 @@ fun PlatformDestination(
                     bottom = 8.dp,
                 )
                 .height(height = 56.dp)
-                .drawBackdrop(
+                .backdropEffects(
                     backdrop = backdrop,
-                    shape = {
-                        ContinuousRoundedRectangle(size = 16.dp)
-                    },
-                    effects = {
-                        vibrancy()
-                        blur(radius = 2f.dp.toPx())
-                        lens(
-                            refractionHeight = 12f.dp.toPx(),
-                            refractionAmount = 24f.dp.toPx(),
-                            depthEffect = false,
-                        )
-                    },
-                    onDrawSurface = {
-                        drawRect(
-                            color = primaryContainerTint.copy(alpha = 0.8f),
-                            blendMode = BlendMode.Hue,
-                        )
-                    },
+                    shape = ContinuousRoundedRectangle(size = 16.dp),
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    alpha = 0.8f,
+                    bigBlock = false
                 ),
             navigationIcon = {
                 IconButton(
@@ -193,26 +173,12 @@ fun PlatformDestination(
                     end = 16.dp,
                     bottom = 16.dp,
                 )
-                .drawBackdrop(
+                .backdropEffects(
                     backdrop = backdrop,
-                    shape = {
-                        ContinuousRoundedRectangle(size = 16.dp)
-                    },
-                    effects = {
-                        vibrancy()
-                        blur(radius = 2f.dp.toPx())
-                        lens(
-                            refractionHeight = 12f.dp.toPx(),
-                            refractionAmount = 24f.dp.toPx(),
-                            depthEffect = true,
-                        )
-                    },
-                    onDrawSurface = {
-                        drawRect(
-                            color = backgroundTint.copy(alpha = 0.8f),
-                            blendMode = BlendMode.Hue,
-                        )
-                    },
+                    shape = ContinuousRoundedRectangle(size = 16.dp),
+                    color = MaterialTheme.colorScheme.background,
+                    alpha = 0.8f,
+                    bigBlock = false
                 ),
         ) {
             if (!inspection) {

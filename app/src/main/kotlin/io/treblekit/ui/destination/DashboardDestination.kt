@@ -57,6 +57,7 @@ import io.treblekit.ui.components.AppItem
 import io.treblekit.ui.navigation.PlatformDestination
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.utils.NoOnClick
+import io.treblekit.ui.utils.backdropEffects
 import io.treblekit.ui.utils.navigateToRoute
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -91,233 +92,15 @@ fun DashboardDestination(
             backdrop = backdrop,
             popBackStack = popBackStack,
         )
-        val primaryContainerTint = MaterialTheme.colorScheme.primaryContainer
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(
-                    start = 16.dp,
-                    top = 15.dp,
-                    end = 16.dp,
-                    bottom = 15.dp,
-                )
-                .drawBackdrop(
-                    backdrop = backdrop,
-                    shape = {
-                        ContinuousRoundedRectangle(size = 16.dp)
-                    },
-                    effects = {
-                        vibrancy()
-                        blur(radius = 2f.dp.toPx())
-                        lens(
-                            refractionHeight = 12f.dp.toPx(),
-                            refractionAmount = 24f.dp.toPx(),
-                            depthEffect = true,
-                        )
-                    },
-                    onDrawSurface = {
-                        drawRect(
-                            color = primaryContainerTint.copy(alpha = 0.8f),
-                            blendMode = BlendMode.Hue,
-                        )
-                    },
-                )
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-            ) {
-                Row {
-                    Text(
-                        text = "互联互通",
-                        fontSize = 14.sp,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    )
-                }
-                Row(
-                    modifier = Modifier,
-                    horizontalArrangement = Arrangement.spacedBy(space = 10.dp),
-                ) {
-                    Column(
-                        modifier = Modifier.wrapContentSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(size = 40.dp)
-                                .clip(shape = RoundedCornerShape(size = 35.dp))
-                                .background(color = Color(color = 0xFF8E8E9E))
-                                .clickable(onClick = {}),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Add,
-                                contentDescription = null,
-                            )
-                        }
-                        Text(
-                            text = "app",
-                            fontSize = 15.sp,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-                    Column(
-                        modifier = Modifier.wrapContentSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(size = 40.dp)
-                                .clip(shape = RoundedCornerShape(size = 35.dp))
-                                .background(color = Color(color = 0xFF8E8E9E))
-                                .clickable(onClick = {}),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Add,
-                                contentDescription = null,
-                            )
-                        }
-                        Text(
-                            text = "app",
-                            fontSize = 15.sp,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-                    Column(
-                        modifier = Modifier.wrapContentSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(size = 40.dp)
-                                .clip(shape = RoundedCornerShape(size = 35.dp))
-                                .background(color = Color(color = 0xFF8E8E9E))
-                                .clickable(onClick = {}),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Add,
-                                contentDescription = null,
-                            )
-                        }
-                        Text(
-                            text = "app",
-                            fontSize = 15.sp,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-
-
-                }
-            }
-        }
-//        Surface(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .wrapContentHeight()
-//                .padding(
-//                    start = 16.dp,
-//                    top = 15.dp,
-//                    end = 16.dp,
-//                    bottom = 15.dp,
-//                ),
-//            shape = ContinuousRoundedRectangle(size = 16.dp),
-//            color = MaterialTheme.colorScheme.secondaryContainer,
-//        ) {
-//            Column(
-//                modifier = Modifier.padding(16.dp),
-//            ) {
-//                Row {
-//                    Text(
-//                        text = "互联互通",
-//                        fontSize = 14.sp,
-//                    )
-//                }
-//                Row(
-//                    modifier = Modifier,
-//                    horizontalArrangement = Arrangement.spacedBy(space = 10.dp),
-//                ) {
-//                    Column(
-//                        modifier = Modifier.wrapContentSize(),
-//                        horizontalAlignment = Alignment.CenterHorizontally,
-//                    ) {
-//                        Box(
-//                            modifier = Modifier
-//                                .size(size = 40.dp)
-//                                .clip(shape = RoundedCornerShape(size = 35.dp))
-//                                .background(color = Color(color = 0xFF8E8E9E))
-//                                .clickable(onClick = {}),
-//                            contentAlignment = Alignment.Center,
-//                        ) {
-//                            Icon(
-//                                imageVector = Icons.Filled.Add,
-//                                contentDescription = null,
-//                            )
-//                        }
-//                        Text(
-//                            text = "app",
-//                            fontSize = 15.sp,
-//                            color = Color.White,
-//                            textAlign = TextAlign.Center,
-//                        )
-//                    }
-//                    Column(
-//                        modifier = Modifier.wrapContentSize(),
-//                        horizontalAlignment = Alignment.CenterHorizontally,
-//                    ) {
-//                        Box(
-//                            modifier = Modifier
-//                                .size(size = 40.dp)
-//                                .clip(shape = RoundedCornerShape(size = 35.dp))
-//                                .background(color = Color(color = 0xFF8E8E9E))
-//                                .clickable(onClick = {}),
-//                            contentAlignment = Alignment.Center,
-//                        ) {
-//                            Icon(
-//                                imageVector = Icons.Filled.Add,
-//                                contentDescription = null,
-//                            )
-//                        }
-//                        Text(
-//                            text = "app",
-//                            fontSize = 15.sp,
-//                            color = Color.White,
-//                            textAlign = TextAlign.Center,
-//                        )
-//                    }
-//                    Column(
-//                        modifier = Modifier.wrapContentSize(),
-//                        horizontalAlignment = Alignment.CenterHorizontally,
-//                    ) {
-//                        Box(
-//                            modifier = Modifier
-//                                .size(size = 40.dp)
-//                                .clip(shape = RoundedCornerShape(size = 35.dp))
-//                                .background(color = Color(color = 0xFF8E8E9E))
-//                                .clickable(onClick = {}),
-//                            contentAlignment = Alignment.Center,
-//                        ) {
-//                            Icon(
-//                                imageVector = Icons.Filled.Add,
-//                                contentDescription = null,
-//                            )
-//                        }
-//                        Text(
-//                            text = "app",
-//                            fontSize = 15.sp,
-//                            color = Color.White,
-//                            textAlign = TextAlign.Center,
-//                        )
-//                    }
-//
-//
-//                }
-//            }
-//        }
+        ControlCard(
+            modifier = Modifier.padding(
+                start = 16.dp,
+                top = 15.dp,
+                end = 16.dp,
+                bottom = 15.dp,
+            ),
+            backdrop = backdrop,
+        )
         Text(
             text = "常用应用",
             modifier = Modifier.padding(
@@ -432,26 +215,12 @@ fun RecentPlayer(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(height = 60.dp)
-                .drawBackdrop(
+                .backdropEffects(
                     backdrop = backdrop,
-                    shape = {
-                        ContinuousCapsule
-                    },
-                    effects = {
-                        vibrancy()
-                        blur(radius = 2f.dp.toPx())
-                        lens(
-                            refractionHeight = 12f.dp.toPx(),
-                            refractionAmount = 24f.dp.toPx(),
-                            depthEffect = false,
-                        )
-                    },
-                    onDrawSurface = {
-                        drawRect(
-                            color = primaryContainerTint.copy(alpha = 0.8f),
-                            blendMode = BlendMode.Hue,
-                        )
-                    },
+                    shape = ContinuousCapsule,
+                    color = primaryContainerTint,
+                    alpha = 0.8f,
+                    bigBlock = false,
                 )
                 .clickable {
                     coroutineScope.launch {
@@ -499,6 +268,125 @@ fun RecentPlayerPreview() {
     }
 }
 
+@Composable
+fun ControlCard(
+    modifier: Modifier = Modifier,
+    backdrop: LayerBackdrop = rememberLayerBackdrop(),
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+
+            .backdropEffects(
+                backdrop = backdrop,
+                shape = ContinuousRoundedRectangle(size = 16.dp),
+                color = MaterialTheme.colorScheme.primaryContainer,
+                alpha = 0.8f,
+                bigBlock = true,
+            ),
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+        ) {
+            Row {
+                Text(
+                    text = "互联互通",
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+            }
+            Row(
+                modifier = Modifier,
+                horizontalArrangement = Arrangement.spacedBy(space = 10.dp),
+            ) {
+                Column(
+                    modifier = Modifier.wrapContentSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(size = 40.dp)
+                            .clip(shape = RoundedCornerShape(size = 35.dp))
+                            .background(color = Color(color = 0xFF8E8E9E))
+                            .clickable(onClick = {}),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = null,
+                        )
+                    }
+                    Text(
+                        text = "app",
+                        fontSize = 15.sp,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+                Column(
+                    modifier = Modifier.wrapContentSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(size = 40.dp)
+                            .clip(shape = RoundedCornerShape(size = 35.dp))
+                            .background(color = Color(color = 0xFF8E8E9E))
+                            .clickable(onClick = {}),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = null,
+                        )
+                    }
+                    Text(
+                        text = "app",
+                        fontSize = 15.sp,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+                Column(
+                    modifier = Modifier.wrapContentSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(size = 40.dp)
+                            .clip(shape = RoundedCornerShape(size = 35.dp))
+                            .background(color = Color(color = 0xFF8E8E9E))
+                            .clickable(onClick = {}),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = null,
+                        )
+                    }
+                    Text(
+                        text = "app",
+                        fontSize = 15.sp,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+
+
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun ControlCardPreview() {
+    TrebleKitTheme {
+        ControlCard()
+    }
+}
+
 data class MiniProgramItem(
     /** 名称 */
     val title: String,
@@ -531,6 +419,14 @@ fun AppsGrid(
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun AppsGridPreview() {
+    TrebleKitTheme {
+        AppsGrid(list = miniProgramList)
     }
 }
 
