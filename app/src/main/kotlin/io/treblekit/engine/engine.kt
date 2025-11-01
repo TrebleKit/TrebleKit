@@ -18,8 +18,6 @@ import io.treblekit.app.MainService
 class Engine {
 
 
-
-
     /** Activity */
     private var mActivity: Activity? = null
 
@@ -642,8 +640,6 @@ class Engine {
             super.onDestroy(owner)
         }
     }
-
-
 
 
     /**
