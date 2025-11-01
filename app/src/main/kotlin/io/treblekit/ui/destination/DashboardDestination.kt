@@ -155,7 +155,7 @@ fun MPPlayer(
                 appIcon = rememberDrawablePainter(
                     drawable = AppCompatResources.getDrawable(
                         context,
-                        R.drawable.ic_treblekit,
+                        R.mipmap.ic_treblekit,
                     ),
                 ),
                 appName = "TrebleKit",
@@ -169,7 +169,7 @@ fun MPPlayer(
                 appIcon = rememberDrawablePainter(
                     drawable = AppCompatResources.getDrawable(
                         context,
-                        R.drawable.ic_ebkit,
+                        R.mipmap.ic_ebkit,
                     ),
                 ),
                 appName = "EbKit",

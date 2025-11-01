@@ -84,7 +84,7 @@ private fun AppItemPreview() {
             appIcon = rememberDrawablePainter(
                 drawable = AppCompatResources.getDrawable(
                     LocalContext.current,
-                    R.drawable.ic_treblekit
+                    R.mipmap.ic_treblekit
                 )
             ),
             appName = stringResource(

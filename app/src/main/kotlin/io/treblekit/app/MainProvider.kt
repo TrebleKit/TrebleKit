@@ -2,4 +2,4 @@ package io.treblekit.app
 
 import rikka.shizuku.ShizukuProvider
 
-class EmbedderProvider : ShizukuProvider()
+class MainProvider : ShizukuProvider()
