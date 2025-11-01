@@ -64,7 +64,7 @@ class AndroidToFlutter : FlutterPlugin, EventChannel.StreamHandler {
                     )
                 } catch (e: Exception) {
                     mEventSink?.error(
-                        "GODOT_EVENT_ERROR",
+                        "SEND_EVENT_ERROR",
                         e.message,
                         null,
                     )

@@ -219,8 +219,8 @@ class Engine {
          * @param context 上下文 - 此上下文来自FlutterPlugin的ApplicationContext
          */
         override fun onCreateEngine(context: Context) {
-            when {
-                mPluginList.isNull or mBinding.isNull -> pluginScope(
+            if (mPluginList.isNull or mBinding.isNull) {
+                pluginScope(
                     debug = mBaseDebug,
                     context = context,
                 ) { plugins, binding ->
@@ -253,10 +253,12 @@ class Engine {
                         }
                     }
                 }
-
-                else -> if (mBaseDebug) Log.e(
-                    TAG, "请勿重复执行onCreateEngine!"
-                ) else Unit
+            } else {
+                if (mBaseDebug) {
+                    Log.e(
+                        TAG, "请勿重复执行onCreateEngine!"
+                    )
+                }
             }
         }
 
