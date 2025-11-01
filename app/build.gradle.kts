@@ -90,6 +90,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.play.services.base)
 //    implementation(libs.androidx.navigation.compose)
 
     testImplementation(libs.junit)

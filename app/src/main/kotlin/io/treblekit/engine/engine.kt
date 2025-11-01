@@ -25,6 +25,9 @@
 //import androidx.lifecycle.Lifecycle
 //import androidx.lifecycle.LifecycleOwner
 //import com.blankj.utilcode.util.AppUtils
+//import com.google.android.gms.common.GoogleApiAvailability
+//import io.treblekit.aidl.ITrebleKit
+//import io.treblekit.app.MainService
 //
 //class Engine {
 //
@@ -620,15 +623,15 @@
 //            get() = "Ecosed Engine"
 //
 //        override fun onCreateActivity(activity: Activity) {
-//            this@EbKitCore.mActivity = activity
+//            mActivity = activity
 //        }
 //
 //        override fun onDestroyActivity() {
-//            this@EbKitCore.mActivity = null
+//            mActivity = null
 //        }
 //
 //        override fun onCreateLifecycle(lifecycle: Lifecycle) = lifecycleScope {
-//            this@EbKitCore.mLifecycle = lifecycle
+//            mLifecycle = lifecycle
 //            this@lifecycleScope.lifecycle.addObserver(
 //                observer = this@lifecycleScope,
 //            )
@@ -636,7 +639,7 @@
 //
 //        override fun onDestroyLifecycle(): Unit = lifecycleScope {
 //            this@lifecycleScope.lifecycle.removeObserver(this@lifecycleScope)
-//            this@EbKitCore.mLifecycle = null
+//            mLifecycle = null
 //        }
 //
 //        override fun onActivityResult(
@@ -663,7 +666,7 @@
 //        override fun onEcosedAdded(binding: PluginBinding): Unit = run {
 //            super.onEcosedAdded(binding)
 //            // 设置来自插件的全局调试布尔值
-//            this@EbKitCore.mFullDebug = this@run.isDebug
+//            mFullDebug = this@run.isDebug
 //        }
 //
 //        override fun onEcosedMethodCall(call: EcosedMethodCall, result: EcosedResult) {
@@ -695,33 +698,33 @@
 //         */
 //        override fun onCreateEngine(context: Context) {
 //            when {
-//                this@EbKitCore.mPluginList.isNull or this@EbKitCore.mBinding.isNull -> pluginScope(
-//                    debug = this@EbKitCore.mBaseDebug,
+//                mPluginList.isNull or mBinding.isNull -> pluginScope(
+//                    debug = mBaseDebug,
 //                    context = context,
 //                ) { plugins, binding ->
 //                    // 初始化插件列表.
-//                    this@EbKitCore.mPluginList = arrayListOf()
+//                    mPluginList = arrayListOf()
 //                    // 添加所有插件.
 //                    plugins.forEach { plugin ->
 //                        plugin.apply {
 //                            try {
 //                                this@apply.onEcosedAdded(binding = binding)
-//                                if (this@EbKitCore.mBaseDebug) Log.d(
+//                                if (mBaseDebug) Log.d(
 //                                    TAG,
 //                                    "插件${this@apply.javaClass.name}已加载",
 //                                )
 //                            } catch (exception: Exception) {
-//                                if (this@EbKitCore.mBaseDebug) Log.e(
+//                                if (mBaseDebug) Log.e(
 //                                    TAG,
 //                                    "插件${this@apply.javaClass.name}添加失败!",
 //                                    exception,
 //                                )
 //                            }
 //                        }.run {
-//                            this@EbKitCore.mPluginList?.add(
+//                            mPluginList?.add(
 //                                element = this@run
 //                            )
-//                            if (this@EbKitCore.mBaseDebug) Log.d(
+//                            if (mBaseDebug) Log.d(
 //                                TAG,
 //                                "插件${this@run.javaClass.name}已添加到插件列表",
 //                            )
@@ -729,7 +732,7 @@
 //                    }
 //                }
 //
-//                else -> if (this@EbKitCore.mBaseDebug) Log.e(
+//                else -> if (mBaseDebug) Log.e(
 //                    TAG, "请勿重复执行onCreateEngine!"
 //                ) else Unit
 //            }
@@ -740,12 +743,12 @@
 //         */
 //        override fun onDestroyEngine() {
 //            when {
-//                this@EbKitCore.mPluginList.isNotNull or this@EbKitCore.mBinding.isNotNull -> {
+//                mPluginList.isNotNull or mBinding.isNotNull -> {
 //                    // 清空插件列表
-//                    this@EbKitCore.mPluginList = null
+//                    mPluginList = null
 //                }
 //
-//                else -> if (this@EbKitCore.mBaseDebug) Log.e(
+//                else -> if (mBaseDebug) Log.e(
 //                    TAG,
 //                    "请勿重复执行onDestroyEngine!",
 //                ) else Unit
@@ -801,7 +804,7 @@
 //        ): T? {
 //            var result: T? = null
 //            try {
-//                this@EbKitCore.mPluginList?.forEach { plugin ->
+//                mPluginList?.forEach { plugin ->
 //                    plugin.getPluginChannel.let { pluginChannel ->
 //                        if (pluginChannel.getChannel() == channel) {
 //                            result = pluginChannel.execMethodCall<T>(
@@ -809,7 +812,7 @@
 //                                method = method,
 //                                bundle = bundle,
 //                            )
-//                            if (this@EbKitCore.mBaseDebug) Log.d(
+//                            if (mBaseDebug) Log.d(
 //                                TAG,
 //                                "插件代码调用成功!\n" + "通道名称:${channel}.\n" + "方法名称:${method}.\n" + "返回结果:${result}.",
 //                            )
@@ -817,7 +820,7 @@
 //                    }
 //                }
 //            } catch (exception: Exception) {
-//                if (this@EbKitCore.mBaseDebug) {
+//                if (mBaseDebug) {
 //                    Log.e(
 //                        TAG,
 //                        "插件代码调用失败!",
@@ -853,13 +856,13 @@
 //         */
 //        override fun onEcosedAdded(binding: PluginBinding) = run {
 //            super.onEcosedAdded(binding)
-//            this@EbKitCore.mEcosedServicesIntent = Intent(
+//            mEcosedServicesIntent = Intent(
 //                this@run,
-//                MainServices().javaClass,
+//                MainService().javaClass,
 //            )
-//            this@EbKitCore.mEcosedServicesIntent.action = EcosedManifest.ACTION
+//            mEcosedServicesIntent.action = EcosedManifest.ACTION
 //
-//            startService(this@EbKitCore.mEcosedServicesIntent)
+//            startService(mEcosedServicesIntent)
 //            bindEcosed(this@run)
 //
 //            Toast.makeText(this@run, "client", Toast.LENGTH_SHORT).show()
@@ -871,13 +874,13 @@
 //        override fun onEcosedMethodCall(call: EcosedMethodCall, result: EcosedResult) {
 //            super.onEcosedMethodCall(call, result)
 //            when (call.method) {
-//                EcosedMethod.OPEN_DIALOG_METHOD -> result.success(result = invokeMethod {
-//                    openDialog()
-//                })
-//
-//                EcosedMethod.CLOSE_DIALOG_METHOD -> result.success(result = invokeMethod {
-//                    closeDialog()
-//                })
+////                EcosedMethod.OPEN_DIALOG_METHOD -> result.success(result = invokeMethod {
+////                    openDialog()
+////                })
+////
+////                EcosedMethod.CLOSE_DIALOG_METHOD -> result.success(result = invokeMethod {
+////                    closeDialog()
+////                })
 //
 //                else -> result.notImplemented()
 //            }
@@ -933,7 +936,7 @@
 //
 //        override fun attachBaseContext(base: Context?): Unit = base?.run {
 //            super.attachBaseContext(base)
-//            this@EbKitCore.mAppCompatDelegateBaseContext = this@run
+//
 //        } ?: Unit
 //
 //        /**
@@ -942,13 +945,11 @@
 //         * @return IBinder
 //         */
 //        override fun getBinder(intent: Intent): IBinder {
-//            return object : IFeOSdk.Stub() {}
+//            return object : ITrebleKit.Stub() {}
 //        }
 //
 //        override fun attachDelegateBaseContext() {
-//            this@EbKitCore.mAppCompatDelegate.attachBaseContext2(
-//                this@EbKitCore.mAppCompatDelegateBaseContext
-//            )
+//
 //        }
 //
 //        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -974,19 +975,19 @@
 ////                    }
 ////                }
 //
-//                MainServices().javaClass.name -> {
+//                MainService().javaClass.name -> {
 //                    if (service.isNotNull and (service?.pingBinder() == true)) {
-//                        this@EbKitCore.mAIDL = IFeOSdk.Stub.asInterface(service)
+//                        mAIDL = ITrebleKit.Stub.asInterface(service)
 //                    }
 //                    when {
-//                        this@EbKitCore.mAIDL.isNotNull -> {
-//                            this@EbKitCore.mIsBind = true
+//                        mAIDL.isNotNull -> {
+//                            mIsBind = true
 //                            invokeScope {
 //                                onEcosedConnected()
 //                            }
 //                        }
 //
-//                        else -> if (this@EbKitCore.mFullDebug) Log.e(
+//                        else -> if (mFullDebug) Log.e(
 //                            TAG, "AIDL接口获取失败 - onServiceConnected"
 //                        )
 //                    }
@@ -1009,14 +1010,14 @@
 ////
 ////                }
 //
-//                this@EbKitCore.javaClass.name -> {
-//                    this@EbKitCore.mIsBind = false
-//                    this@EbKitCore.mAIDL = null
+//               MainService::class.java.name -> {
+//                    mIsBind = false
+//                    mAIDL = null
 //                    unbindService(this)
 //                    invokeScope {
 //                        onEcosedDisconnected()
 //                    }
-//                    if (this@EbKitCore.mFullDebug) {
+//                    if (mFullDebug) {
 //                        Log.i(TAG, "服务意外断开连接 - onServiceDisconnected")
 //                    }
 //                }
@@ -1035,7 +1036,7 @@
 ////
 ////                }
 //
-//                this@EbKitCore.javaClass.name -> {
+//                MainService::class.java.name -> {
 //
 //                }
 //
@@ -1052,8 +1053,8 @@
 ////
 ////                }
 //
-//                this@EbKitCore.javaClass.name -> {
-//                    if (this@EbKitCore.mFullDebug) {
+//                MainService::class.java.name -> {
+//                    if (mFullDebug) {
 //                        Log.e(TAG, "Binder为空 - onNullBinding")
 //                    }
 //                }
@@ -1089,7 +1090,7 @@
 //        }
 //
 //        override fun getDrawerToggleDelegate(): ActionBarDrawerToggle.Delegate? {
-//            return mAppCompatDelegate.drawerToggleDelegate
+//            return null
 //        }
 //
 //        override val lifecycle: Lifecycle
@@ -1101,19 +1102,19 @@
 //        override fun onCreate(owner: LifecycleOwner): Unit = activityScope {
 //            super.onCreate(owner)
 //            // 初始化
-//            init {
-//                delegateScope {
-//                    // 调用Delegate onCreate函数
-//                    onCreate(Bundle())
-//                }
-//            }
+////            init {
+////                delegateScope {
+////                    // 调用Delegate onCreate函数
+////                    onCreate(Bundle())
+////                }
+////            }
 //            // 切换工具栏状态
 //            //toggle()
 //
-//            // 执行Delegate函数
-//            if (this@activityScope.isNotAppCompat) delegateScope {
-//                onPostCreate(Bundle())
-//            }
+////            // 执行Delegate函数
+////            if (this@activityScope.isNotAppCompat) delegateScope {
+////                onPostCreate(Bundle())
+////            }
 //        }
 //
 //        /**
@@ -1121,10 +1122,10 @@
 //         */
 //        override fun onStart(owner: LifecycleOwner): Unit = activityScope {
 //            super.onStart(owner)
-//            // 执行Delegate onStart函数
-//            if (this@activityScope.isNotAppCompat) delegateScope {
-//                onStart()
-//            }
+////            // 执行Delegate onStart函数
+////            if (this@activityScope.isNotAppCompat) delegateScope {
+////                onStart()
+////            }
 //        }
 //
 //        /**
@@ -1132,10 +1133,10 @@
 //         */
 //        override fun onResume(owner: LifecycleOwner): Unit = activityScope {
 //            super.onResume(owner)
-//            // 执行Delegate onPostResume函数
-//            if (this@activityScope.isNotAppCompat) delegateScope {
-//                onPostResume()
-//            }
+////            // 执行Delegate onPostResume函数
+////            if (this@activityScope.isNotAppCompat) delegateScope {
+////                onPostResume()
+////            }
 //        }
 //
 //        /**
@@ -1150,9 +1151,9 @@
 //         */
 //        override fun onStop(owner: LifecycleOwner): Unit = activityScope {
 //            super.onStop(owner)
-//            if (this@activityScope.isNotAppCompat) delegateScope {
-//                onStop()
-//            }
+////            if (this@activityScope.isNotAppCompat) delegateScope {
+////                onStop()
+////            }
 //        }
 //
 //        /**
@@ -1160,9 +1161,9 @@
 //         */
 //        override fun onDestroy(owner: LifecycleOwner): Unit = activityScope {
 //            super.onDestroy(owner)
-//            if (this@activityScope.isNotAppCompat) delegateScope {
-//                onDestroy()
-//            }
+////            if (this@activityScope.isNotAppCompat) delegateScope {
+////                onDestroy()
+////            }
 //        }
 //    }
 //

@@ -25,6 +25,7 @@ utilcodex = "1.31.1"
 backdrop = "1.0.0"
 capsule = "2.1.1"
 koin = "4.1.1"
+playServicesBase = "18.9.0"
 
 [libraries]
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
@@ -62,6 +63,7 @@ kongzue-dialogx-material3 = { group = "com.github.kongzue.DialogX", name = "Dial
 insert-koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 insert-koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 insert-koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
+play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServicesBase" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
