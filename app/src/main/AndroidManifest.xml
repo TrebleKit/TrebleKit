@@ -31,7 +31,13 @@
             android:multiprocess="false"
             android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
 
-        <service android:name=".app.MainService" />
+        <service
+            android:name=".app.MainService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="io.treblekit.ACTION" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
