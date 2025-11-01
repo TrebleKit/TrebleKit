@@ -26,10 +26,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -61,7 +60,7 @@ import io.treblekit.ui.theme.topBarPaddingExcess
 @Composable
 fun ActivityMain() {
     val pageState: PagerState = rememberPagerState { appDestination.size }
-    var showDialog: Boolean by remember { mutableStateOf(value = false) }
+    val showDialog: MutableState<Boolean> = remember { mutableStateOf(value = false) }
     AppBackground { backdrop ->
         OverlayLayer(backdrop = backdrop) {
             Scaffold(
@@ -100,14 +99,14 @@ fun ActivityMain() {
                             .fillMaxWidth()
                             .wrapContentHeight(),
                         actions = {
-                            if (showDialog) AlertDialog(
+                            if (showDialog.value) AlertDialog(
                                 onDismissRequest = {
-                                    showDialog = false
+                                    showDialog.value = false
                                 },
                                 confirmButton = {
                                     TextButton(
                                         onClick = {
-                                            showDialog = false
+                                            showDialog.value = false
                                         },
                                     ) {
                                         Text(text = "确定")
@@ -129,7 +128,7 @@ fun ActivityMain() {
                             )
                             IconButton(
                                 onClick = {
-                                    showDialog = true
+                                    showDialog.value = true
                                 },
                             ) {
                                 Icon(

@@ -178,7 +178,7 @@ fun PlatformDestination(
                     shape = ContinuousRoundedRectangle(size = 16.dp),
                     color = MaterialTheme.colorScheme.background,
                     alpha = 0.8f,
-                    bigBlock = false
+                    bigBlock = true
                 ),
         ) {
             if (!inspection) {

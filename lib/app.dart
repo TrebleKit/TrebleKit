@@ -16,20 +16,19 @@ class TrebleKitApp extends StatelessWidget {
 
   /// 主题
   ThemeData customTheme(BuildContext context, ThemeData origin) {
+    if (!isEmbed) return origin;
     return origin.copyWith(
       appBarTheme: AppBarTheme(
-        systemOverlayStyle: isEmbed
-            ? SystemUiOverlayStyle(
-                systemNavigationBarColor: Colors.transparent,
-                systemNavigationBarDividerColor: Colors.transparent,
-                systemNavigationBarIconBrightness: Brightness.light,
-                systemNavigationBarContrastEnforced: false,
-                statusBarColor: Colors.transparent,
-                statusBarBrightness: Brightness.light,
-                statusBarIconBrightness: Brightness.light,
-                systemStatusBarContrastEnforced: false,
-              )
-            : null,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          systemNavigationBarColor: Colors.transparent,
+          systemNavigationBarDividerColor: Colors.transparent,
+          systemNavigationBarIconBrightness: Brightness.light,
+          systemNavigationBarContrastEnforced: false,
+          statusBarColor: Colors.transparent,
+          statusBarBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.light,
+          systemStatusBarContrastEnforced: false,
+        ),
       ),
     );
   }

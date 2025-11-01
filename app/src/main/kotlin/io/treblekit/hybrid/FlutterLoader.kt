@@ -16,7 +16,7 @@ fun Application.loadFlutterEngine() {
         engine.dartExecutor.executeDartEntrypoint(
             DartExecutor.DartEntrypoint(
                 FlutterInjector.instance().flutterLoader().findAppBundlePath(),
-                EngineConfig.ENTRYPOINT
+                EngineConfig.ENTRYPOINT,
             )
         )
         CustomPluginRegistrant.registerWith(engine = engine)
