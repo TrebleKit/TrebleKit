@@ -17,6 +17,14 @@ import io.treblekit.app.MainService
 
 class Engine {
 
+    fun entry(activity: Activity) {
+        bridgeScope {
+            onCreateEngine(activity)
+            onCreateActivity(activity = activity)
+            onCreateLifecycle((activity as LifecycleOwner).lifecycle)
+        }
+    }
+
 
     /** Activity */
     private var mActivity: Activity? = null
