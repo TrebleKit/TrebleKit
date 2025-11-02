@@ -2,10 +2,14 @@ package io.treblekit.app
 
 import com.google.android.material.color.DynamicColors
 import com.kongzue.dialogx.DialogX
+import com.kongzue.dialogx.dialogs.PopTip
 import com.kongzue.dialogxmaterialyou.style.MaterialYouStyle
 import io.treblekit.BuildConfig
 import io.treblekit.base.BaseApplication
+import io.treblekit.common.MethodCallProxyHandler
 import io.treblekit.di.appModules
+import io.treblekit.engine.MethodCallProxy
+import io.treblekit.engine.ResultProxy
 import io.treblekit.hybrid.loadFlutterEngine
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -14,7 +18,7 @@ import org.koin.dsl.module
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import rikka.sui.Sui
 
-class MainApplication : BaseApplication() {
+class MainApplication : BaseApplication(), MethodCallProxyHandler {
 
     override fun onInitHiddenApi() {
         HiddenApiBypass.addHiddenApiExemptions("L")
@@ -41,5 +45,14 @@ class MainApplication : BaseApplication() {
         DialogX.onlyOnePopTip = false // 可以显示多个PopTip
         DialogX.onlyOnePopNotification = false // 可以显示多个通知
         DialogX.DEBUGMODE = BuildConfig.DEBUG // 调试配置
+    }
+
+    override fun onMethodCall(
+        call: MethodCallProxy,
+        result: ResultProxy,
+    ) {
+        when (call.methodProxy) {
+            "hello" -> PopTip.show("hello")
+        }
     }
 }

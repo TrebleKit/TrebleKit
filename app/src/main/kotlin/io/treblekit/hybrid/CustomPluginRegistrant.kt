@@ -9,6 +9,7 @@ object CustomPluginRegistrant {
     private const val TAG: String = "CustomPluginRegistrant"
 
     private val mPlugins: ArrayList<FlutterPlugin> = arrayListOf(
+        BridgeFlutter(),
         PlatformResources(),
         AndroidToFlutter(),
     )

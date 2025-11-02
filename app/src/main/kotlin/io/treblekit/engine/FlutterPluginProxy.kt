@@ -4,11 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.Lifecycle
+import io.treblekit.common.MethodCallProxyHandler
 
 /**
  * Flutter插件代理
  */
-interface FlutterPluginProxy {
+interface FlutterPluginProxy : MethodCallProxyHandler {
 
     /** 注册Activity引用 */
     fun onCreateActivity(activity: Activity)
@@ -39,10 +40,4 @@ interface FlutterPluginProxy {
 
     /** 引擎销毁 */
     fun onDestroyEngine()
-
-    /** 方法调用 */
-    fun onMethodCall(
-        call: MethodCallProxy,
-        result: ResultProxy,
-    )
 }

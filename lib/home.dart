@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'capsule_placeholder.dart';
 import 'platform_image.dart';
@@ -28,6 +29,13 @@ class _MyHomePageState extends State<MyHomePage> {
             FreeFEOSLogo(),
             EcosedKitLogo(),
             EbKitLogo(),
+
+            ElevatedButton(
+              onPressed: () {
+                MethodChannel("bridge_flutter").invokeMethod("hello");
+              },
+              child: Text("Hello"),
+            ),
           ],
         ),
       ),
