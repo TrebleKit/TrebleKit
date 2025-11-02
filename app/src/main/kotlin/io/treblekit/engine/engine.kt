@@ -37,7 +37,7 @@ class Engine {
     private val mBaseDebug: Boolean = BuildConfig.DEBUG
 
     /** 全局调试布尔值 */
-    private var mFullDebug: Boolean = false
+    private var mFullDebug: Boolean = true
 
     /** 此服务意图 */
     private lateinit var mEcosedServicesIntent: Intent
@@ -226,37 +226,42 @@ class Engine {
          */
         override fun onCreateEngine(context: Context) {
             if (mPluginList.isNull or mBinding.isNull) {
-                pluginScope(
+                // 初始化插件列表.
+                mPluginList = arrayListOf()
+                val binding = PluginBinding(
                     debug = mBaseDebug,
                     context = context,
-                ) { plugins, binding ->
-                    // 初始化插件列表.
-                    mPluginList = arrayListOf()
-                    // 添加所有插件.
-                    plugins.forEach { plugin ->
-                        plugin.apply {
-                            try {
-                                this@apply.onEcosedAdded(binding = binding)
-                                if (mBaseDebug) Log.d(
-                                    TAG,
-                                    "插件${this@apply.javaClass.name}已加载",
-                                )
-                            } catch (exception: Exception) {
-                                if (mBaseDebug) Log.e(
-                                    TAG,
-                                    "插件${this@apply.javaClass.name}添加失败!",
-                                    exception,
-                                )
-                            }
-                        }.run {
-                            mPluginList?.add(
-                                element = this@run
-                            )
+                    engine = this,
+                )
+                // 添加所有插件.
+                arrayListOf(
+                    mEngineBridge,
+                    mEcosedEngine,
+                    mServiceInvoke,
+                    mServiceDelegate,
+                ).forEach { plugin ->
+                    plugin.apply {
+                        try {
+                            this@apply.onEcosedAdded(binding = binding)
                             if (mBaseDebug) Log.d(
                                 TAG,
-                                "插件${this@run.javaClass.name}已添加到插件列表",
+                                "插件${this@apply.javaClass.name}已加载",
+                            )
+                        } catch (exception: Exception) {
+                            if (mBaseDebug) Log.e(
+                                TAG,
+                                "插件${this@apply.javaClass.name}添加失败!",
+                                exception,
                             )
                         }
+                    }.run {
+                        mPluginList?.add(
+                            element = this@run
+                        )
+                        if (mBaseDebug) Log.d(
+                            TAG,
+                            "插件${this@run.javaClass.name}已添加到插件列表",
+                        )
                     }
                 }
             } else {
@@ -272,16 +277,11 @@ class Engine {
          * 销毁引擎释放资源.
          */
         override fun onDestroyEngine() {
-            when {
-                mPluginList.isNotNull or mBinding.isNotNull -> {
-                    // 清空插件列表
-                    mPluginList = null
-                }
-
-                else -> if (mBaseDebug) Log.e(
-                    TAG,
-                    "请勿重复执行onDestroyEngine!",
-                ) else Unit
+            if (mPluginList.isNotNull or mBinding.isNotNull) {
+                // 清空插件列表
+                mPluginList = null
+            } else if (mBaseDebug) {
+                Log.e(TAG, "请勿重复执行onDestroyEngine!")
             }
         }
 
@@ -337,7 +337,7 @@ class Engine {
                 mPluginList?.forEach { plugin ->
                     plugin.getPluginChannel.let { pluginChannel ->
                         if (pluginChannel.getChannel() == channel) {
-                            result = pluginChannel.execMethodCall<T>(
+                            result = pluginChannel.execMethodCall(
                                 name = channel,
                                 method = method,
                                 bundle = bundle,
@@ -504,23 +504,20 @@ class Engine {
                     if (service.isNotNull and (service?.pingBinder() == true)) {
                         mAIDL = ITrebleKit.Stub.asInterface(service)
                     }
-                    when {
-                        mAIDL.isNotNull -> {
-                            mIsBind = true
-                            invokeScope {
-                                onEcosedConnected()
-                            }
+                    if (mAIDL.isNotNull) {
+                        mIsBind = true
+                        invokeScope {
+                            onEcosedConnected()
                         }
-
-                        else -> if (mFullDebug) Log.e(
-                            TAG, "AIDL接口获取失败 - onServiceConnected"
-                        )
-                    }
-                    when {
-                        mFullDebug -> Log.i(
+                    } else if (mFullDebug) Log.e(
+                        TAG, "AIDL接口获取失败 - onServiceConnected"
+                    )
+                    if (mFullDebug) {
+                        Log.i(
                             TAG, "服务已连接 - onServiceConnected"
                         )
                     }
+
                 }
 
                 else -> {
