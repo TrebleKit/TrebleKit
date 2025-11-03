@@ -4,22 +4,21 @@ import android.os.Bundle
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.treblekit.common.MethodCallProxyHandler
+import io.treblekit.common.ProxyHandler
 import io.treblekit.engine.MethodCallProxy
 import io.treblekit.engine.ResultProxy
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class BridgeFlutter : FlutterPlugin, MethodChannel.MethodCallHandler {
+class BridgeFlutter : FlutterPlugin, MethodChannel.MethodCallHandler, KoinComponent {
 
-    private lateinit var mProxyHandler: MethodCallProxyHandler
+    /** 方法通道 */
     private lateinit var mChannel: MethodChannel
 
+    /** koin依赖注入 */
+    private val mProxyHandler: ProxyHandler by inject<ProxyHandler>()
+
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        val app = binding.applicationContext
-        if (app is MethodCallProxyHandler) {
-            mProxyHandler = app
-        } else {
-            error("应用全局类必须实现MethodCallProxyHandler接口")
-        }
         mChannel = MethodChannel(binding.binaryMessenger, BRIDGE_FLUTTER_CHANNEL)
         mChannel.setMethodCallHandler(this@BridgeFlutter)
     }

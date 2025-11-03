@@ -4,12 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.Lifecycle
-import io.treblekit.common.MethodCallProxyHandler
+import io.treblekit.common.ProxyHandler
 
 /**
  * Flutter插件代理
  */
-interface FlutterPluginProxy : MethodCallProxyHandler {
+interface FlutterPluginProxy : ProxyHandler {
 
     /** 注册Activity引用 */
     fun onCreateActivity(activity: Activity)

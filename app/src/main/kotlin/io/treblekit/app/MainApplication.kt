@@ -6,34 +6,49 @@ import com.kongzue.dialogx.dialogs.PopTip
 import com.kongzue.dialogxmaterialyou.style.MaterialYouStyle
 import io.treblekit.BuildConfig
 import io.treblekit.base.BaseApplication
-import io.treblekit.common.MethodCallProxyHandler
+import io.treblekit.common.ProxyHandler
 import io.treblekit.di.appModules
+import io.treblekit.di.bridgeFlutter
 import io.treblekit.engine.MethodCallProxy
 import io.treblekit.engine.ResultProxy
 import io.treblekit.hybrid.loadFlutterEngine
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import org.koin.dsl.module
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import rikka.sui.Sui
 
-class MainApplication : BaseApplication(), MethodCallProxyHandler {
+class MainApplication : BaseApplication() {
+
+    private val mProxy: ProxyHandler = object : ProxyHandler {
+
+        override fun onMethodCall(
+            call: MethodCallProxy,
+            result: ResultProxy,
+        ) {
+            when (call.methodProxy) {
+                "hello" -> PopTip.show("hello")
+                else -> result.notImplemented()
+            }
+        }
+    }
 
     override fun onInitHiddenApi() {
         HiddenApiBypass.addHiddenApiExemptions("L")
     }
 
     override fun onInitDependence() {
+        // 应用全局动态颜色
         DynamicColors.applyToActivitiesIfAvailable(this@MainApplication)
-        loadFlutterEngine() // 初始化Flutter引擎
-        Sui.init(BuildConfig.APPLICATION_ID)
         startKoin {
             androidLogger()
-            androidContext(this@MainApplication)
+            androidContext(androidContext = this@MainApplication)
+            bridgeFlutter(proxy = mProxy)
             modules(appModules)
-            modules(module { single { this@MainApplication } })
         }
+        // 初始化Flutter引擎
+        loadFlutterEngine()
+        Sui.init(BuildConfig.APPLICATION_ID)
     }
 
     override fun onInitAsync() {
@@ -45,14 +60,5 @@ class MainApplication : BaseApplication(), MethodCallProxyHandler {
         DialogX.onlyOnePopTip = false // 可以显示多个PopTip
         DialogX.onlyOnePopNotification = false // 可以显示多个通知
         DialogX.DEBUGMODE = BuildConfig.DEBUG // 调试配置
-    }
-
-    override fun onMethodCall(
-        call: MethodCallProxy,
-        result: ResultProxy,
-    ) {
-        when (call.methodProxy) {
-            "hello" -> PopTip.show("hello")
-        }
     }
 }
