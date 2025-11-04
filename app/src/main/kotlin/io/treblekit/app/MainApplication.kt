@@ -9,6 +9,7 @@ import io.treblekit.base.BaseApplication
 import io.treblekit.common.ProxyHandler
 import io.treblekit.di.appModules
 import io.treblekit.di.bridgeFlutter
+import io.treblekit.engine.EcosedPlugin
 import io.treblekit.engine.MethodCallProxy
 import io.treblekit.engine.ResultProxy
 import io.treblekit.hybrid.loadFlutterEngine
@@ -20,17 +21,42 @@ import rikka.sui.Sui
 
 class MainApplication : BaseApplication() {
 
-    private val mProxy: ProxyHandler = object : ProxyHandler {
+    private val mProxy: ProxyHandler = object : EcosedPlugin(), ProxyHandler {
 
         override fun onMethodCall(
             call: MethodCallProxy,
             result: ResultProxy,
         ) {
+//            try {
+//                result.success(
+//                    resultProxy = execPluginMethod(
+//                        channel = call.bundleProxy.getString("channel") ?: error(message = ""),
+//                        method = call.methodProxy,
+//                        bundle = call.bundleProxy,
+//                    ),
+//                )
+//            } catch (e: Exception) {
+//                result.error(
+//                    errorCodeProxy = "",
+//                    errorMessageProxy = "",
+//                    errorDetailsProxy = e,
+//                )
+//            }
+
             when (call.methodProxy) {
                 "hello" -> PopTip.show("hello")
                 else -> result.notImplemented()
             }
         }
+
+        override val title: String
+            get() = TODO("Not yet implemented")
+        override val channel: String
+            get() = TODO("Not yet implemented")
+        override val author: String
+            get() = TODO("Not yet implemented")
+        override val description: String
+            get() = TODO("Not yet implemented")
     }
 
     override fun onInitHiddenApi() {
