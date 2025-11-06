@@ -56,7 +56,7 @@ fun AppBackground(
                         }
                     },
             ) {
-                getEffectView // 流光背景效果
+                effectView // 流光背景效果
             }
         }
         // 前景内容

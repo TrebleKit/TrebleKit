@@ -27,7 +27,7 @@ fun rememberCapsulePadding(excess: Dp = 0.dp): PaddingValues {
 
             activity != null && activity is FactoryHost -> with(receiver = density) {
                 val factory = (activity as? FactoryHost)?.getViewFactory
-                val system = (factory?.getOverlayView?.paddingRight ?: 0).toDp()
+                val system = (factory?.overlayView?.paddingRight ?: 0).toDp()
                 return@with (basePadding + system) - excess
             }
 

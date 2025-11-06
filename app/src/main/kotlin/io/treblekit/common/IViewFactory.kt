@@ -6,8 +6,8 @@ import io.treblekit.ui.view.HybridComposeView
 import io.treblekit.ui.view.OverlayView
 
 interface IViewFactory {
-    val getContentView: HybridComposeView
-    val getOverlayView: OverlayView
-    val getWrapperView: FlutterWrapperView
-    val getEffectView: StreamerEffectView
+    val contentView: HybridComposeView
+    val overlayView: OverlayView
+    val wrapperView: FlutterWrapperView
+    val effectView: StreamerEffectView
 }

@@ -1,6 +1,5 @@
 package io.treblekit.ui.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,7 +40,7 @@ fun OverlayLayer(
             ViewFactory(
                 modifier = Modifier.fillMaxSize()
             ) {
-                getOverlayView // 叠加层视图
+                overlayView // 叠加层视图
             }
         } else {
             // 检查模式下, 显示胶囊按钮

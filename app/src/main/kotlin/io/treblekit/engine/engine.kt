@@ -756,38 +756,6 @@ class Engine {
     )
 
     /**
-     * 插件调用单元
-     * 插件初始化
-     * @param context 上下文
-     * @param content 插件列表单元, 插件绑定器
-     * @return content 返回值
-     */
-    private fun <R> pluginScope(
-        context: Context,
-        debug: Boolean,
-        content: (ArrayList<EcosedPlugin>, PluginBinding) -> R,
-    ): R = content.invoke(
-        arrayListOf(
-            mEngineBridge,
-            mEcosedEngine,
-            mServiceInvoke,
-            mServiceDelegate,
-        ),
-        PluginBinding(
-            debug = debug,
-            context = context,
-            engine = mEcosedEngine.run {
-                return@run when (this@run) {
-                    is EngineWrapper -> this@run
-                    else -> error(
-                        message = "引擎未实现引擎包装器方法"
-                    )
-                }
-            },
-        ),
-    )
-
-    /**
      * 客户端回调调用单元
      * 绑定解绑调用客户端回调
      * @param content 客户端回调单元

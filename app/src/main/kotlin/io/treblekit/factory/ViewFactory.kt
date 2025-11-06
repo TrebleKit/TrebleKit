@@ -9,19 +9,19 @@ import io.treblekit.ui.view.OverlayView
 
 class ViewFactory(activity: FragmentActivity) : IViewFactory {
 
-    override val getContentView: HybridComposeView by lazy {
+    override val contentView: HybridComposeView by lazy {
         return@lazy HybridComposeView(context = activity)
     }
 
-    override val getOverlayView: OverlayView by lazy {
+    override val overlayView: OverlayView by lazy {
         return@lazy OverlayView(context = activity)
     }
 
-    override val getEffectView: StreamerEffectView by lazy {
+    override val effectView: StreamerEffectView by lazy {
         return@lazy StreamerEffectView(context = activity)
     }
 
-    override val getWrapperView: FlutterWrapperView by lazy {
+    override val wrapperView: FlutterWrapperView by lazy {
         return@lazy FlutterWrapperView(context = activity)
     }
 }

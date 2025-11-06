@@ -11,7 +11,7 @@ fun FlutterView(modifier: Modifier = Modifier) {
     ViewFactory(
         modifier = modifier.fillMaxSize(),
     ) {
-        getWrapperView
+        wrapperView
     }
 }
 

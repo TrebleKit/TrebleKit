@@ -12,7 +12,7 @@ import io.treblekit.hybrid.HybridActivity
 abstract class ComposableActivity : HybridActivity(), FactoryHost {
 
     override fun resetContentView(): View? {
-        return getViewFactory.getContentView
+        return getViewFactory.contentView
     }
 
     override val getViewFactory: IViewFactory by lazy {
@@ -22,7 +22,7 @@ abstract class ComposableActivity : HybridActivity(), FactoryHost {
     override fun initViews() {
         super.initViews()
         Engine().entry(this)
-        getViewFactory.getContentView.setContent {
+        getViewFactory.contentView.setContent {
             Content()
         }
     }

@@ -5,6 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import io.treblekit.base.ComposableActivity
+import io.treblekit.common.IViewFactory
+import io.treblekit.factory.ViewFactory
 import io.treblekit.ui.activity.ActivityMain
 import io.treblekit.ui.theme.TrebleKitTheme
 
