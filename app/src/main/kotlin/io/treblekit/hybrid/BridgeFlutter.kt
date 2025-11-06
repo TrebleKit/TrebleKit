@@ -31,42 +31,46 @@ class BridgeFlutter : FlutterPlugin, MethodChannel.MethodCallHandler, KoinCompon
         call: MethodCall,
         result: MethodChannel.Result,
     ) {
-        mProxyHandler.onMethodCall(
-            call = object : MethodCallProxy {
+        try {
+            mProxyHandler.onMethodCall(
+                call = object : MethodCallProxy {
 
-                override val methodProxy: String
-                    get() = call.method
+                    override val methodProxy: String
+                        get() = call.method
 
-                override val bundleProxy: Bundle
-                    get() = Bundle().let { bundle ->
-                        bundle.putString(
-                            "channel",
-                            call.argument<String>("channel"),
-                        )
-                        return@let bundle
-                    }
-            },
-            result = object : ResultProxy {
+                    override val bundleProxy: Bundle
+                        get() = Bundle().let { bundle ->
+                            bundle.putString(
+                                "channel",
+                                call.argument<String>("channel"),
+                            )
+                            return@let bundle
+                        }
+                },
+                result = object : ResultProxy {
 
-                override fun success(
-                    resultProxy: Any?,
-                ) = result.success(
-                    resultProxy
-                )
+                    override fun success(
+                        resultProxy: Any?,
+                    ) = result.success(
+                        resultProxy,
+                    )
 
-                override fun error(
-                    errorCodeProxy: String,
-                    errorMessageProxy: String?,
-                    errorDetailsProxy: Any?,
-                ) = result.error(
-                    errorCodeProxy,
-                    errorMessageProxy,
-                    errorDetailsProxy,
-                )
+                    override fun error(
+                        errorCodeProxy: String,
+                        errorMessageProxy: String?,
+                        errorDetailsProxy: Any?,
+                    ) = result.error(
+                        errorCodeProxy,
+                        errorMessageProxy,
+                        errorDetailsProxy,
+                    )
 
-                override fun notImplemented() = result.notImplemented()
-            },
-        )
+                    override fun notImplemented() = result.notImplemented()
+                },
+            )
+        } catch (e: Exception) {
+            result.error("", "", e)
+        }
     }
 
     private companion object {

@@ -4,15 +4,14 @@ import io.treblekit.common.ProxyHandler
 import org.koin.core.KoinApplication
 import org.koin.dsl.module
 
-fun KoinApplication.bridgeFlutter(proxy: ProxyHandler): KoinApplication {
-    koin.loadModules(
-        modules = listOf(
-            module {
-                single<ProxyHandler> {
-                    return@single proxy
-                }
+fun KoinApplication.bridgeFlutter(handler: ProxyHandler): KoinApplication {
+    return this@bridgeFlutter.apply {
+        module {
+            single<ProxyHandler> {
+                return@single handler
             }
-        ),
-    )
-    return this
+        }.let { module ->
+            koin.loadModules(modules = arrayListOf(module))
+        }
+    }
 }

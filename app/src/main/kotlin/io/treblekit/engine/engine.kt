@@ -59,10 +59,6 @@ class Engine {
         override val channel: String
             get() = EcosedChannel.BRIDGE_CHANNEL_NAME
 
-        /** 插件作者 */
-        override val author: String
-            get() = EcosedResources.DEFAULT_AUTHOR
-
         /** 插件描述 */
         override val description: String
             get() = "FlutterEngine与EcosedEngine通信的的桥梁"
@@ -141,10 +137,6 @@ class Engine {
         /** 插件通道 */
         override val channel: String
             get() = EcosedChannel.ENGINE_CHANNEL_NAME
-
-        /** 插件作者 */
-        override val author: String
-            get() = EcosedResources.DEFAULT_AUTHOR
 
         /** 插件描述 */
         override val description: String
@@ -373,10 +365,6 @@ class Engine {
         override val channel: String
             get() = EcosedChannel.INVOKE_CHANNEL_NAME
 
-        /** 插件作者 */
-        override val author: String
-            get() = EcosedResources.DEFAULT_AUTHOR
-
         /** 插件描述 */
         override val description: String
             get() = "负责与服务通信的服务调用"
@@ -455,10 +443,6 @@ class Engine {
         /** 插件通道 */
         override val channel: String
             get() = EcosedChannel.DELEGATE_CHANNEL_NAME
-
-        /** 插件作者 */
-        override val author: String
-            get() = EcosedResources.DEFAULT_AUTHOR
 
         /** 插件描述 */
         override val description: String

@@ -8,6 +8,7 @@ import io.treblekit.BuildConfig
 import io.treblekit.base.BaseApplication
 import io.treblekit.common.ProxyHandler
 import io.treblekit.di.appModules
+import io.treblekit.di.appleModules
 import io.treblekit.di.bridgeFlutter
 import io.treblekit.engine.EcosedPlugin
 import io.treblekit.engine.MethodCallProxy
@@ -53,8 +54,6 @@ class MainApplication : BaseApplication() {
             get() = TODO("Not yet implemented")
         override val channel: String
             get() = TODO("Not yet implemented")
-        override val author: String
-            get() = TODO("Not yet implemented")
         override val description: String
             get() = TODO("Not yet implemented")
     }
@@ -69,8 +68,8 @@ class MainApplication : BaseApplication() {
         startKoin {
             androidLogger()
             androidContext(androidContext = this@MainApplication)
-            bridgeFlutter(proxy = mProxy)
-            modules(appModules)
+            bridgeFlutter(handler = mProxy)
+            appleModules()
         }
         // 初始化Flutter引擎
         loadFlutterEngine()

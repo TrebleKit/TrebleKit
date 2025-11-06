@@ -58,8 +58,8 @@ abstract class EcosedPlugin : ContextWrapper(null) {
     /** 需要子类重写的通道名称 */
     abstract val channel: String
 
-    /** 需要子类重写的插件作者 */
-    abstract val author: String
+//    /** 需要子类重写的插件作者 */
+//    abstract val author: String
 
     /** 需要子类重写的插件描述 */
     abstract val description: String
