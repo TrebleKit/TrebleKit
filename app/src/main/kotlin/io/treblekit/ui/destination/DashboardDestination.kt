@@ -366,8 +366,6 @@ fun ControlCard(
                         textAlign = TextAlign.Center,
                     )
                 }
-
-
             }
         }
     }

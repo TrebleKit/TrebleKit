@@ -7,7 +7,6 @@ import com.kongzue.dialogxmaterialyou.style.MaterialYouStyle
 import io.treblekit.BuildConfig
 import io.treblekit.base.BaseApplication
 import io.treblekit.common.ProxyHandler
-import io.treblekit.di.appModules
 import io.treblekit.di.appleModules
 import io.treblekit.di.bridgeFlutter
 import io.treblekit.engine.EcosedPlugin

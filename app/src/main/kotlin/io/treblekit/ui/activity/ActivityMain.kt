@@ -29,13 +29,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.treblekit.R
@@ -51,6 +51,7 @@ import io.treblekit.ui.destination.UnknownDestination
 import io.treblekit.ui.navigation.DashboardDestination
 import io.treblekit.ui.navigation.PlatformDestination
 import io.treblekit.ui.navigation.appDestination
+import io.treblekit.ui.preview.ActivityPreview
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.theme.androidGreen
 import io.treblekit.ui.theme.capsuleEdgePadding
@@ -126,29 +127,39 @@ fun ActivityMain() {
                                     Text(text = "Android API ${Build.VERSION.SDK_INT}")
                                 },
                             )
-                            IconButton(
-                                onClick = {
-                                    showDialog.value = true
-                                },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.Android,
-                                    contentDescription = null,
-                                    tint = androidGreen,
-                                )
-                            }
-                            Text(
+                            Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .wrapContentHeight(),
-                                text = stringResource(id = R.string.android),
-                                style = MaterialTheme.typography.titleMedium,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 16.sp,
-                                textAlign = TextAlign.Left,
-                            )
+                                    .wrapContentHeight()
+                                    .padding(end = 8.dp),
+                                horizontalArrangement = Arrangement.Start,
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                IconButton(
+                                    onClick = {
+                                        showDialog.value = true
+                                    },
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Android,
+                                        contentDescription = null,
+                                        tint = androidGreen,
+                                    )
+                                }
+                                Text(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentHeight(),
+                                    text = stringResource(id = R.string.android),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    fontSize = 16.sp,
+                                    textAlign = TextAlign.Left,
+                                )
+                            }
+
                         },
                         floatingActionButton = {
                             Row(
@@ -204,7 +215,7 @@ fun ActivityMain() {
     }
 }
 
-@Preview
+@ActivityPreview
 @Composable
 private fun ActivityMainPreview() {
     TrebleKitTheme {
