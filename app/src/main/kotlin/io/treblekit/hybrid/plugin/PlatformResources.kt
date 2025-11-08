@@ -12,7 +12,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.treblekit.R
 import java.io.ByteArrayOutputStream
 
-class PlatformResources : FlutterPlugin, MethodChannel.MethodCallHandler {
+internal class PlatformResources : FlutterPlugin, MethodChannel.MethodCallHandler {
 
     /** 方法通道 */
     private lateinit var mChannel: MethodChannel

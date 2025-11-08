@@ -1,9 +1,11 @@
-package io.treblekit.hybrid
+package io.treblekit.hybrid.base
 
 import android.content.Intent
 import io.flutter.embedding.android.FlutterFragment
+import io.flutter.embedding.android.RenderMode
 import io.treblekit.base.BaseActivity
 import io.treblekit.common.FlutterHost
+import io.treblekit.hybrid.config.EngineConfig
 
 abstract class HybridActivity : BaseActivity(), FlutterHost {
 
@@ -13,7 +15,11 @@ abstract class HybridActivity : BaseActivity(), FlutterHost {
         get() = mFlutterFragment
 
     override fun initFlutter() {
-        mFlutterFragment = loadEmbedFragment()
+        mFlutterFragment = FlutterFragment.withCachedEngine(
+            EngineConfig.ENGINE_ID,
+        ).renderMode(
+            RenderMode.texture,
+        ).build()
     }
 
     override fun onPostResume() {

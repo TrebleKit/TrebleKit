@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import io.flutter.embedding.android.FlutterFragment
 import io.treblekit.common.FlutterHost
 
 class FlutterWrapperView @JvmOverloads constructor(
@@ -21,7 +20,7 @@ class FlutterWrapperView @JvmOverloads constructor(
     private val mFragmentActivity: FragmentActivity
 
     /** FlutterFragment */
-    private val mFlutterFragment: FlutterFragment
+    private val mFlutterFragment: Fragment
 
     init {
         if (context is FragmentActivity && context is FlutterHost) {

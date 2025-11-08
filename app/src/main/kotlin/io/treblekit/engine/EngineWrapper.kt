@@ -1,6 +1,5 @@
 package io.treblekit.engine
 
-import android.content.Context
 import android.os.Bundle
 import org.koin.core.component.KoinComponent
 
@@ -10,7 +9,7 @@ import org.koin.core.component.KoinComponent
 interface EngineWrapper : KoinComponent {
 
     /** 引擎初始化 */
-    fun onCreateEngine(context: Context)
+    fun onCreateEngine()
 
     /** 引擎销毁 */
     fun onDestroyEngine()

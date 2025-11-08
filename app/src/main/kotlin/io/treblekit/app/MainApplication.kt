@@ -1,12 +1,12 @@
 package io.treblekit.app
 
+import com.blankj.utilcode.util.LogUtils
 import com.google.android.material.color.DynamicColors
 import com.kongzue.dialogx.DialogX
 import com.kongzue.dialogxmaterialyou.style.MaterialYouStyle
 import io.treblekit.BuildConfig
 import io.treblekit.base.BaseApplication
-import io.treblekit.di.appleModules
-import io.treblekit.di.bridgeFlutter
+import io.treblekit.di.init.applyModules
 import io.treblekit.engine.loadTrebleEngine
 import io.treblekit.hybrid.loadFlutterEngine
 import org.koin.android.ext.koin.androidContext
@@ -28,8 +28,7 @@ class MainApplication : BaseApplication() {
         startKoin {
             androidLogger()
             androidContext(androidContext = this@MainApplication)
-            bridgeFlutter()
-            appleModules()
+            applyModules()
         }
         // 初始化Treble引擎
         loadTrebleEngine()
@@ -37,6 +36,8 @@ class MainApplication : BaseApplication() {
         loadFlutterEngine()
         // 初始化Sui
         Sui.init(BuildConfig.APPLICATION_ID)
+
+        LogUtils.i("onInitDependence")
     }
 
     override fun onInitAsync() {

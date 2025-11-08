@@ -12,25 +12,24 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import com.blankj.utilcode.util.LogUtils
 import com.kongzue.dialogx.dialogs.PopTip
 import io.treblekit.BuildConfig
 import io.treblekit.aidl.ITrebleKit
 import io.treblekit.app.MainService
-import io.treblekit.di.PLUGIN_INSERT_NAMED
+import io.treblekit.bridge.PlatformConnector
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
 
-fun Application.loadTrebleEngine() {
-    Engine().entry(this)
+fun loadTrebleEngine() {
+    Engine().entry()
 }
 
 
 class Engine {
 
-    fun entry(context: Context) {
-        engineScope {
-            onCreateEngine(context)
-        }
+    fun entry() {
+        mEcosedEngine.onCreateEngine()
     }
 
 
@@ -54,10 +53,21 @@ class Engine {
 
 
     /** 引擎 */
-    private val mEcosedEngine: EcosedPlugin = object : EcosedPlugin(), EngineWrapper {
+    private val mEcosedEngine = object : EcosedPlugin(), EngineWrapper {
+
+        private val mPlugins: ArrayList<EcosedPlugin> by lazy {
+            return@lazy arrayListOf(mServiceInvoke, mServiceDelegate)
+        }
 
         /** 供引擎使用的基本调试布尔值 */
         private val mBaseDebug: Boolean = BuildConfig.DEBUG
+
+        // 通过依赖注入获取到应用程序全局上下文
+        private val mContext: Context by inject<Context>()
+        // 通过依赖注入获取到连接器插件
+        private val mConnector: EcosedPlugin by inject<EcosedPlugin>(
+            qualifier = named(name = PlatformConnector.EBKIT_PLUGIN_NAMED),
+        )
 
         /** 插件绑定器. */
         private var mBinding: PluginBinding? = null
@@ -83,7 +93,7 @@ class Engine {
         override fun onEcosedAdded(binding: PluginBinding): Unit = run {
             super.onEcosedAdded(binding)
             // 设置来自插件的全局调试布尔值
-            mFullDebug = this@run.isDebug
+//            mFullDebug = this@run.isDebug
         }
 
         override fun onEcosedMethodCall(call: EcosedMethodCall, result: EcosedResult) {
@@ -118,47 +128,48 @@ class Engine {
          * 引擎初始化.
          * @param context 上下文 - 此上下文来自FlutterPlugin的ApplicationContext
          */
-        override fun onCreateEngine(context: Context) {
+        override fun onCreateEngine() {
             if (mPluginList.isNull or mBinding.isNull) {
                 // 初始化插件列表.
                 mPluginList = arrayListOf()
-                val bridge: EcosedPlugin by inject<EcosedPlugin>(
-                    qualifier = named(name = PLUGIN_INSERT_NAMED),
-                )
-                val binding = PluginBinding(
+                // 初始化插件绑定
+                mBinding = PluginBinding(
                     debug = mBaseDebug,
-                    context = context,
+                    context = mContext,
                     engine = this,
                 )
                 // 添加所有插件.
-                arrayListOf(
-                    bridge,
-                    mEcosedEngine,
-                    mServiceInvoke,
-                    mServiceDelegate,
-                ).forEach { plugin ->
+                arrayListOf(this, mConnector).apply {
+                    addAll(mPlugins)
+                }.forEach { plugin ->
                     plugin.apply {
                         try {
-                            this@apply.onEcosedAdded(binding = binding)
-                            if (mBaseDebug) Log.d(
-                                TAG,
-                                "插件${this@apply.javaClass.name}已加载",
-                            )
+                            this@apply.onEcosedAdded(binding = mBinding!!)
+                            if (mBaseDebug) {
+                                Log.d(
+                                    TAG,
+                                    "插件${this@apply.javaClass.name}已加载",
+                                )
+                            }
                         } catch (exception: Exception) {
-                            if (mBaseDebug) Log.e(
-                                TAG,
-                                "插件${this@apply.javaClass.name}添加失败!",
-                                exception,
-                            )
+                            if (mBaseDebug) {
+                                Log.e(
+                                    TAG,
+                                    "插件${this@apply.javaClass.name}添加失败!",
+                                    exception,
+                                )
+                            }
                         }
                     }.run {
                         mPluginList?.add(
                             element = this@run
                         )
-                        if (mBaseDebug) Log.d(
-                            TAG,
-                            "插件${this@run.javaClass.name}已添加到插件列表",
-                        )
+                        if (mBaseDebug) {
+                            Log.d(
+                                TAG,
+                                "插件${this@run.javaClass.name}已添加到插件列表",
+                            )
+                        }
                     }
                 }
             } else {

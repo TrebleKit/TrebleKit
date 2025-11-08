@@ -1,6 +1,7 @@
 package io.treblekit.base
 
 import android.graphics.Color
+import android.view.View
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.WindowCompat
@@ -9,9 +10,17 @@ import com.kongzue.baseframework.util.JumpParameter
 
 abstract class BaseActivity : BaseActivity() {
 
+    private var mView: View? = null
+
+    override fun resetContentView(): View? {
+        mView = onCreateView()
+        return mView
+    }
+
     override fun initViews() {
         edgeToEdge()
         initFlutter()
+        onViewCreated(view = mView)
     }
 
     override fun initDatas(p0: JumpParameter?) {
@@ -39,6 +48,10 @@ abstract class BaseActivity : BaseActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         window.isNavigationBarContrastEnforced = false
     }
+
+    abstract fun onCreateView(): View
+
+    abstract fun onViewCreated(view: View?)
 
     /**
      * 抽象接口定义

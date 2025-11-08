@@ -1,7 +1,7 @@
 package io.treblekit.common
 
-import io.flutter.embedding.android.FlutterFragment
+import androidx.fragment.app.Fragment
 
 interface FlutterHost {
-    val getFlutterFragment: FlutterFragment?
+    val getFlutterFragment: Fragment?
 }
