@@ -7,6 +7,8 @@ import io.flutter.embedding.android.RenderMode
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
+import io.treblekit.hybrid.config.EngineConfig
+import io.treblekit.hybrid.register.CustomPluginRegistrant
 
 /**
  * 初始化Flutter引擎

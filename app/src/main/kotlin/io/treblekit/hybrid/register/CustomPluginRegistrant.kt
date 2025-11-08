@@ -1,17 +1,25 @@
-package io.treblekit.hybrid
+package io.treblekit.hybrid.register
 
 import android.util.Log
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.treblekit.hybrid.plugin.AndroidToFlutter
+import io.treblekit.hybrid.plugin.EcosedBridge
+import io.treblekit.hybrid.plugin.PlatformResources
 
-object CustomPluginRegistrant {
+/**
+ * 自定义Flutter插件注册器
+ */
+internal object CustomPluginRegistrant {
 
+    /** 注册器日志标签 */
     private const val TAG: String = "CustomPluginRegistrant"
 
+    /** 插件列表 */
     private val mPlugins: ArrayList<FlutterPlugin> = arrayListOf(
-        BridgeFlutter(),
-        PlatformResources(),
-        AndroidToFlutter(),
+        PlatformResources(), // 平台资源
+        EcosedBridge(), // EbKit 桥接
+        AndroidToFlutter(), // Android 到 Flutter 通信
     )
 
     /**

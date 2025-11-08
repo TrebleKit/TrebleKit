@@ -35,7 +35,7 @@
             android:name=".app.MainService"
             android:exported="false">
             <intent-filter>
-                <action android:name="io.treblekit.ACTION" />
+                <action android:name="io.treblekit.action" />
             </intent-filter>
         </service>
 

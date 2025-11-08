@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.UiComposable
 import io.treblekit.common.FactoryHost
 import io.treblekit.common.IViewFactory
-import io.treblekit.engine.Engine
 import io.treblekit.factory.ViewFactory
 import io.treblekit.hybrid.HybridActivity
 
@@ -21,7 +20,6 @@ abstract class ComposableActivity : HybridActivity(), FactoryHost {
 
     override fun initViews() {
         super.initViews()
-        Engine().entry(this)
         getViewFactory.contentView.setContent {
             Content()
         }

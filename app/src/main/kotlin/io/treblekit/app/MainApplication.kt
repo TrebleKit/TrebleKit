@@ -2,17 +2,12 @@ package io.treblekit.app
 
 import com.google.android.material.color.DynamicColors
 import com.kongzue.dialogx.DialogX
-import com.kongzue.dialogx.dialogs.PopTip
 import com.kongzue.dialogxmaterialyou.style.MaterialYouStyle
 import io.treblekit.BuildConfig
 import io.treblekit.base.BaseApplication
-import io.treblekit.common.ProxyHandler
 import io.treblekit.di.appleModules
 import io.treblekit.di.bridgeFlutter
-import io.treblekit.engine.EcosedPlugin
-import io.treblekit.engine.MethodCallProxy
-import io.treblekit.engine.ResultProxy
-import io.treblekit.hybrid.BridgeFlutter
+import io.treblekit.engine.loadTrebleEngine
 import io.treblekit.hybrid.loadFlutterEngine
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -22,44 +17,6 @@ import rikka.sui.Sui
 
 class MainApplication : BaseApplication() {
 
-    private val mProxy: ProxyHandler = object : EcosedPlugin(), ProxyHandler {
-
-        override fun onMethodCall(
-            call: MethodCallProxy,
-            result: ResultProxy,
-        ) {
-//            try {
-//                result.success(
-//                    resultProxy = execPluginMethod(
-//                        channel = call.bundleProxy.getString(
-//                            BridgeFlutter.CHANNEL_FLAG
-//                        ) ?: error(message = ""),
-//                        method = call.methodProxy,
-//                        bundle = call.bundleProxy,
-//                    ),
-//                )
-//            } catch (e: Exception) {
-//                result.error(
-//                    errorCodeProxy = "",
-//                    errorMessageProxy = "",
-//                    errorDetailsProxy = e,
-//                )
-//            }
-
-            when (call.methodProxy) {
-                "hello" -> PopTip.show("hello")
-                else -> result.notImplemented()
-            }
-        }
-
-        override val title: String
-            get() = TODO("Not yet implemented")
-        override val channel: String
-            get() = TODO("Not yet implemented")
-        override val description: String
-            get() = TODO("Not yet implemented")
-    }
-
     override fun onInitHiddenApi() {
         HiddenApiBypass.addHiddenApiExemptions("L")
     }
@@ -67,14 +24,18 @@ class MainApplication : BaseApplication() {
     override fun onInitDependence() {
         // 应用全局动态颜色
         DynamicColors.applyToActivitiesIfAvailable(this@MainApplication)
+        // 初始化Koin依赖注入
         startKoin {
             androidLogger()
             androidContext(androidContext = this@MainApplication)
-            bridgeFlutter(handler = mProxy)
+            bridgeFlutter()
             appleModules()
         }
+        // 初始化Treble引擎
+        loadTrebleEngine()
         // 初始化Flutter引擎
         loadFlutterEngine()
+        // 初始化Sui
         Sui.init(BuildConfig.APPLICATION_ID)
     }
 

@@ -1,11 +1,19 @@
 package io.treblekit.engine
 
+import android.content.Context
 import android.os.Bundle
+import org.koin.core.component.KoinComponent
 
 /**
  * 引擎包装器
  */
-interface EngineWrapper : FlutterPluginProxy {
+interface EngineWrapper : KoinComponent {
+
+    /** 引擎初始化 */
+    fun onCreateEngine(context: Context)
+
+    /** 引擎销毁 */
+    fun onDestroyEngine()
 
     /**
      * 执行方法

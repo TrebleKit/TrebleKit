@@ -7,37 +7,43 @@ import android.widget.Toast
 import com.blankj.utilcode.util.AppUtils
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import io.treblekit.engine.Engine.Companion.TAG
+
+/** 谷歌基础服务包名 */
+private const val GMS_PACKAGE: String = "com.google.android.gms"
+
+private const val GMS_CLASS: String = "com.google.android.gms.app.settings.GoogleSettingsLink"
+
+private const val TAG: String = "GMSUtils"
 
 /**
  * 判断是否支持谷歌基础服务
  */
-fun isSupportGMS(context: Context): Boolean {
+fun Context.isSupportGMS(): Boolean {
     return if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(
-            context
+            this@isSupportGMS
         ) == ConnectionResult.SUCCESS
     ) true else AppUtils.isAppInstalled(
-        EcosedManifest.GMS_PACKAGE
+        GMS_PACKAGE
     )
 }
 
-fun gms(context: Context) {
+fun Context.launchGMS() {
     try {
         val intent = Intent(Intent.ACTION_MAIN)
-        intent.setPackage(EcosedManifest.GMS_PACKAGE)
+        intent.setPackage(GMS_PACKAGE)
         try {
-            context.startActivity(intent)
+            startActivity(intent)
         } catch (e: Exception) {
             Log.w(TAG, "不存在可启动的默认活动")
             intent.setClassName(
-                EcosedManifest.GMS_PACKAGE,
-                context.packageManager.resolveActivity(intent, 0)!!.activityInfo.name
+                GMS_PACKAGE,
+                packageManager.resolveActivity(intent, 0)!!.activityInfo.name
             )
-            context.startActivity(intent)
+            startActivity(intent)
         }
-        Toast.makeText(context, "已安装", Toast.LENGTH_LONG).show()
+        Toast.makeText(this@launchGMS, "已安装", Toast.LENGTH_LONG).show()
     } catch (e: Exception) {
         Log.w(TAG, "microG设置启动失败", e)
-        Toast.makeText(context, "未安装", Toast.LENGTH_LONG).show()
+        Toast.makeText(this@launchGMS, "未安装", Toast.LENGTH_LONG).show()
     }
 }

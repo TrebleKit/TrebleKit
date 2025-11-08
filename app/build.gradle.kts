@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.kyant.capsule)
     implementation(libs.kyant.backdrop)
     implementation(libs.blankj.utilcodex)
+    implementation(platform(libs.insert.koin.bom))
     implementation(libs.insert.koin.core)
     implementation(libs.insert.koin.android)
     implementation(libs.insert.koin.compose)

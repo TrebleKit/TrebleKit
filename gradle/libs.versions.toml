@@ -24,7 +24,7 @@ hiddenapibypass = "6.1"
 utilcodex = "1.31.1"
 backdrop = "1.0.0"
 capsule = "2.1.1"
-koin = "4.1.1"
+koinBom = "4.1.1"
 playServicesBase = "18.9.0"
 
 [libraries]
@@ -60,9 +60,10 @@ kyant-backdrop = { group = "io.github.kyant0", name = "backdrop", version.ref = 
 kongzue-baseframework = { group = "com.github.kongzue", name = "BaseFramework", version.ref = "baseframework" }
 kongzue-dialogx = { group = "com.github.kongzue.DialogX", name = "DialogX", version.ref = "dialogx" }
 kongzue-dialogx-material3 = { group = "com.github.kongzue.DialogX", name = "DialogXMaterialYou", version.ref = "dialogx" }
-insert-koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
-insert-koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
-insert-koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
+insert-koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koinBom" }
+insert-koin-core = { group = "io.insert-koin", name = "koin-core"}
+insert-koin-android = { group = "io.insert-koin", name = "koin-android"}
+insert-koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose"}
 play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServicesBase" }
 
 [plugins]

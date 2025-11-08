@@ -1,6 +1,7 @@
 package io.treblekit.engine
 
 import android.app.Activity
+import android.app.Application
 import android.content.ComponentName
 import android.content.Context
 import android.content.Context.BIND_AUTO_CREATE
@@ -11,17 +12,24 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import com.kongzue.dialogx.dialogs.PopTip
 import io.treblekit.BuildConfig
 import io.treblekit.aidl.ITrebleKit
 import io.treblekit.app.MainService
+import io.treblekit.di.PLUGIN_INSERT_NAMED
+import org.koin.core.component.inject
+import org.koin.core.qualifier.named
+
+fun Application.loadTrebleEngine() {
+    Engine().entry(this)
+}
+
 
 class Engine {
 
-    fun entry(activity: Activity) {
-        bridgeScope {
-            onCreateEngine(activity)
-            onCreateActivity(activity = activity)
-            onCreateLifecycle((activity as LifecycleOwner).lifecycle)
+    fun entry(context: Context) {
+        engineScope {
+            onCreateEngine(context)
         }
     }
 
@@ -31,10 +39,6 @@ class Engine {
 
     /** 生命周期 */
     private var mLifecycle: Lifecycle? = null
-
-
-    /** 供引擎使用的基本调试布尔值 */
-    private val mBaseDebug: Boolean = BuildConfig.DEBUG
 
     /** 全局调试布尔值 */
     private var mFullDebug: Boolean = true
@@ -48,81 +52,12 @@ class Engine {
     /** 服务绑定状态 */
     private var mIsBind: Boolean = false
 
-    /** 引擎桥接 */
-    private val mEngineBridge: EcosedPlugin = object : EcosedPlugin(), FlutterPluginProxy {
-
-        /** 插件标题 */
-        override val title: String
-            get() = "EngineBridge"
-
-        /** 插件通道 */
-        override val channel: String
-            get() = EcosedChannel.BRIDGE_CHANNEL_NAME
-
-        /** 插件描述 */
-        override val description: String
-            get() = "FlutterEngine与EcosedEngine通信的的桥梁"
-
-        override fun onCreateActivity(activity: Activity) = engineScope {
-            return@engineScope this@engineScope.onCreateActivity(
-                activity = activity,
-            )
-        }
-
-        override fun onDestroyActivity() = engineScope {
-            return@engineScope this@engineScope.onDestroyActivity()
-        }
-
-        override fun onCreateLifecycle(lifecycle: Lifecycle) = engineScope {
-            return@engineScope this@engineScope.onCreateLifecycle(
-                lifecycle = lifecycle,
-            )
-        }
-
-        override fun onDestroyLifecycle() = engineScope {
-            return@engineScope this@engineScope.onDestroyLifecycle()
-        }
-
-        override fun onActivityResult(
-            requestCode: Int,
-            resultCode: Int,
-            data: Intent?,
-        ): Boolean = engineScope {
-            return@engineScope this@engineScope.onActivityResult(
-                requestCode = requestCode,
-                resultCode = resultCode,
-                data = data,
-            )
-        }
-
-        override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray,
-        ): Boolean = engineScope {
-            return@engineScope this@engineScope.onRequestPermissionsResult(
-                requestCode = requestCode,
-                permissions = permissions,
-                grantResults = grantResults,
-            )
-        }
-
-        override fun onCreateEngine(context: Context) = engineScope {
-            return@engineScope this@engineScope.onCreateEngine(context = context)
-        }
-
-        override fun onDestroyEngine() = engineScope {
-            return@engineScope this@engineScope.onDestroyEngine()
-        }
-
-        override fun onMethodCall(call: MethodCallProxy, result: ResultProxy) = engineScope {
-            return@engineScope this@engineScope.onMethodCall(call = call, result = result)
-        }
-    }
-
 
     /** 引擎 */
     private val mEcosedEngine: EcosedPlugin = object : EcosedPlugin(), EngineWrapper {
+
+        /** 供引擎使用的基本调试布尔值 */
+        private val mBaseDebug: Boolean = BuildConfig.DEBUG
 
         /** 插件绑定器. */
         private var mBinding: PluginBinding? = null
@@ -142,44 +77,6 @@ class Engine {
         override val description: String
             get() = "Ecosed Engine"
 
-        override fun onCreateActivity(activity: Activity) {
-            mActivity = activity
-        }
-
-        override fun onDestroyActivity() {
-            mActivity = null
-        }
-
-        override fun onCreateLifecycle(lifecycle: Lifecycle) = lifecycleScope {
-            mLifecycle = lifecycle
-            this@lifecycleScope.lifecycle.addObserver(
-                observer = this@lifecycleScope,
-            )
-        }
-
-        override fun onDestroyLifecycle(): Unit = lifecycleScope {
-            this@lifecycleScope.lifecycle.removeObserver(this@lifecycleScope)
-            mLifecycle = null
-        }
-
-        override fun onActivityResult(
-            requestCode: Int,
-            resultCode: Int,
-            data: Intent?,
-        ): Boolean {
-
-            return true
-        }
-
-        override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray,
-        ): Boolean {
-
-            return true
-        }
-
         /**
          * 引擎初始化时执行
          */
@@ -192,6 +89,11 @@ class Engine {
         override fun onEcosedMethodCall(call: EcosedMethodCall, result: EcosedResult) {
             super.onEcosedMethodCall(call, result)
             when (call.method) {
+                "hello" -> {
+                    PopTip.show("hello")
+                    result.success(true)
+                }
+
                 EcosedMethod.OPEN_DIALOG_METHOD -> result.success(
                     result = execPluginMethod<Boolean>(
                         channel = EcosedChannel.INVOKE_CHANNEL_NAME,
@@ -220,6 +122,9 @@ class Engine {
             if (mPluginList.isNull or mBinding.isNull) {
                 // 初始化插件列表.
                 mPluginList = arrayListOf()
+                val bridge: EcosedPlugin by inject<EcosedPlugin>(
+                    qualifier = named(name = PLUGIN_INSERT_NAMED),
+                )
                 val binding = PluginBinding(
                     debug = mBaseDebug,
                     context = context,
@@ -227,7 +132,7 @@ class Engine {
                 )
                 // 添加所有插件.
                 arrayListOf(
-                    mEngineBridge,
+                    bridge,
                     mEcosedEngine,
                     mServiceInvoke,
                     mServiceDelegate,
@@ -274,41 +179,6 @@ class Engine {
                 mPluginList = null
             } else if (mBaseDebug) {
                 Log.e(TAG, "请勿重复执行onDestroyEngine!")
-            }
-        }
-
-        /**
-         * 方法调用
-         * 此方法通过Flutter插件代理类[FlutterPluginProxy]实现
-         * 此方法等价与MethodCallHandler的onMethodCall方法
-         * 但参数传递是依赖Bundle进行的
-         */
-        override fun onMethodCall(
-            call: MethodCallProxy,
-            result: ResultProxy,
-        ) {
-            try {
-                // 执行代码并获取执行后的返回值
-                execMethodCall<Any>(
-                    channel = call.bundleProxy.getString(
-                        "channel",
-                        EcosedChannel.ENGINE_CHANNEL_NAME,
-                    ),
-                    method = call.methodProxy,
-                    bundle = call.bundleProxy,
-                ).apply {
-                    // 判断是否为空并提交数据
-                    if (this@apply.isNotNull) result.success(
-                        resultProxy = this@apply
-                    ) else result.notImplemented()
-                }
-            } catch (e: Exception) {
-                // 抛出异常
-                result.error(
-                    errorCodeProxy = TAG,
-                    errorMessageProxy = "engine: onMethodCall",
-                    errorDetailsProxy = Log.getStackTraceString(e),
-                )
             }
         }
 
@@ -681,25 +551,6 @@ class Engine {
             }
         }
     }
-
-    /**
-     * 框架调用单元
-     * Flutter插件调用框架
-     * @param content Flutter插件代理单元
-     * @return content 返回值
-     */
-    private fun <R> bridgeScope(
-        content: FlutterPluginProxy.() -> R,
-    ): R = content.invoke(
-        mEngineBridge.run {
-            return@run when (this@run) {
-                is FlutterPluginProxy -> this@run
-                else -> error(
-                    message = "引擎桥接未实现插件代理方法"
-                )
-            }
-        },
-    )
 
     /**
      * 引擎调用单元

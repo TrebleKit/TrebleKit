@@ -1,4 +1,4 @@
-package io.treblekit.hybrid
+package io.treblekit.hybrid.plugin
 
 import android.util.Log
 import io.flutter.embedding.engine.plugins.FlutterPlugin

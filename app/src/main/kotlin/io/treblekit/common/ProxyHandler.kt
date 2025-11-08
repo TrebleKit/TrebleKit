@@ -5,7 +5,7 @@ import io.treblekit.engine.ResultProxy
 
 interface ProxyHandler {
     /** 方法调用 */
-    fun onMethodCall(
+    fun onProxyMethodCall(
         call: MethodCallProxy,
         result: ResultProxy,
     )

@@ -32,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
             ElevatedButton(
               onPressed: () {
-                MethodChannel("bridge_flutter").invokeMethod("hello");
+                MethodChannel("ecosed_bridge").invokeMethod("hello", {"channel":"ecosed_engine"});
               },
               child: Text("Hello"),
             ),

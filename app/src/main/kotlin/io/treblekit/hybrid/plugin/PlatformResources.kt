@@ -1,4 +1,4 @@
-package io.treblekit.hybrid
+package io.treblekit.hybrid.plugin
 
 import android.content.Context
 import android.graphics.Bitmap
