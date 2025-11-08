@@ -1,7 +1,6 @@
 package io.treblekit.ui.activity
 
 import android.content.Intent
-import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,32 +11,19 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Android
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.treblekit.R
 import io.treblekit.ui.components.AppBackground
 import io.treblekit.ui.components.CapsuleSearch
@@ -45,6 +31,7 @@ import io.treblekit.ui.components.CapsuleSpacer
 import io.treblekit.ui.components.HomeFAB
 import io.treblekit.ui.components.NavBlock
 import io.treblekit.ui.components.OverlayLayer
+import io.treblekit.ui.components.SystemTag
 import io.treblekit.ui.destination.DashboardDestination
 import io.treblekit.ui.destination.PlatformDestination
 import io.treblekit.ui.destination.UnknownDestination
@@ -53,15 +40,17 @@ import io.treblekit.ui.navigation.PlatformDestination
 import io.treblekit.ui.navigation.appDestination
 import io.treblekit.ui.preview.ActivityPreview
 import io.treblekit.ui.theme.TrebleKitTheme
-import io.treblekit.ui.theme.androidGreen
 import io.treblekit.ui.theme.capsuleEdgePadding
 import io.treblekit.ui.theme.topBarPaddingExcess
+import io.treblekit.ui.utils.getIndexWithRoute
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ActivityMain() {
-    val pageState: PagerState = rememberPagerState { appDestination.size }
-    val showDialog: MutableState<Boolean> = remember { mutableStateOf(value = false) }
+    val pageState: PagerState = rememberPagerState(
+        initialPage = getIndexWithRoute(route = DashboardDestination),
+        pageCount = { return@rememberPagerState appDestination.size }
+    )
     AppBackground { backdrop ->
         OverlayLayer(backdrop = backdrop) {
             Scaffold(
@@ -100,66 +89,9 @@ fun ActivityMain() {
                             .fillMaxWidth()
                             .wrapContentHeight(),
                         actions = {
-                            if (showDialog.value) AlertDialog(
-                                onDismissRequest = {
-                                    showDialog.value = false
-                                },
-                                confirmButton = {
-                                    TextButton(
-                                        onClick = {
-                                            showDialog.value = false
-                                        },
-                                    ) {
-                                        Text(text = "确定")
-                                    }
-                                },
-                                icon = {
-                                    Icon(
-                                        imageVector = Icons.Filled.Android,
-                                        contentDescription = null,
-                                    )
-                                },
-                                iconContentColor = androidGreen,
-                                title = {
-                                    Text(text = "Android")
-                                },
-                                text = {
-                                    Text(text = "Android API ${Build.VERSION.SDK_INT}")
-                                },
+                            SystemTag(
+                                modifier = Modifier.padding(end = 8.dp),
                             )
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .wrapContentHeight()
-                                    .padding(end = 8.dp),
-                                horizontalArrangement = Arrangement.Start,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                IconButton(
-                                    onClick = {
-                                        showDialog.value = true
-                                    },
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Android,
-                                        contentDescription = null,
-                                        tint = androidGreen,
-                                    )
-                                }
-                                Text(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .wrapContentHeight(),
-                                    text = stringResource(id = R.string.android),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    color = MaterialTheme.colorScheme.onBackground,
-                                    fontSize = 16.sp,
-                                    textAlign = TextAlign.Left,
-                                )
-                            }
-
                         },
                         floatingActionButton = {
                             Row(

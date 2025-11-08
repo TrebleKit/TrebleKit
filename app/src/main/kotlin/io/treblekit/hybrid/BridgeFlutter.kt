@@ -41,7 +41,7 @@ class BridgeFlutter : FlutterPlugin, MethodChannel.MethodCallHandler, KoinCompon
                     override val bundleProxy: Bundle
                         get() = Bundle().let { bundle ->
                             bundle.putString(
-                                "channel",
+                                CHANNEL_FLAG,
                                 call.argument<String>("channel"),
                             )
                             return@let bundle
@@ -73,7 +73,8 @@ class BridgeFlutter : FlutterPlugin, MethodChannel.MethodCallHandler, KoinCompon
         }
     }
 
-    private companion object {
-        const val BRIDGE_FLUTTER_CHANNEL: String = "bridge_flutter"
+    companion object {
+        private const val BRIDGE_FLUTTER_CHANNEL: String = "bridge_flutter"
+        const val CHANNEL_FLAG: String = "channel"
     }
 }

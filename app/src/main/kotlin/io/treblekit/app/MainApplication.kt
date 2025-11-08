@@ -12,6 +12,7 @@ import io.treblekit.di.bridgeFlutter
 import io.treblekit.engine.EcosedPlugin
 import io.treblekit.engine.MethodCallProxy
 import io.treblekit.engine.ResultProxy
+import io.treblekit.hybrid.BridgeFlutter
 import io.treblekit.hybrid.loadFlutterEngine
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -30,7 +31,9 @@ class MainApplication : BaseApplication() {
 //            try {
 //                result.success(
 //                    resultProxy = execPluginMethod(
-//                        channel = call.bundleProxy.getString("channel") ?: error(message = ""),
+//                        channel = call.bundleProxy.getString(
+//                            BridgeFlutter.CHANNEL_FLAG
+//                        ) ?: error(message = ""),
 //                        method = call.methodProxy,
 //                        bundle = call.bundleProxy,
 //                    ),
