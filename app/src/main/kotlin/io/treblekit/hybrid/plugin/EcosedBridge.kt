@@ -5,7 +5,7 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.treblekit.common.ProxyHandler
-import io.treblekit.bridge.PlatformConnector
+import io.treblekit.di.bridge.EBKIT_PROXY_NAMED
 import io.treblekit.engine.MethodCallProxy
 import io.treblekit.engine.ResultProxy
 import org.koin.core.component.KoinComponent
@@ -22,7 +22,7 @@ internal class EcosedBridge : FlutterPlugin, MethodChannel.MethodCallHandler, Ko
 
     /** 调用代理, 使用Koin依赖注入 */
     private val mHandler: ProxyHandler by inject<ProxyHandler>(
-        qualifier = named(name = PlatformConnector.EBKIT_PROXY_NAMED),
+        qualifier = named(name = EBKIT_PROXY_NAMED),
     )
 
     /**

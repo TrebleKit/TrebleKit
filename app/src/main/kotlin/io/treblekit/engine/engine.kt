@@ -1,7 +1,6 @@
 package io.treblekit.engine
 
 import android.app.Activity
-import android.app.Application
 import android.content.ComponentName
 import android.content.Context
 import android.content.Context.BIND_AUTO_CREATE
@@ -12,12 +11,13 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.blankj.utilcode.util.LogUtils
 import com.kongzue.dialogx.dialogs.PopTip
 import io.treblekit.BuildConfig
 import io.treblekit.aidl.ITrebleKit
 import io.treblekit.app.MainService
-import io.treblekit.bridge.PlatformConnector
+import io.treblekit.di.bridge.EBKIT_PLUGIN_NAMED
+import io.treblekit.utils.isNotNull
+import io.treblekit.utils.isNull
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
 
@@ -62,11 +62,12 @@ class Engine {
         /** 供引擎使用的基本调试布尔值 */
         private val mBaseDebug: Boolean = BuildConfig.DEBUG
 
-        // 通过依赖注入获取到应用程序全局上下文
+        /** 通过依赖注入获取到应用程序全局上下文 */
         private val mContext: Context by inject<Context>()
-        // 通过依赖注入获取到连接器插件
+
+        /** 通过依赖注入获取到连接器插件 */
         private val mConnector: EcosedPlugin by inject<EcosedPlugin>(
-            qualifier = named(name = PlatformConnector.EBKIT_PLUGIN_NAMED),
+            qualifier = named(name = EBKIT_PLUGIN_NAMED),
         )
 
         /** 插件绑定器. */
