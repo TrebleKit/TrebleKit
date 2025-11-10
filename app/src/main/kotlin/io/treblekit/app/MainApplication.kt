@@ -1,6 +1,5 @@
 package io.treblekit.app
 
-import com.blankj.utilcode.util.LogUtils
 import com.google.android.material.color.DynamicColors
 import com.kongzue.dialogx.DialogX
 import com.kongzue.dialogxmaterialyou.style.MaterialYouStyle
@@ -36,8 +35,6 @@ class MainApplication : BaseApplication() {
         loadFlutterEngine()
         // 初始化Sui
         Sui.init(BuildConfig.APPLICATION_ID)
-
-        LogUtils.i("onInitDependence")
     }
 
     override fun onInitAsync() {

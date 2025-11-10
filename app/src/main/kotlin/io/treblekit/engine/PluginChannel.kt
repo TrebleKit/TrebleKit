@@ -31,6 +31,7 @@ class PluginChannel(
 
     /**
      * 设置方法调用.
+     *
      * @param handler 执行方法时调用EcosedMethodCallHandler.
      */
     fun setMethodCallHandler(handler: EcosedPlugin) {
@@ -39,18 +40,21 @@ class PluginChannel(
 
     /**
      * 获取上下文.
+     *
      * @return Context.
      */
     fun getContext(): Context = this@PluginChannel.mBinding.getContext()
 
     /**
      * 是否调试模式.
+     *
      * @return Boolean.
      */
     fun isDebug(): Boolean = this@PluginChannel.mBinding.isDebug()
 
     /**
      * 获取通道.
+     *
      * @return 通道名称.
      */
     fun getChannel(): String = this@PluginChannel.mChannel
@@ -63,6 +67,7 @@ class PluginChannel(
 
     /**
      * 执行方法回调.
+     *
      * @param name 通道名称.
      * @param method 方法名称.
      * @return 方法执行后的返回值.

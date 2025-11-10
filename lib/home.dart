@@ -43,6 +43,20 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+class EcosedBridge  {
+  
+  static const MethodChannel _channel = MethodChannel('ecosed_bridge');
+  
+  void a() {
+    _channel.setMethodCallHandler((call) async {
+      switch (call.method) {
+
+      }
+    });
+  }
+  
+}
+
 class Header extends StatelessWidget {
   const Header({super.key});
 

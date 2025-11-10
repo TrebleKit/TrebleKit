@@ -18,8 +18,8 @@ abstract class BaseApplication : BaseApp<BaseApplication>() {
 
     private val mCrash: OnBugReportListener = object : OnBugReportListener() {
         override fun onCrash(e: Exception?, crashLogFile: File): Boolean {
-            if (AppManager.getInstance().getActiveActivity() == null || !AppManager.getInstance()
-                    .getActiveActivity().isActive
+            if (AppManager.getInstance().activeActivity == null || !AppManager.getInstance()
+                    .activeActivity.isActive
             ) {
                 return false
             }

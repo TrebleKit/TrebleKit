@@ -33,6 +33,7 @@ internal class EcosedBridge : FlutterPlugin, MethodChannel.MethodCallHandler, Ko
         mChannel = MethodChannel(binding.binaryMessenger, ECOSED_BRIDGE_CHANNEL)
         // 设置方法调用处理
         mChannel.setMethodCallHandler(this@EcosedBridge)
+
     }
 
     /**
