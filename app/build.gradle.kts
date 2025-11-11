@@ -6,15 +6,25 @@ plugins {
 }
 
 android {
-    namespace = "io.treblekit"
-    compileSdk = 36
+    namespace = NameSpaceConfig.APP
+
+    compileSdk {
+        version = release(version = AppConfig.COMPILE_SDK_VERSION)
+    }
 
     defaultConfig {
-        applicationId = "io.treblekit"
-        minSdk = 33
-        targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+
+        applicationId = AppConfig.APPLICATION_ID
+
+        minSdk {
+            version = release(version = AppConfig.MIN_SDK_VERSION)
+        }
+        targetSdk {
+            version = release(version = AppConfig.TARGET_SDK_VERSION)
+        }
+
+        versionCode = AppConfig.VERSION_CODE
+        versionName = AppConfig.VERSION_NAME
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -48,7 +58,6 @@ android {
         }
     }
     buildFeatures {
-        aidl = true
         compose = true
         buildConfig = true
     }
@@ -56,6 +65,7 @@ android {
 
 dependencies {
     implementation(project(":flutter"))
+    implementation(project(":aidl"))
 
     implementation("com.google.accompanist:accompanist-coil:0.15.0")
     implementation(libs.accompanist.drawablepainter)
