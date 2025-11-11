@@ -10,6 +10,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import io.treblekit.common.FlutterHost
 
+/**
+ * 包裹Fragment的View
+ */
 class FlutterWrapperView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -19,7 +22,7 @@ class FlutterWrapperView @JvmOverloads constructor(
     /** FragmentActivity */
     private val mFragmentActivity: FragmentActivity
 
-    /** FlutterFragment */
+    /** Fragment */
     private val mFlutterFragment: Fragment
 
     init {
@@ -29,21 +32,22 @@ class FlutterWrapperView @JvmOverloads constructor(
                 message = "FlutterFragment为空",
             )
         } else error(
-            message = "FlutterWrapperView的父Activity必须是FragmentActivity或其子类, 并且实现FlutterHost接口.",
+            message = "FlutterWrapperView 的父 Activity 必须是 FragmentActivity 或其子类, 并且实现 FlutterHost 接口.",
         )
-        addView(
-            ViewPager2(context).apply {
-                tag = FLUTTER_CONTAINER_TAG
-            },
-        )
+        addView(ViewPager2(context).apply {
+            tag = FLUTTER_CONTAINER_TAG
+        })
     }
 
+    /**
+     * 布局子View
+     */
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         // 遍历子View
         for (index in 0 until childCount) {
             when (index) {
                 0 -> {
-                    // 布局承载Flutter的ViewPager2
+                    // 布局承载FlutterFragment的ViewPager2
                     getChildAt(index).layout(
                         0,
                         0,
@@ -57,6 +61,9 @@ class FlutterWrapperView @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 子View添加时调用
+     */
     override fun onViewAdded(child: View?) {
         super.onViewAdded(child)
         if (child?.tag == FLUTTER_CONTAINER_TAG && child is ViewPager2) child.apply {
@@ -68,7 +75,10 @@ class FlutterWrapperView @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 伴生对象
+     */
     private companion object {
-        private const val FLUTTER_CONTAINER_TAG: String = "FlutterContainer"
+        const val FLUTTER_CONTAINER_TAG: String = "FLUTTER_CONTAINER"
     }
 }

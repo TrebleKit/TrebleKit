@@ -7,6 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.AbstractComposeView
 
+/**
+ * 支持混合开发的ComposeView
+ */
 class HybridComposeView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -26,11 +29,15 @@ class HybridComposeView @JvmOverloads constructor(
         consumeWindowInsets = false
     }
 
+    /** 布局 */
     private val content = mutableStateOf<(@Composable () -> Unit)?>(value = null)
 
     override var shouldCreateCompositionOnAttachedToWindow: Boolean = false
         private set
 
+    /**
+     * 绘制Compose布局
+     */
     @Composable
     override fun Content() {
         content.value?.invoke()
@@ -43,6 +50,9 @@ class HybridComposeView @JvmOverloads constructor(
         return javaClass.name
     }
 
+    /**
+     * 设置Compose布局
+     */
     internal fun setContent(
         content: @Composable () -> Unit,
     ) {

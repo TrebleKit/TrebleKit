@@ -2,6 +2,8 @@ package io.treblekit.hybrid
 
 import android.app.Application
 import io.flutter.FlutterInjector
+import io.flutter.embedding.android.FlutterFragment
+import io.flutter.embedding.android.RenderMode
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
@@ -22,4 +24,15 @@ fun Application.loadFlutterEngine() {
         CustomPluginRegistrant.registerWith(engine = engine)
         FlutterEngineCache.getInstance().put(EngineConfig.ENGINE_ID, engine)
     }
+}
+
+/**
+ * 加载Flutter片段
+ */
+internal fun loadFlutterFragment(): FlutterFragment {
+    return FlutterFragment.withCachedEngine(
+        EngineConfig.ENGINE_ID,
+    ).renderMode(
+        RenderMode.texture,
+    ).build()
 }

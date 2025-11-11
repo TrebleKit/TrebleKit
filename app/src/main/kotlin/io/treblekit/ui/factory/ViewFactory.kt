@@ -1,7 +1,6 @@
 package io.treblekit.ui.factory
 
 import android.content.Context
-import androidx.fragment.app.FragmentActivity
 import io.treblekit.common.IViewFactory
 import io.treblekit.ui.view.StreamerEffectView
 import io.treblekit.ui.view.FlutterWrapperView

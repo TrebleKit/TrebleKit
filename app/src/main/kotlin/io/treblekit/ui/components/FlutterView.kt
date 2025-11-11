@@ -7,7 +7,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import io.treblekit.ui.theme.TrebleKitTheme
 
 @Composable
-fun FlutterView(modifier: Modifier = Modifier) {
+fun  FlutterView(modifier: Modifier = Modifier) {
     ViewFactory(
         modifier = modifier.fillMaxSize(),
     ) {
