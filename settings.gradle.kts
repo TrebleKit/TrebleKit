@@ -24,3 +24,6 @@ apply(from = rootProject.projectDir.resolve(relative = ".android/include_flutter
 rootProject.name = "TrebleKit"
 include(":app")
 include(":aidl")
+include(":hybrid")
+include(":base")
+include(":common")

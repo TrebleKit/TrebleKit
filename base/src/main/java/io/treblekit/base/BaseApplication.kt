@@ -5,8 +5,6 @@ import com.kongzue.baseframework.BaseApp
 import com.kongzue.baseframework.BaseFrameworkSettings
 import com.kongzue.baseframework.interfaces.OnBugReportListener
 import com.kongzue.baseframework.util.AppManager
-import com.kongzue.dialogx.dialogs.MessageDialog
-import io.treblekit.BuildConfig
 import java.io.File
 
 abstract class BaseApplication : BaseApp<BaseApplication>() {
@@ -23,11 +21,11 @@ abstract class BaseApplication : BaseApp<BaseApplication>() {
             ) {
                 return false
             }
-            MessageDialog.show(
-                "Ops！发生了一次崩溃！",
-                "您是否愿意帮助我们改进程序以修复此Bug？",
-                "愿意",
-            )
+//            MessageDialog.show(
+//                "Ops！发生了一次崩溃！",
+//                "您是否愿意帮助我们改进程序以修复此Bug？",
+//                "愿意",
+//            )
             return false
         }
     }

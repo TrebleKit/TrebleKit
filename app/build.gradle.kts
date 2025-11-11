@@ -65,7 +65,11 @@ android {
 
 dependencies {
     implementation(project(":flutter"))
+
+    implementation(project(":hybrid"))
     implementation(project(":aidl"))
+    implementation(project(":base"))
+    implementation(project(":common"))
 
     implementation("com.google.accompanist:accompanist-coil:0.15.0")
     implementation(libs.accompanist.drawablepainter)
