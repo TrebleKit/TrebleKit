@@ -9,7 +9,7 @@ import androidx.core.graphics.createBitmap
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.treblekit.resources.R
+import io.treblekit.resources.ResourcesLogo
 import java.io.ByteArrayOutputStream
 
 internal class PlatformResources : FlutterPlugin, MethodChannel.MethodCallHandler {
@@ -41,10 +41,10 @@ internal class PlatformResources : FlutterPlugin, MethodChannel.MethodCallHandle
      */
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
-            "treblekit" -> result.success(drawableToByteArray(id = R.drawable.treblekit_logo))
-            "freefeos" -> result.success(drawableToByteArray(id = R.drawable.freefeos_logo))
-            "ecosedkit" -> result.success(drawableToByteArray(id = R.drawable.ecosedkit_logo))
-            "ebkit" -> result.success(drawableToByteArray(id = R.drawable.ebkit_logo))
+            "treblekit" -> result.success(drawableToByteArray(id = ResourcesLogo.TREBLEKIT_LOGO))
+            "freefeos" -> result.success(drawableToByteArray(id = ResourcesLogo.FREEFEOS_LOGO))
+            "ecosedkit" -> result.success(drawableToByteArray(id = ResourcesLogo.ECOSEDKIT_LOGO))
+            "ebkit" -> result.success(drawableToByteArray(id = ResourcesLogo.EBKIT_LOGO))
             else -> result.notImplemented()
         }
     }

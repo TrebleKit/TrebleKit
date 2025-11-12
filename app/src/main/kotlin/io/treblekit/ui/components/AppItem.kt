@@ -28,10 +28,10 @@ import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.capsule.ContinuousCapsule
 import io.treblekit.R
+import io.treblekit.resources.ResourcesLogo
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.utils.NoOnClick
 import io.treblekit.ui.utils.backdropEffects
-import io.treblekit.resources.R as Resources
 
 @Composable
 fun AppItem(
@@ -87,7 +87,7 @@ private fun AppItemPreview() {
     TrebleKitTheme {
         AppItem(
             appIcon = painterResource(
-                id = Resources.drawable.treblekit_logo,
+                id = ResourcesLogo.TREBLEKIT_LOGO,
             ),
             appName = stringResource(
                 id = R.string.app_name,
