@@ -49,4 +49,5 @@ dependencies {
     implementation(libs.insert.koin.core)
     implementation(libs.kongzue.baseframework)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.viewpager2)
 }
