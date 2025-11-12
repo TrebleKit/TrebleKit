@@ -10,15 +10,15 @@ import io.treblekit.ui.view.StreamerEffectView
 
 class ViewFactory(context: Context) : IViewFactory {
 
-    override val contentView: HybridComposeView by lazy {
+    override val contentView: View by lazy {
         return@lazy HybridComposeView(context = context)
     }
 
-    override val overlayView: OverlayView by lazy {
+    override val overlayView: View by lazy {
         return@lazy OverlayView(context = context)
     }
 
-    override val effectView: StreamerEffectView by lazy {
+    override val effectView: View by lazy {
         return@lazy StreamerEffectView(context = context)
     }
 
