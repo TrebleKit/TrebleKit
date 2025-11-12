@@ -4,14 +4,15 @@ plugins {
 }
 
 android {
-    namespace = "io.treblekit.common"
+    namespace = NameSpaceConfig.COMMON
+
     compileSdk {
         version = release(version = AppConfig.COMPILE_SDK_VERSION)
     }
 
     defaultConfig {
-        minSdk {
 
+        minSdk {
             version = release(version = AppConfig.MIN_SDK_VERSION)
         }
 

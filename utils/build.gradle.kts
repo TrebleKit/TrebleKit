@@ -4,13 +4,16 @@ plugins {
 }
 
 android {
-    namespace = "io.treblekit.utils"
+    namespace = NameSpaceConfig.UTILS
+
     compileSdk {
-        version = release(36)
+        version = release(version = AppConfig.COMPILE_SDK_VERSION)
     }
 
     defaultConfig {
-        minSdk = 33
+        minSdk {
+            version = release(version = AppConfig.MIN_SDK_VERSION)
+        }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "io.treblekit.resources"
+    namespace = NameSpaceConfig.RESOURCES
 
     compileSdk {
         version = release(version = AppConfig.COMPILE_SDK_VERSION)

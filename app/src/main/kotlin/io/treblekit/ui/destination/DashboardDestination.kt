@@ -1,7 +1,5 @@
 package io.treblekit.ui.destination
 
-import android.content.Context
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -35,19 +33,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import com.google.accompanist.imageloading.rememberDrawablePainter
 import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.capsule.ContinuousCapsule
 import com.kyant.capsule.ContinuousRoundedRectangle
-import io.treblekit.R
 import io.treblekit.ui.components.AppItem
 import io.treblekit.ui.navigation.PlatformDestination
 import io.treblekit.ui.theme.TrebleKitTheme
@@ -56,6 +52,7 @@ import io.treblekit.ui.utils.backdropEffects
 import io.treblekit.ui.utils.navigateToRoute
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import io.treblekit.resources.R as Resources
 
 @Composable
 fun DashboardDestination(
@@ -135,7 +132,6 @@ fun MPPlayer(
     backdrop: LayerBackdrop = rememberLayerBackdrop(),
     popBackStack: () -> Unit = NoOnClick,
 ) {
-    val context: Context = LocalContext.current
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -152,11 +148,8 @@ fun MPPlayer(
                     .fillMaxSize(),
                 backdrop = backdrop,
                 onLaunch = popBackStack,
-                appIcon = rememberDrawablePainter(
-                    drawable = AppCompatResources.getDrawable(
-                        context,
-                        R.mipmap.ic_treblekit,
-                    ),
+                appIcon = painterResource(
+                    id = Resources.drawable.treblekit_logo,
                 ),
                 appName = "TrebleKit",
             )
@@ -166,11 +159,8 @@ fun MPPlayer(
                     .fillMaxSize(),
                 backdrop = backdrop,
                 onLaunch = {},
-                appIcon = rememberDrawablePainter(
-                    drawable = AppCompatResources.getDrawable(
-                        context,
-                        R.mipmap.ic_ebkit,
-                    ),
+                appIcon = painterResource(
+                    id = Resources.drawable.ebkit_logo,
                 ),
                 appName = "EbKit",
             )

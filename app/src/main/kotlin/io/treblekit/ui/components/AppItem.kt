@@ -1,6 +1,5 @@
 package io.treblekit.ui.components
 
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -18,14 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.imageloading.rememberDrawablePainter
 import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.capsule.ContinuousCapsule
@@ -33,6 +31,7 @@ import io.treblekit.R
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.utils.NoOnClick
 import io.treblekit.ui.utils.backdropEffects
+import io.treblekit.resources.R as Resources
 
 @Composable
 fun AppItem(
@@ -70,7 +69,9 @@ fun AppItem(
         }
         Text(
             text = appName,
-            modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = 15.sp,
             textAlign = TextAlign.Center,
@@ -85,11 +86,8 @@ fun AppItem(
 private fun AppItemPreview() {
     TrebleKitTheme {
         AppItem(
-            appIcon = rememberDrawablePainter(
-                drawable = AppCompatResources.getDrawable(
-                    LocalContext.current,
-                    R.mipmap.ic_treblekit
-                )
+            appIcon = painterResource(
+                id = Resources.drawable.treblekit_logo,
             ),
             appName = stringResource(
                 id = R.string.app_name,

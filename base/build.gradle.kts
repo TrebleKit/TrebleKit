@@ -4,13 +4,17 @@ plugins {
 }
 
 android {
-    namespace = "io.treblekit.base"
+    namespace = NameSpaceConfig.BASE
+
     compileSdk {
-        version = release(36)
+        version = release(version = AppConfig.COMPILE_SDK_VERSION)
     }
 
     defaultConfig {
-        minSdk = 33
+
+        minSdk {
+            version = release(version = AppConfig.MIN_SDK_VERSION)
+        }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -25,15 +29,18 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
+
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(21)
         }
     }
+
     buildFeatures {
         buildConfig = true
     }

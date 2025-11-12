@@ -1,8 +1,11 @@
 import "package:flutter/material.dart";
 
+/// 应用主题
 class TrebleKitTheme {
   const TrebleKitTheme();
 
+  /// hide
+  /// 浅色主题ColorScheme
   static ColorScheme _lightScheme() {
     return const ColorScheme(
       brightness: Brightness.light,
@@ -54,6 +57,8 @@ class TrebleKitTheme {
     );
   }
 
+  /// hide
+  /// 深色主题ColorScheme
   static ColorScheme _darkScheme() {
     return const ColorScheme(
       brightness: Brightness.dark,
@@ -105,6 +110,8 @@ class TrebleKitTheme {
     );
   }
 
+  /// hide
+  /// 应用主题
   ThemeData _theme(ColorScheme colorScheme) => ThemeData(
     useMaterial3: true,
     brightness: colorScheme.brightness,
@@ -112,10 +119,12 @@ class TrebleKitTheme {
     canvasColor: colorScheme.surface,
   );
 
+  /// 浅色主题
   ThemeData light() {
     return _theme(_lightScheme());
   }
 
+  /// 深色主题
   ThemeData dark() {
     return _theme(_darkScheme());
   }

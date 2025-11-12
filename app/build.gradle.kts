@@ -32,6 +32,7 @@ android {
             abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64")
         }
     }
+
     dependenciesInfo {
         includeInApk = false
         includeInBundle = false
@@ -48,15 +49,18 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
+
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(21)
         }
     }
+
     buildFeatures {
         compose = true
         buildConfig = true
@@ -64,16 +68,15 @@ android {
 }
 
 dependencies {
-    implementation(project(":flutter"))
-
     implementation(project(":hybrid"))
     implementation(project(":aidl"))
     implementation(project(":base"))
     implementation(project(":common"))
     implementation(project(":plugin"))
+    implementation(project(":resources"))
 
     implementation("com.google.accompanist:accompanist-coil:0.15.0")
-    implementation(libs.accompanist.drawablepainter)
+//    implementation(libs.accompanist.drawablepainter)
 
     implementation(libs.kongzue.baseframework)
     implementation(libs.kongzue.dialogx)
