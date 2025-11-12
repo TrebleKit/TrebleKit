@@ -6,7 +6,6 @@ import io.treblekit.common.FactoryHost
 import io.treblekit.common.IViewFactory
 import io.treblekit.hybrid.base.HybridActivity
 import io.treblekit.ui.activity.ActivityMain
-import io.treblekit.ui.factory.ViewFactory
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.view.HybridComposeView
 

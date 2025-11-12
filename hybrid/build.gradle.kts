@@ -43,7 +43,10 @@ android {
 dependencies {
     implementation(project(":flutter"))
     implementation(project(":common"))
+    implementation(project(":base"))
+    implementation(project(":resources"))
     implementation(platform(libs.insert.koin.bom))
     implementation(libs.insert.koin.core)
     implementation(libs.kongzue.baseframework)
+    implementation(libs.androidx.appcompat)
 }

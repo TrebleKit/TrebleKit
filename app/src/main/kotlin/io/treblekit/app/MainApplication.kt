@@ -4,17 +4,16 @@ import com.google.android.material.color.DynamicColors
 import com.kongzue.dialogx.DialogX
 import com.kongzue.dialogxmaterialyou.style.MaterialYouStyle
 import io.treblekit.BuildConfig
-import io.treblekit.base.BaseApplication
 import io.treblekit.di.init.applyModules
 import io.treblekit.engine.loadTrebleEngine
-import io.treblekit.hybrid.loadFlutterEngine
+import io.treblekit.hybrid.base.HybridApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import rikka.sui.Sui
 
-class MainApplication : BaseApplication() {
+class MainApplication : HybridApplication() {
 
     override fun onInitHiddenApi() {
         HiddenApiBypass.addHiddenApiExemptions("L")
@@ -29,10 +28,6 @@ class MainApplication : BaseApplication() {
             androidContext(androidContext = this@MainApplication)
             applyModules()
         }
-        // 初始化Treble引擎
-        loadTrebleEngine()
-        // 初始化Flutter引擎
-        loadFlutterEngine()
         // 初始化Sui
         Sui.init(BuildConfig.APPLICATION_ID)
     }
@@ -46,5 +41,10 @@ class MainApplication : BaseApplication() {
         DialogX.onlyOnePopTip = false // 可以显示多个PopTip
         DialogX.onlyOnePopNotification = false // 可以显示多个通知
         DialogX.DEBUGMODE = BuildConfig.DEBUG // 调试配置
+    }
+
+    override fun onInitEngine() {
+        // 初始化Treble引擎
+        loadTrebleEngine()
     }
 }

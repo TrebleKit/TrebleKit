@@ -15,7 +15,11 @@ import com.kongzue.dialogx.dialogs.PopTip
 import io.treblekit.BuildConfig
 import io.treblekit.aidl.ITrebleKit
 import io.treblekit.app.MainService
-import io.treblekit.di.bridge.EBKIT_PLUGIN_NAMED
+import io.treblekit.common.DiConfig
+import io.treblekit.plugin.PluginBinding
+import io.treblekit.plugin.PluginMethodCall
+import io.treblekit.plugin.PluginResult
+import io.treblekit.plugin.TreblePlugin
 import io.treblekit.utils.isNotNull
 import io.treblekit.utils.isNull
 import org.koin.core.component.inject
@@ -53,9 +57,9 @@ class Engine {
 
 
     /** 引擎 */
-    private val mEcosedEngine = object : EcosedPlugin(), EngineWrapper {
+    private val mEcosedEngine = object : TreblePlugin(), EngineWrapper {
 
-        private val mPlugins: ArrayList<EcosedPlugin> by lazy {
+        private val mPlugins: ArrayList<TreblePlugin> by lazy {
             return@lazy arrayListOf(mServiceInvoke, mServiceDelegate)
         }
 
@@ -66,15 +70,15 @@ class Engine {
         private val mContext: Context by inject<Context>()
 
         /** 通过依赖注入获取到连接器插件 */
-        private val mConnector: EcosedPlugin by inject<EcosedPlugin>(
-            qualifier = named(name = EBKIT_PLUGIN_NAMED),
+        private val mConnector: TreblePlugin by inject<TreblePlugin>(
+            qualifier = named(name = DiConfig.DI_EBKIT_PLUGIN_NAMED),
         )
 
         /** 插件绑定器. */
         private var mBinding: PluginBinding? = null
 
         /** 插件列表. */
-        private var mPluginList: ArrayList<EcosedPlugin>? = null
+        private var mPluginList: ArrayList<TreblePlugin>? = null
 
         /** 插件标题 */
         override val title: String
@@ -97,7 +101,7 @@ class Engine {
 //            mFullDebug = this@run.isDebug
         }
 
-        override fun onEcosedMethodCall(call: EcosedMethodCall, result: EcosedResult) {
+        override fun onEcosedMethodCall(call: PluginMethodCall, result: PluginResult) {
             super.onEcosedMethodCall(call, result)
             when (call.method) {
                 "hello" -> {
@@ -137,7 +141,7 @@ class Engine {
                 mBinding = PluginBinding(
                     debug = mBaseDebug,
                     context = mContext,
-                    engine = this,
+                    executor = this,
                 )
                 // 添加所有插件.
                 arrayListOf(this, mConnector).apply {
@@ -237,7 +241,7 @@ class Engine {
     }
 
     /** 负责与服务通信的客户端 */
-    private val mServiceInvoke: EcosedPlugin = object : EcosedPlugin(), InvokeWrapper {
+    private val mServiceInvoke: TreblePlugin = object : TreblePlugin(), InvokeWrapper {
 
         /** 插件标题 */
         override val title: String
@@ -271,7 +275,7 @@ class Engine {
         /**
          * 插件方法调用
          */
-        override fun onEcosedMethodCall(call: EcosedMethodCall, result: EcosedResult) {
+        override fun onEcosedMethodCall(call: PluginMethodCall, result: PluginResult) {
             super.onEcosedMethodCall(call, result)
             when (call.method) {
 //                EcosedMethod.OPEN_DIALOG_METHOD -> result.success(result = invokeMethod {
@@ -316,7 +320,7 @@ class Engine {
     }
 
     /** 服务相当于整个服务类部分无法在大类中实现的方法在此实现并调用 */
-    private val mServiceDelegate: EcosedPlugin = object : EcosedPlugin(), DelegateWrapper {
+    private val mServiceDelegate: TreblePlugin = object : TreblePlugin(), DelegateWrapper {
 
         /** 插件标题 */
         override val title: String
@@ -345,7 +349,7 @@ class Engine {
 
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             when (name?.className) {
-//                UserService::class.java.name -> {
+//                UserService::class.kotlin.name -> {
 //                    if (service.isNotNull and (service?.pingBinder() == true)) {
 //                        this@FeOSdk.mIUserService =
 //                            IUserService.Stub.asInterface(service)
@@ -394,7 +398,7 @@ class Engine {
 
         override fun onServiceDisconnected(name: ComponentName?) {
             when (name?.className) {
-//                UserService::class.java.name -> {
+//                UserService::class.kotlin.name -> {
 //
 //                }
 
@@ -420,7 +424,7 @@ class Engine {
         override fun onBindingDied(name: ComponentName?) {
             super.onBindingDied(name)
             when (name?.className) {
-//                UserService::class.java.name -> {
+//                UserService::class.kotlin.name -> {
 //
 //                }
 
@@ -437,7 +441,7 @@ class Engine {
         override fun onNullBinding(name: ComponentName?) {
             super.onNullBinding(name)
             when (name?.className) {
-//                UserService::class.java.name -> {
+//                UserService::class.kotlin.name -> {
 //
 //                }
 

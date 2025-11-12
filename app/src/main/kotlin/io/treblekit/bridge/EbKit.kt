@@ -3,12 +3,12 @@ package io.treblekit.bridge
 import android.util.Log
 import io.treblekit.common.ProxyHandler
 import io.treblekit.engine.EcosedChannel
-import io.treblekit.engine.EcosedPlugin
-import io.treblekit.engine.MethodCallProxy
-import io.treblekit.engine.ResultProxy
+import io.treblekit.plugin.TreblePlugin
+import io.treblekit.common.MethodCallProxy
+import io.treblekit.common.ResultProxy
 import io.treblekit.utils.isNotNull
 
-class EbKit : EcosedPlugin(), ProxyHandler {
+class EbKit : TreblePlugin(), ProxyHandler {
 
     override val title: String
         get() = "EbKit"
