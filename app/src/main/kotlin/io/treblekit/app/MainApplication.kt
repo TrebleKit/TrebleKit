@@ -2,6 +2,7 @@ package io.treblekit.app
 
 import com.google.android.material.color.DynamicColors
 import com.kongzue.dialogx.DialogX
+import com.kongzue.dialogx.dialogs.MessageDialog
 import com.kongzue.dialogxmaterialyou.style.MaterialYouStyle
 import io.treblekit.BuildConfig
 import io.treblekit.di.init.applyModules
@@ -15,7 +16,7 @@ import rikka.sui.Sui
 
 class MainApplication : HybridApplication() {
 
-    override fun onInitHiddenApi() {
+    override fun onInitFirst() {
         HiddenApiBypass.addHiddenApiExemptions("L")
     }
 
@@ -33,6 +34,7 @@ class MainApplication : HybridApplication() {
     }
 
     override fun onInitAsync() {
+        // 初始化DialogX
         DialogX.init(this) // 初始化
         DialogX.implIMPLMode = DialogX.IMPL_MODE.VIEW // 使用View实现
         DialogX.useHaptic = true // 启用震动反馈
@@ -46,5 +48,13 @@ class MainApplication : HybridApplication() {
     override fun onInitEngine() {
         // 初始化Treble引擎
         loadTrebleEngine()
+    }
+
+    override fun onShowCrashDialog() {
+        MessageDialog.show(
+            "Ops！发生了一次崩溃！",
+            "您是否愿意帮助我们改进程序以修复此Bug？",
+            "愿意",
+        )
     }
 }

@@ -11,7 +11,7 @@ abstract class BaseApplication : BaseApp<BaseApplication>() {
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
-        onInitHiddenApi()
+        onInitFirst()
     }
 
     private val mCrash: OnBugReportListener = object : OnBugReportListener() {
@@ -21,11 +21,8 @@ abstract class BaseApplication : BaseApp<BaseApplication>() {
             ) {
                 return false
             }
-//            MessageDialog.show(
-//                "Ops！发生了一次崩溃！",
-//                "您是否愿意帮助我们改进程序以修复此Bug？",
-//                "愿意",
-//            )
+
+            onShowCrashDialog()
             return false
         }
     }
@@ -48,10 +45,12 @@ abstract class BaseApplication : BaseApp<BaseApplication>() {
         onInitAsync()
     }
 
-    abstract fun onInitHiddenApi()
+    abstract fun onInitFirst()
     abstract fun onInitDependence()
     abstract fun onInitAsync()
 
     abstract fun onInitEngine()
     abstract fun onInitHybrid()
+
+    abstract fun onShowCrashDialog()
 }
