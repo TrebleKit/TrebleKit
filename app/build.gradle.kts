@@ -74,6 +74,7 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":plugin"))
     implementation(project(":resources"))
+    implementation(project(":utils"))
 
 //    implementation("com.google.accompanist:accompanist-coil:0.15.0")
 //    implementation(libs.accompanist.drawablepainter)

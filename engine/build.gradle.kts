@@ -4,8 +4,7 @@ plugins {
 }
 
 android {
-    namespace = NameSpaceConfig.UTILS
-
+    namespace = "io.treblekit.engine"
     compileSdk {
         version = release(version = AppConfig.COMPILE_SDK_VERSION)
     }
@@ -48,7 +47,4 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    implementation(libs.blankj.utilcodex)
-    implementation(libs.play.services.base)
 }

@@ -4,15 +4,20 @@ plugins {
 }
 
 android {
-    namespace = NameSpaceConfig.UTILS
+    namespace = "io.treblekit.ui"
 
     compileSdk {
-        version = release(version = AppConfig.COMPILE_SDK_VERSION)
+        version = release(
+            version = AppConfig.COMPILE_SDK_VERSION,
+        )
     }
 
     defaultConfig {
+
         minSdk {
-            version = release(version = AppConfig.MIN_SDK_VERSION)
+            version = release(
+                version = AppConfig.MIN_SDK_VERSION,
+            )
         }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -48,7 +53,4 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    implementation(libs.blankj.utilcodex)
-    implementation(libs.play.services.base)
 }

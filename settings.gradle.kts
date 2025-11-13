@@ -1,3 +1,5 @@
+rootProject.name = "TrebleKit"
+
 pluginManagement {
     repositories {
         google {
@@ -11,6 +13,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
@@ -20,8 +23,13 @@ dependencyResolutionManagement {
         maven(url = "https://jitpack.io")
     }
 }
-apply(from = rootProject.projectDir.resolve(relative = ".android/include_flutter.groovy"))
-rootProject.name = "TrebleKit"
+
+apply(
+    from = rootProject.projectDir.resolve(
+        relative = ".android/include_flutter.groovy",
+    ),
+)
+
 include(":app")
 include(":aidl")
 include(":hybrid")
@@ -30,3 +38,5 @@ include(":common")
 include(":plugin")
 include(":resources")
 include(":utils")
+include(":ui")
+include(":engine")

@@ -57,7 +57,7 @@ class Engine {
 
 
     /** 引擎 */
-    private val mEcosedEngine = object : TreblePlugin(), EngineWrapper {
+    private val mEcosedEngine = object : TreblePlugin(), IEngine {
 
         private val mPlugins: ArrayList<TreblePlugin> by lazy {
             return@lazy arrayListOf(mServiceInvoke, mServiceDelegate)
@@ -575,11 +575,11 @@ class Engine {
      * @return content 返回值
      */
     private fun <R> engineScope(
-        content: EngineWrapper.() -> R,
+        content: IEngine.() -> R,
     ): R = content.invoke(
         mEcosedEngine.run {
             return@run when (this@run) {
-                is EngineWrapper -> this@run
+                is IEngine -> this@run
                 else -> error(
                     message = "引擎未实现引擎包装器方法"
                 )

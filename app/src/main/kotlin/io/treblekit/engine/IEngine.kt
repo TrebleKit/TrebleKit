@@ -6,7 +6,7 @@ import org.koin.core.component.KoinComponent
 /**
  * 引擎包装器
  */
-interface EngineWrapper : IExecutor, KoinComponent {
+interface IEngine : IExecutor, KoinComponent {
 
     /** 引擎初始化 */
     fun onCreateEngine()
