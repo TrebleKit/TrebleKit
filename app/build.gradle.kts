@@ -75,7 +75,7 @@ dependencies {
     implementation(project(":plugin"))
     implementation(project(":resources"))
 
-    implementation("com.google.accompanist:accompanist-coil:0.15.0")
+//    implementation("com.google.accompanist:accompanist-coil:0.15.0")
 //    implementation(libs.accompanist.drawablepainter)
 
     implementation(libs.kongzue.baseframework)
