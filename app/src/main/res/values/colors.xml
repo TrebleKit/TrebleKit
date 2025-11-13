@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ic_treblekit_background">#FF005C31</color>
-    <color name="ic_treblekit_foreground">#FF3DDC84</color>
-    <color name="ic_freefeos_background">#FF000066</color>
-    <color name="ic_freefeos_foreground">#FF0066FF</color>
-    <color name="ic_ecosedkit_background">#FF990099</color>
-    <color name="ic_ecosedkit_foreground">#FFFF66FF</color>
-    <color name="ic_ebkit_background">#FF0F0F0B</color>
-    <color name="ic_ebkit_foreground">#FFF5FBF3</color>
+    <color name="ic_launcher_background">#FF005C31</color>
+    <color name="ic_launcher_foreground">#FF3DDC84</color>
 </resources>
