@@ -65,7 +65,12 @@ fun PlatformDestination(
     ) {
         TopAppBar(
             title = {
-                Text(text = "Treble平台")
+                Text(
+                    text = "Treble平台",
+                    modifier = Modifier.padding(
+                        horizontal = 12.dp,
+                    )
+                )
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -92,7 +97,8 @@ fun PlatformDestination(
                     },
                 ) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = null,
                     )
                 }
             },
@@ -198,7 +204,7 @@ fun PlatformDestination(
     }
 }
 
-@Preview(showBackground = false)
+@Preview
 @Composable
 fun PlatformDestinationPreview() {
     TrebleKitTheme {

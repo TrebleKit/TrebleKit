@@ -77,17 +77,20 @@ dependencies {
     implementation(project(":utils"))
     implementation(project(":provider"))
 
-//    implementation("com.google.accompanist:accompanist-coil:0.15.0")
-//    implementation(libs.accompanist.drawablepainter)
-
     implementation(libs.kongzue.baseframework)
+
     implementation(libs.kongzue.dialogx)
     implementation(libs.kongzue.dialogx.material3)
+
     implementation(libs.lsposed.hiddenapibypass)
+
     implementation(libs.rikka.shizuku.api)
+
     implementation(libs.kyant.capsule)
     implementation(libs.kyant.backdrop)
+
     implementation(libs.blankj.utilcodex)
+
     implementation(platform(libs.insert.koin.bom))
     implementation(libs.insert.koin.core)
     implementation(libs.insert.koin.android)

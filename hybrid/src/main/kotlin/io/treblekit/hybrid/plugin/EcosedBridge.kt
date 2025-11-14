@@ -4,7 +4,7 @@ import android.os.Bundle
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.treblekit.common.DiConfig
+import io.treblekit.common.EbConfig
 import io.treblekit.common.MethodCallProxy
 import io.treblekit.common.ProxyHandler
 import io.treblekit.common.ResultProxy
@@ -22,7 +22,7 @@ internal class EcosedBridge : FlutterPlugin, MethodChannel.MethodCallHandler, Ko
 
     /** 调用代理, 使用Koin依赖注入 */
     private val mHandler: ProxyHandler by inject<ProxyHandler>(
-        qualifier = named(name = DiConfig.DO_EBKIT_PROXY_NAMED),
+        qualifier = named(name = EbConfig.DI_EBKIT_PROXY_NAMED),
     )
 
     /**

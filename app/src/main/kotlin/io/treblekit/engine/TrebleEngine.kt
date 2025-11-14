@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import com.kongzue.dialogx.dialogs.PopTip
 import io.treblekit.BuildConfig
-import io.treblekit.common.DiConfig
+import io.treblekit.common.EbConfig
 import io.treblekit.engine.Engine.Companion.TAG
 import io.treblekit.plugin.IExecutor
 import io.treblekit.plugin.PluginBinding
@@ -34,7 +34,7 @@ class TrebleEngine : TreblePlugin(), KoinComponent, IExecutor, IEngine {
 
     /** 通过依赖注入获取到连接器插件 */
     private val mConnector: TreblePlugin by inject<TreblePlugin>(
-        qualifier = named(name = DiConfig.DI_EBKIT_PLUGIN_NAMED),
+        qualifier = named(name = EbConfig.DI_EBKIT_PLUGIN_NAMED),
     )
 
     /** 插件绑定器. */

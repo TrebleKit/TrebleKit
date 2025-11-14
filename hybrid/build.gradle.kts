@@ -51,4 +51,7 @@ dependencies {
     implementation(libs.kongzue.baseframework)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.viewpager2)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }

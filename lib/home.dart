@@ -17,6 +17,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('TrebleKit'),
+        leading: IconButton(onPressed: (){}, icon: Icon(Icons.menu)),
         actions: const [CapsulePlaceholder()],
       ),
       body: SingleChildScrollView(

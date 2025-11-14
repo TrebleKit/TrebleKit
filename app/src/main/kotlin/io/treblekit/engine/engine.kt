@@ -59,7 +59,7 @@ class Engine {
                 this@run,
                 MainService::class.java,
             )
-            mEcosedServicesIntent.action = EcosedManifest.ACTION
+            mEcosedServicesIntent.action = "io.treblekit.action"
 
             startService(mEcosedServicesIntent)
             (mServiceDelegate as ServiceConnection).bindEcosed(this@run)
