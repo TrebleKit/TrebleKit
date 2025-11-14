@@ -24,12 +24,22 @@ dependencyResolutionManagement {
     }
 }
 
-apply(
-    from = rootProject.projectDir.resolve(
-        relative = ".android/include_flutter.groovy",
-    ),
-)
+// 检查是否存在构建脚本
+// 不存在就 flutter pub get
+rootProject.projectDir.resolve(
+    relative = ".android/include_flutter.groovy"
+).let { flutter ->
+    if (flutter.exists()) {
+        apply(from = flutter)
+        return@let flutter
+    } else {
+        throw GradleException(
+            "未找到Flutter生成的构建脚本",
+        )
+    }
+}
 
+// 包含项目模块
 include(":app")
 include(":aidl")
 include(":hybrid")
