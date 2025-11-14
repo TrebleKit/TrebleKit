@@ -75,6 +75,7 @@ dependencies {
     implementation(project(":plugin"))
     implementation(project(":resources"))
     implementation(project(":utils"))
+    implementation(project(":provider"))
 
 //    implementation("com.google.accompanist:accompanist-coil:0.15.0")
 //    implementation(libs.accompanist.drawablepainter)
@@ -84,7 +85,6 @@ dependencies {
     implementation(libs.kongzue.dialogx.material3)
     implementation(libs.lsposed.hiddenapibypass)
     implementation(libs.rikka.shizuku.api)
-    implementation(libs.rikka.shizuku.provider)
     implementation(libs.kyant.capsule)
     implementation(libs.kyant.backdrop)
     implementation(libs.blankj.utilcodex)

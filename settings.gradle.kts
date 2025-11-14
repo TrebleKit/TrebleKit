@@ -1,3 +1,4 @@
+// 设置项目名称
 rootProject.name = "TrebleKit"
 
 pluginManagement {
@@ -25,7 +26,7 @@ dependencyResolutionManagement {
 }
 
 // 检查是否存在构建脚本
-// 不存在就 flutter pub get
+// 不存在就执行 flutter pub get
 rootProject.projectDir.resolve(
     relative = ".android/include_flutter.groovy"
 ).let { flutter ->
@@ -50,3 +51,4 @@ include(":resources")
 include(":utils")
 include(":ui")
 include(":engine")
+include(":provider")

@@ -21,6 +21,8 @@ class MainApplication : HybridApplication() {
     }
 
     override fun onInitDependence() {
+        // 初始化Sui
+        Sui.init(BuildConfig.APPLICATION_ID)
         // 应用全局动态颜色
         DynamicColors.applyToActivitiesIfAvailable(this@MainApplication)
         // 初始化Koin依赖注入
@@ -29,8 +31,6 @@ class MainApplication : HybridApplication() {
             androidContext(androidContext = this@MainApplication)
             applyModules()
         }
-        // 初始化Sui
-        Sui.init(BuildConfig.APPLICATION_ID)
     }
 
     override fun onInitAsync() {
