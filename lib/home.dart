@@ -17,7 +17,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('TrebleKit'),
-        leading: IconButton(onPressed: (){}, icon: Icon(Icons.menu)),
+        leading: IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         actions: const [CapsulePlaceholder()],
       ),
       body: SingleChildScrollView(
@@ -33,7 +33,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
             ElevatedButton(
               onPressed: () {
-                MethodChannel("ecosed_bridge").invokeMethod("hello", {"channel":"ecosed_engine"});
+                final MethodChannel channel = MethodChannel('ecosed_bridge');
+                channel.invokeMethod('hello', {'channel': 'ecosed_engine'});
               },
               child: Text("Hello"),
             ),
@@ -44,18 +45,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class EcosedBridge  {
-  
+class EcosedBridge {
   static const MethodChannel _channel = MethodChannel('ecosed_bridge');
-  
+
   void a() {
     _channel.setMethodCallHandler((call) async {
-      switch (call.method) {
-
-      }
+      switch (call.method) {}
     });
   }
-  
 }
 
 class Header extends StatelessWidget {
@@ -64,12 +61,12 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 30),
+      padding: const .symmetric(vertical: 16, horizontal: 30),
       child: Row(
-        children: [
+        children: <Widget>[
           EcosedKitLogo(),
           Padding(
-            padding: EdgeInsets.only(left: 16),
+            padding: const .only(left: 16),
             child: Text(
               'EcosedKit',
               style: Theme.of(context).textTheme.titleLarge,
@@ -87,16 +84,16 @@ class StateCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(16),
+      margin: const .all(16),
       color: Theme.of(context).colorScheme.primaryContainer,
       child: ListTile(
-        leading: Icon(Icons.check_circle_outline),
+        leading: const Icon(Icons.check_circle_outline),
         title: Text('一切正常'),
         subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [Text('AppID: xxxxxx'), Text('版本: 1.0.0')],
         ),
-        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+        contentPadding: const .symmetric(vertical: 16, horizontal: 20),
       ),
     );
   }
