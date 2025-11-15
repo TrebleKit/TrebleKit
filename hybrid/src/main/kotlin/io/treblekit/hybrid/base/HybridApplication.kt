@@ -10,7 +10,7 @@ import io.treblekit.hybrid.register.CustomPluginRegistrant
 
 abstract class HybridApplication : BaseApplication() {
 
-    override fun onInitHybrid() {
+    override fun onCreateFlutter() {
         FlutterEngine(this@HybridApplication).let { engine ->
             engine.dartExecutor.executeDartEntrypoint(
                 DartExecutor.DartEntrypoint(

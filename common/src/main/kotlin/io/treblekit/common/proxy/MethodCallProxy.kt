@@ -1,4 +1,4 @@
-package io.treblekit.common
+package io.treblekit.common.proxy
 
 import android.os.Bundle
 

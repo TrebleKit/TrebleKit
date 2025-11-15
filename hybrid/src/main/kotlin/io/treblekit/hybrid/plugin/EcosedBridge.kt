@@ -5,9 +5,9 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.treblekit.common.EbConfig
-import io.treblekit.common.MethodCallProxy
-import io.treblekit.common.ProxyHandler
-import io.treblekit.common.ResultProxy
+import io.treblekit.common.proxy.MethodCallProxy
+import io.treblekit.common.proxy.MethodHandlerProxy
+import io.treblekit.common.proxy.MethodResultProxy
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
@@ -21,7 +21,7 @@ internal class EcosedBridge : FlutterPlugin, MethodChannel.MethodCallHandler, Ko
     private lateinit var mChannel: MethodChannel
 
     /** 调用代理, 使用Koin依赖注入 */
-    private val mHandler: ProxyHandler by inject<ProxyHandler>(
+    private val mHandler: MethodHandlerProxy by inject<MethodHandlerProxy>(
         qualifier = named(name = EbConfig.DI_EBKIT_PROXY_NAMED),
     )
 
@@ -67,7 +67,7 @@ internal class EcosedBridge : FlutterPlugin, MethodChannel.MethodCallHandler, Ko
                             return@let bundle
                         }
                 },
-                result = object : ResultProxy {
+                result = object : MethodResultProxy {
 
                     override fun success(
                         resultProxy: Any?,

@@ -2,10 +2,15 @@ package io.treblekit.ui.view
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.AbstractComposeView
+import io.treblekit.ui.activity.ActivityMain
+import io.treblekit.ui.factory.IViewFactory
+import io.treblekit.ui.factory.LocalViewFactory
+import io.treblekit.ui.theme.TrebleKitTheme
 
 /**
  * 支持混合开发的ComposeView
@@ -27,12 +32,29 @@ class HybridComposeView @JvmOverloads constructor(
         // 必须加此代码否则不符合预期
         // 支持混合开发
         consumeWindowInsets = false
+        if (isAttachedToWindow) {
+            createComposition()
+        }
     }
 
-    /** 布局 */
-    private val content = mutableStateOf<(@Composable () -> Unit)?>(value = null)
+    private val mContext: Context = context
 
-    override var shouldCreateCompositionOnAttachedToWindow: Boolean = false
+    private val mViewFactory: IViewFactory = object : IViewFactory {
+
+        override val overlayView: View by lazy {
+            return@lazy OverlayView(context = mContext)
+        }
+
+        override val effectView: View by lazy {
+            return@lazy StreamerEffectView(context = mContext)
+        }
+
+        override val wrapperView: View by lazy {
+            return@lazy FlutterWrapperView(context = mContext)
+        }
+    }
+
+    override var shouldCreateCompositionOnAttachedToWindow: Boolean = true
         private set
 
     /**
@@ -40,7 +62,13 @@ class HybridComposeView @JvmOverloads constructor(
      */
     @Composable
     override fun Content() {
-        content.value?.invoke()
+        CompositionLocalProvider(
+            value = LocalViewFactory provides mViewFactory,
+        ) {
+            TrebleKitTheme {
+                ActivityMain()
+            }
+        }
     }
 
     /**
@@ -48,18 +76,5 @@ class HybridComposeView @JvmOverloads constructor(
      */
     override fun getAccessibilityClassName(): CharSequence {
         return javaClass.name
-    }
-
-    /**
-     * 设置Compose布局
-     */
-    internal fun setContent(
-        content: @Composable () -> Unit,
-    ) {
-        shouldCreateCompositionOnAttachedToWindow = true
-        this@HybridComposeView.content.value = content
-        if (isAttachedToWindow) {
-            createComposition()
-        }
     }
 }

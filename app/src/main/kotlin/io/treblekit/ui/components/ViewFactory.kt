@@ -1,9 +1,7 @@
 package io.treblekit.ui.components
 
-import android.app.Activity
 import android.view.View
 import android.widget.TextView
-import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -11,29 +9,28 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import io.treblekit.R
-import io.treblekit.common.FactoryHost
-import io.treblekit.common.IViewFactory
+import io.treblekit.ui.factory.IViewFactory
 import io.treblekit.ui.theme.TrebleKitTheme
+import io.treblekit.ui.factory.LocalViewFactory
 
 @Composable
 fun ViewFactory(
     modifier: Modifier = Modifier,
     view: IViewFactory.() -> View? = { null },
 ) {
-    val activity: Activity? = LocalActivity.current
     val inspection: Boolean = LocalInspectionMode.current
-    val inspectionModeText: String = stringResource(
+    val factory: IViewFactory? = LocalViewFactory.current
+    val prompt: String = stringResource(
         id = R.string.inspection_mode_text,
     )
     AndroidView(
         factory = { context ->
             when {
                 inspection -> TextView(context)
-                activity != null && activity is FactoryHost -> {
-                    (activity as? FactoryHost)?.getViewFactory?.view() ?: error(
-                        message = "FactoryHost not implemented",
-                    )
-                }
+
+                factory != null -> factory.view() ?: error(
+                    message = "FactoryHost not implemented",
+                )
 
                 else -> View(context)
             }
@@ -41,7 +38,7 @@ fun ViewFactory(
         modifier = modifier,
         update = { view ->
             if (inspection && view is TextView) {
-                view.text = inspectionModeText
+                view.text = prompt
             }
         },
     )

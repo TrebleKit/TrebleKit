@@ -1,14 +1,14 @@
 package io.treblekit.bridge
 
 import android.util.Log
-import io.treblekit.common.ProxyHandler
+import io.treblekit.common.proxy.MethodHandlerProxy
 import io.treblekit.engine.EcosedChannel
 import io.treblekit.plugin.TreblePlugin
-import io.treblekit.common.MethodCallProxy
-import io.treblekit.common.ResultProxy
+import io.treblekit.common.proxy.MethodCallProxy
+import io.treblekit.common.proxy.MethodResultProxy
 import io.treblekit.utils.isNotNull
 
-class EbKit : TreblePlugin(), ProxyHandler {
+class EbKit : TreblePlugin(), MethodHandlerProxy {
 
     override val title: String
         get() = "EbKit"
@@ -21,7 +21,7 @@ class EbKit : TreblePlugin(), ProxyHandler {
 
     override fun onProxyMethodCall(
         call: MethodCallProxy,
-        result: ResultProxy,
+        result: MethodResultProxy,
     ) {
         try {
             // 执行代码并获取执行后的返回值

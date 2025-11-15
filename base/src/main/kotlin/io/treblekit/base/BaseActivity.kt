@@ -10,17 +10,13 @@ import com.kongzue.baseframework.util.JumpParameter
 
 abstract class BaseActivity : BaseActivity() {
 
-    private var mView: View? = null
-
     override fun resetContentView(): View? {
-        mView = onCreateView()
-        return mView
+        return onCreateView()
     }
 
     override fun initViews() {
         edgeToEdge()
         initFlutter()
-        onViewCreated(view = mView)
     }
 
     override fun initDatas(p0: JumpParameter?) {
@@ -50,8 +46,6 @@ abstract class BaseActivity : BaseActivity() {
     }
 
     abstract fun onCreateView(): View
-
-    abstract fun onViewCreated(view: View?)
 
     /**
      * 抽象接口定义

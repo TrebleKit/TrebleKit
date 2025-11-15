@@ -16,7 +16,7 @@ import rikka.sui.Sui
 
 class MainApplication : HybridApplication() {
 
-    override fun onInitFirst() {
+    override fun onCreateContext() {
         HiddenApiBypass.addHiddenApiExemptions("L")
     }
 
@@ -45,7 +45,7 @@ class MainApplication : HybridApplication() {
         DialogX.DEBUGMODE = BuildConfig.DEBUG // 调试配置
     }
 
-    override fun onInitEngine() {
+    override fun onCreateEngine() {
         // 初始化Treble引擎
         loadTrebleEngine()
     }

@@ -1,4 +1,4 @@
-package io.treblekit.hybrid.wrapper
+package io.treblekit.ui.view
 
 import android.content.Context
 import android.util.AttributeSet
@@ -8,8 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import io.flutter.embedding.android.FlutterFragment
-import io.treblekit.hybrid.host.IFlutterHost
+import io.treblekit.common.IFlutterHost
 
 /**
  * 承载FlutterFragment的View
@@ -24,7 +23,7 @@ class FlutterWrapperView @JvmOverloads constructor(
     private val mFragmentActivity: FragmentActivity
 
     /** Fragment */
-    private val mFlutterFragment: FlutterFragment
+    private val mFlutterFragment: Fragment
 
     init {
         if (context is FragmentActivity && context is IFlutterHost) {

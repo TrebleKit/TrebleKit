@@ -1,13 +1,13 @@
-package io.treblekit.common
+package io.treblekit.common.proxy
 
 /**
  * 代理处理接口
  */
-interface ProxyHandler {
+interface MethodHandlerProxy {
 
     /** 方法调用 */
     fun onProxyMethodCall(
         call: MethodCallProxy,
-        result: ResultProxy,
+        result: MethodResultProxy,
     )
 }

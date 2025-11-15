@@ -11,17 +11,17 @@ abstract class BaseApplication : BaseApp<BaseApplication>() {
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
-        onInitFirst()
+        onCreateContext()
     }
 
     private val mCrash: OnBugReportListener = object : OnBugReportListener() {
-        override fun onCrash(e: Exception?, crashLogFile: File): Boolean {
-            if (AppManager.getInstance().activeActivity == null || !AppManager.getInstance()
-                    .activeActivity.isActive
-            ) {
-                return false
-            }
 
+        override fun onCrash(
+            e: Exception?,
+            crashLogFile: File
+        ): Boolean {
+            val activity = AppManager.getInstance().activeActivity
+            if (activity == null || !activity.isActive) return false
             onShowCrashDialog()
             return false
         }
@@ -36,8 +36,8 @@ abstract class BaseApplication : BaseApp<BaseApplication>() {
     override fun init() {
         initBaseFramework()
         onInitDependence()
-        onInitEngine()
-        onInitHybrid()
+        onCreateEngine()
+        onCreateFlutter()
     }
 
     override fun initSDKs() {
@@ -45,12 +45,12 @@ abstract class BaseApplication : BaseApp<BaseApplication>() {
         onInitAsync()
     }
 
-    abstract fun onInitFirst()
+    abstract fun onCreateContext()
     abstract fun onInitDependence()
     abstract fun onInitAsync()
 
-    abstract fun onInitEngine()
-    abstract fun onInitHybrid()
+    abstract fun onCreateEngine()
+    abstract fun onCreateFlutter()
 
     abstract fun onShowCrashDialog()
 }

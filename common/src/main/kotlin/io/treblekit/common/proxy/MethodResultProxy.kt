@@ -1,9 +1,9 @@
-package io.treblekit.common
+package io.treblekit.common.proxy
 
 /**
  * 返回内容代理
  */
-interface ResultProxy {
+interface MethodResultProxy {
 
     /**
      * 处理成功结果.
