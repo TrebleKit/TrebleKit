@@ -1,8 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -28,9 +26,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        ndk {
-            abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64")
-        }
+
     }
 
     dependenciesInfo {
@@ -62,7 +58,6 @@ android {
     }
 
     buildFeatures {
-        compose = true
         buildConfig = true
     }
 }
@@ -73,9 +68,10 @@ dependencies {
     implementation(project(":base"))
     implementation(project(":common"))
     implementation(project(":plugin"))
-    implementation(project(":resources"))
+
     implementation(project(":utils"))
     implementation(project(":provider"))
+    implementation(project(":ui"))
 
     implementation(libs.kongzue.baseframework)
 
@@ -86,43 +82,28 @@ dependencies {
 
     implementation(libs.rikka.shizuku.api)
 
-    implementation(libs.kyant.capsule)
-    implementation(libs.kyant.backdrop)
+
 
     implementation(libs.blankj.utilcodex)
 
     implementation(platform(libs.insert.koin.bom))
     implementation(libs.insert.koin.core)
     implementation(libs.insert.koin.android)
-    implementation(libs.insert.koin.compose)
+
 
 
 
     implementation(libs.material)
-    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.viewpager2)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.play.services.base)
-//    implementation(libs.androidx.navigation.compose)
 
     testImplementation(libs.junit)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

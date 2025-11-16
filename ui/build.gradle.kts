@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -44,13 +46,43 @@ android {
             languageVersion = JavaLanguageVersion.of(21)
         }
     }
+
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
+    implementation(project(":resources"))
+    implementation(project(":common"))
+
+    implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.androidx.viewpager2)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    implementation(libs.androidx.fragment)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
+
+    implementation(libs.kongzue.dialogx)
+    implementation(libs.kyant.capsule)
+    implementation(libs.kyant.backdrop)
+    implementation(platform(libs.insert.koin.bom))
+    implementation(libs.insert.koin.compose)
+
     testImplementation(libs.junit)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

@@ -16,8 +16,8 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.kongzue.dialogx.dialogs.PopTip
-import io.treblekit.BuildConfig
-import io.treblekit.R
+import io.treblekit.ui.BuildConfig
+import io.treblekit.ui.R
 import io.treblekit.ui.theme.actionBarExpandedHeight
 import io.treblekit.ui.theme.bannerContainer
 import io.treblekit.ui.theme.bannerContent
@@ -38,7 +38,7 @@ import io.treblekit.ui.utils.convertSpToPx
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-class OverlayView @JvmOverloads constructor(
+internal class OverlayView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,

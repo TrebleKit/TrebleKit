@@ -1,4 +1,4 @@
-package io.treblekit.common
+package io.treblekit.common.hybrid
 
 import androidx.fragment.app.Fragment
 

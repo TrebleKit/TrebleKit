@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.capsule.ContinuousRoundedRectangle
-import io.treblekit.R
+import io.treblekit.ui.R
 import io.treblekit.ui.components.FlutterView
 import io.treblekit.ui.navigation.DashboardDestination
 import io.treblekit.ui.theme.TrebleKitTheme

@@ -15,7 +15,7 @@ import io.treblekit.ui.theme.TrebleKitTheme
 /**
  * 支持混合开发的ComposeView
  */
-class HybridComposeView @JvmOverloads constructor(
+internal class HybridComposeView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,

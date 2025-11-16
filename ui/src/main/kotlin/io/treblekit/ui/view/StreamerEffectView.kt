@@ -11,10 +11,10 @@ import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import io.treblekit.R
+import io.treblekit.ui.R
 import java.util.Scanner
 
-class StreamerEffectView @JvmOverloads constructor(
+internal class StreamerEffectView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,

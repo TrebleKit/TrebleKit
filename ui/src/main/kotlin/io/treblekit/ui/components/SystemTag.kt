@@ -25,7 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import io.treblekit.R
+import io.treblekit.ui.R
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.theme.androidGreen
 

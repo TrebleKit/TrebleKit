@@ -16,6 +16,8 @@ materialIconsExtended = "1.7.8"
 navigation = "2.9.6"
 viewpager2 = "1.1.0"
 annotation = "1.9.1"
+fragment = "1.8.9"
+playServicesBase = "18.9.0"
 
 baseframework = "7.0.7"
 dialogx = "0.0.50"
@@ -25,13 +27,13 @@ utilcodex = "1.31.1"
 backdrop = "1.0.0"
 capsule = "2.1.1"
 koinBom = "4.1.1"
-playServicesBase = "18.9.0"
 
 [libraries]
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-fragment = { group = "androidx.fragment", name = "fragment", version.ref = "fragment" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 androidx-viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

@@ -2,12 +2,12 @@ package io.treblekit.app
 
 import android.view.View
 import io.treblekit.hybrid.base.HybridActivity
-import io.treblekit.ui.view.HybridComposeView
+import io.treblekit.ui.UiAppView
 
 class MainActivity : HybridActivity() {
 
     override fun onCreateView(): View {
-        return HybridComposeView(
+        return UiAppView(
             context = this@MainActivity,
         )
     }

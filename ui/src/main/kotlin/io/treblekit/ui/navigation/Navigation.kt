@@ -6,7 +6,7 @@ import androidx.compose.material.icons.filled.Memory
 import androidx.compose.material.icons.outlined.Dashboard
 import androidx.compose.material.icons.outlined.Memory
 import androidx.compose.ui.graphics.vector.ImageVector
-import io.treblekit.R
+import io.treblekit.ui.R
 import kotlinx.serialization.Serializable
 
 @Serializable

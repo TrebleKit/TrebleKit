@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.capsule.ContinuousCapsule
-import io.treblekit.R
+import io.treblekit.ui.R
 import io.treblekit.resources.ResourcesLogo
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.utils.NoOnClick
@@ -90,7 +90,7 @@ private fun AppItemPreview() {
                 id = ResourcesLogo.TREBLEKIT_LOGO,
             ),
             appName = stringResource(
-                id = R.string.app_name,
+                id = R.string.activity_main_title,
             ),
         )
     }

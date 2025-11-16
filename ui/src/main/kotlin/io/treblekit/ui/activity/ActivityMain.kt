@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import io.treblekit.R
+import io.treblekit.ui.R
 import io.treblekit.ui.components.AppBackground
 import io.treblekit.ui.components.CapsuleSearch
 import io.treblekit.ui.components.CapsuleSpacer
@@ -62,7 +62,7 @@ fun ActivityMain() {
                             .wrapContentHeight(),
                         title = {
                             Text(
-                                text = stringResource(id = R.string.app_name),
+                                text = stringResource(id = R.string.activity_main_title),
                                 color = MaterialTheme.colorScheme.onBackground,
                             )
                         },

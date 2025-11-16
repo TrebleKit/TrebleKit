@@ -5,7 +5,7 @@ import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.android.RenderMode
 import io.treblekit.base.BaseActivity
 import io.treblekit.hybrid.config.EngineConfig
-import io.treblekit.common.IFlutterHost
+import io.treblekit.common.hybrid.IFlutterHost
 
 abstract class HybridActivity : BaseActivity(), IFlutterHost {
 

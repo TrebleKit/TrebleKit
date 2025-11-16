@@ -8,12 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import io.treblekit.common.IFlutterHost
+import io.treblekit.common.hybrid.IFlutterHost
 
 /**
  * 承载FlutterFragment的View
  */
-class FlutterWrapperView @JvmOverloads constructor(
+internal class FlutterWrapperView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
