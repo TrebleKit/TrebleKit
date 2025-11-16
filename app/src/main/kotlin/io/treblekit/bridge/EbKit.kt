@@ -1,11 +1,11 @@
 package io.treblekit.bridge
 
 import android.util.Log
+import io.treblekit.common.proxy.MethodCallProxy
 import io.treblekit.common.proxy.MethodHandlerProxy
+import io.treblekit.common.proxy.MethodResultProxy
 import io.treblekit.engine.EcosedChannel
 import io.treblekit.plugin.TreblePlugin
-import io.treblekit.common.proxy.MethodCallProxy
-import io.treblekit.common.proxy.MethodResultProxy
 import io.treblekit.utils.isNotNull
 
 class EbKit : TreblePlugin(), MethodHandlerProxy {

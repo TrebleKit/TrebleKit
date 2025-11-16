@@ -19,13 +19,9 @@ abstract class BaseActivity : BaseActivity() {
         initFlutter()
     }
 
-    override fun initDatas(p0: JumpParameter?) {
+    override fun initDatas(parameter: JumpParameter?) = Unit
 
-    }
-
-    override fun setEvents() {
-
-    }
+    override fun setEvents() = Unit
 
     /**
      * 启用边倒边

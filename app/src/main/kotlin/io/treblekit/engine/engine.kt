@@ -16,11 +16,6 @@ import io.treblekit.plugin.PluginResult
 import io.treblekit.plugin.TreblePlugin
 import io.treblekit.utils.isNotNull
 
-fun loadTrebleEngine() {
-    TrebleEngine().onCreateEngine()
-}
-
-
 class Engine {
 
     /** 全局调试布尔值 */
