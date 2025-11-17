@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,14 +14,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<String>? plugins;
+  List<PluginDetails>? details;
 
   @override
   void initState() {
     super.initState();
     const MethodChannel("ecosed_bridge")
         .invokeListMethod<String>('getPluginList', {'channel': 'ecosed_engine'})
-        .then((value) => setState(() => plugins = value))
+        .then((value) {
+          List<PluginDetails> temp = [];
+          for (var element in value ?? []) {
+            temp.add(
+              PluginDetails.formJSON(
+                json: jsonDecode(element),
+                type: PluginType.normal,
+              ),
+            );
+          }
+          setState(() => details = temp);
+        })
         .catchError((error) => debugPrint(error));
   }
 
@@ -28,11 +41,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('TrebleKit'),
-        leading: IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+        leading: IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
         actions: const [CapsulePlaceholder()],
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: .center,
           children: [
             Header(),
             StateCard(),
@@ -50,7 +64,12 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text("Hello"),
             ),
 
-            Text(plugins.toString()),
+            ...(details ?? []).map(
+              (e) => ListTile(
+                title: Text('${e.title} (${e.description})'),
+                subtitle: Text(e.channel),
+              ),
+            ),
           ],
         ),
       ),
@@ -108,6 +127,55 @@ class StateCard extends StatelessWidget {
         ),
         contentPadding: const .symmetric(vertical: 16, horizontal: 20),
       ),
+    );
+  }
+}
+
+enum PluginType { normal, unknown }
+
+final class PluginDetails {
+  const PluginDetails({
+    required this.channel,
+    required this.title,
+    required this.description,
+    required this.type,
+  });
+
+  /// 插件通道,插件的唯一标识符
+  final String channel;
+
+  /// 插件标题
+  final String title;
+
+  /// 插件描述
+  final String description;
+
+  /// 插件类型
+  final PluginType type;
+
+  /// 使用Map解析插件详细信息
+  factory PluginDetails.formMap({
+    required Map<String, dynamic> map,
+    required PluginType type,
+  }) {
+    return PluginDetails(
+      channel: map['channel'],
+      title: map['title'],
+      description: map['description'],
+      type: type,
+    );
+  }
+
+  /// 使用JSON解析插件详细信息
+  factory PluginDetails.formJSON({
+    required Map<String, dynamic> json,
+    required PluginType type,
+  }) {
+    return PluginDetails(
+      channel: json['channel'],
+      title: json['title'],
+      description: json['description'],
+      type: type,
     );
   }
 }

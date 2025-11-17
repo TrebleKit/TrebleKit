@@ -3,7 +3,7 @@ package io.treblekit.engine
 import android.util.Log
 import io.treblekit.plugin.TreblePlugin
 
-object TreblePluginRegistrant {
+internal object TreblePluginRegistrant {
 
     /** 注册器日志标签 */
     private const val TAG: String = "TreblePluginRegistrant"

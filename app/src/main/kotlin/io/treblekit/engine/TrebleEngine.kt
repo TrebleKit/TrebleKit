@@ -3,7 +3,6 @@ package io.treblekit.engine
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import com.kongzue.dialogx.dialogs.PopTip
 import io.treblekit.BuildConfig
 import io.treblekit.common.EbConfig
@@ -20,7 +19,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
 
-class TrebleEngine : TreblePlugin(), KoinComponent, IExecutor, IEngine {
+internal class TrebleEngine : TreblePlugin(), KoinComponent, IExecutor, IEngine {
 
     /** 供引擎使用的基本调试布尔值 */
     private val mBaseDebug: Boolean = BuildConfig.DEBUG
