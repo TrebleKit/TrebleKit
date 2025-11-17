@@ -9,17 +9,17 @@ object ResLogo {
 
     /** TrebleKit */
     @DrawableRes
-    val TREBLEKIT_LOGO: Int = R.drawable.treblekit_logo
+    val TREBLEKIT_LOGO: Int = R.drawable.logo_treblekit
 
     /** FreeFEOS */
     @DrawableRes
-    val FREEFEOS_LOGO: Int = R.drawable.freefeos_logo
+    val FREEFEOS_LOGO: Int = R.drawable.logo_freefeos
 
     /** EcosedKit */
     @DrawableRes
-    val ECOSEDKIT_LOGO: Int = R.drawable.ecosedkit_logo
+    val ECOSEDKIT_LOGO: Int = R.drawable.logo_ecosedkit
 
     /** EbKit */
     @DrawableRes
-    val EBKIT_LOGO: Int = R.drawable.ebkit_logo
+    val EBKIT_LOGO: Int = R.drawable.logo_ebkit
 }

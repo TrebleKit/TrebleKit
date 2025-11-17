@@ -5,5 +5,5 @@ import androidx.annotation.RawRes
 object ResGL {
 
     @RawRes
-    val STREAMER_EFFECT: Int = R.raw.streamer_effect
+    val STREAMER_EFFECT: Int = R.raw.gl_streamer_effect
 }
