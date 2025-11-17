@@ -12,6 +12,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List<String>? plugins;
+
+  @override
+  void initState() {
+    super.initState();
+    const MethodChannel("ecosed_bridge")
+        .invokeListMethod<String>('getPluginList', {'channel': 'ecosed_engine'})
+        .then((value) => setState(() => plugins = value))
+        .catchError((error) => debugPrint(error));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +49,8 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: Text("Hello"),
             ),
+
+            Text(plugins.toString()),
           ],
         ),
       ),

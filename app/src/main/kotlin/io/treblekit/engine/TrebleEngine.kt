@@ -3,6 +3,7 @@ package io.treblekit.engine
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.kongzue.dialogx.dialogs.PopTip
 import io.treblekit.BuildConfig
 import io.treblekit.common.EbConfig
@@ -14,17 +15,12 @@ import io.treblekit.plugin.PluginResult
 import io.treblekit.plugin.TreblePlugin
 import io.treblekit.utils.isNotNull
 import io.treblekit.utils.isNull
+import org.json.JSONObject
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
 
 class TrebleEngine : TreblePlugin(), KoinComponent, IExecutor, IEngine {
-
-    private val mPlugins: ArrayList<TreblePlugin> by lazy {
-        return@lazy arrayListOf(
-//            mServiceInvoke, mServiceDelegate
-        )
-    }
 
     /** 供引擎使用的基本调试布尔值 */
     private val mBaseDebug: Boolean = BuildConfig.DEBUG
@@ -42,6 +38,8 @@ class TrebleEngine : TreblePlugin(), KoinComponent, IExecutor, IEngine {
 
     /** 插件列表. */
     private var mPluginList: ArrayList<TreblePlugin>? = null
+
+    private var mJSONList: ArrayList<String>? = null
 
     /** 插件标题 */
     override val title: String
@@ -72,21 +70,7 @@ class TrebleEngine : TreblePlugin(), KoinComponent, IExecutor, IEngine {
                 result.success(true)
             }
 
-//            EcosedMethod.OPEN_DIALOG_METHOD -> result.success(
-//                result = execPluginMethod<Boolean>(
-//                    channel = EcosedChannel.INVOKE_CHANNEL_NAME,
-//                    method = EcosedMethod.OPEN_DIALOG_METHOD,
-//                    bundle = Bundle()
-//                )
-//            )
-//
-//            EcosedMethod.CLOSE_DIALOG_METHOD -> result.success(
-//                result = execPluginMethod<Boolean>(
-//                    channel = EcosedChannel.INVOKE_CHANNEL_NAME,
-//                    method = EcosedMethod.CLOSE_DIALOG_METHOD,
-//                    bundle = Bundle()
-//                )
-//            )
+            "getPluginList" -> result.success(mJSONList)
 
             else -> result.notImplemented()
         }
@@ -97,9 +81,10 @@ class TrebleEngine : TreblePlugin(), KoinComponent, IExecutor, IEngine {
      * @param context 上下文 - 此上下文来自FlutterPlugin的ApplicationContext
      */
     override fun onCreateEngine() {
-        if (mPluginList.isNull or mBinding.isNull) {
+        if (mPluginList.isNull or mBinding.isNull or mJSONList.isNull) {
             // 初始化插件列表.
             mPluginList = arrayListOf()
+            mJSONList = arrayListOf()
             // 初始化插件绑定
             mBinding = PluginBinding(
                 debug = mBaseDebug,
@@ -107,8 +92,9 @@ class TrebleEngine : TreblePlugin(), KoinComponent, IExecutor, IEngine {
                 executor = this@TrebleEngine,
             )
             // 添加所有插件.
-            arrayListOf(this@TrebleEngine, mConnector).apply {
-                addAll(mPlugins)
+            arrayListOf(this@TrebleEngine, mConnector).let { plugins ->
+                TreblePluginRegistrant.registerWith(plugins = plugins)
+                return@let plugins
             }.forEach { plugin ->
                 plugin.apply {
                     try {
@@ -129,7 +115,17 @@ class TrebleEngine : TreblePlugin(), KoinComponent, IExecutor, IEngine {
                         }
                     }
                 }.run {
-                    mPluginList?.add(element = this@run)
+                    mPluginList?.add(
+                        element = this@run,
+                    )
+                    mJSONList?.add(
+                        element = JSONObject().let { json ->
+                            json.put("channel", this@run.channel)
+                            json.put("title", this@run.title)
+                            json.put("description", this@run.description)
+                            return@let json.toString()
+                        },
+                    )
                     if (mBaseDebug) {
                         Log.d(
                             TAG,
@@ -151,7 +147,7 @@ class TrebleEngine : TreblePlugin(), KoinComponent, IExecutor, IEngine {
      * 销毁引擎释放资源.
      */
     override fun onDestroyEngine() {
-        if (mPluginList.isNotNull or mBinding.isNotNull) {
+        if (mPluginList.isNotNull or mBinding.isNotNull or mJSONList.isNotNull) {
             // 清空插件列表
             mPluginList = null
         } else if (mBaseDebug) {

@@ -29,7 +29,7 @@ fun ViewFactory(
                 inspection -> TextView(context)
 
                 factory != null -> factory.view() ?: error(
-                    message = "FactoryHost not implemented",
+                    message = "LocalViewFactory not implemented",
                 )
 
                 else -> View(context)
