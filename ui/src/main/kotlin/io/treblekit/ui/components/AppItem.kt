@@ -28,7 +28,7 @@ import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.capsule.ContinuousCapsule
 import io.treblekit.ui.R
-import io.treblekit.resources.ResourcesLogo
+import io.treblekit.resources.ResLogo
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.utils.NoOnClick
 import io.treblekit.ui.utils.backdropEffects
@@ -87,7 +87,7 @@ private fun AppItemPreview() {
     TrebleKitTheme {
         AppItem(
             appIcon = painterResource(
-                id = ResourcesLogo.TREBLEKIT_LOGO,
+                id = ResLogo.TREBLEKIT_LOGO,
             ),
             appName = stringResource(
                 id = R.string.activity_main_title,

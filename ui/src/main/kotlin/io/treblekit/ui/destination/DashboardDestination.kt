@@ -42,7 +42,7 @@ import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.capsule.ContinuousCapsule
 import com.kyant.capsule.ContinuousRoundedRectangle
-import io.treblekit.resources.ResourcesLogo
+import io.treblekit.resources.ResLogo
 import io.treblekit.ui.components.AppItem
 import io.treblekit.ui.navigation.PlatformDestination
 import io.treblekit.ui.theme.TrebleKitTheme
@@ -146,7 +146,7 @@ fun MPPlayer(
                 backdrop = backdrop,
                 onLaunch = popBackStack,
                 appIcon = painterResource(
-                    id = ResourcesLogo.TREBLEKIT_LOGO,
+                    id = ResLogo.TREBLEKIT_LOGO,
                 ),
                 appName = "TrebleKit",
             )
@@ -157,7 +157,7 @@ fun MPPlayer(
                 backdrop = backdrop,
                 onLaunch = {},
                 appIcon = painterResource(
-                    id = ResourcesLogo.EBKIT_LOGO,
+                    id = ResLogo.EBKIT_LOGO,
                 ),
                 appName = "EbKit",
             )
@@ -411,34 +411,34 @@ fun AppsGridPreview() {
 val miniProgramList: ArrayList<MiniProgramItem> = arrayListOf(
     MiniProgramItem(
         title = "TrebleKit",
-        icon = ResourcesLogo.TREBLEKIT_LOGO,
+        icon = ResLogo.TREBLEKIT_LOGO,
     ),
     MiniProgramItem(
         title = "TrebleKit",
-        icon = ResourcesLogo.TREBLEKIT_LOGO,
+        icon = ResLogo.TREBLEKIT_LOGO,
     ),
     MiniProgramItem(
         title = "TrebleKit",
-        icon = ResourcesLogo.TREBLEKIT_LOGO,
+        icon = ResLogo.TREBLEKIT_LOGO,
     ),
     MiniProgramItem(
         title = "TrebleKit",
-        icon = ResourcesLogo.TREBLEKIT_LOGO,
+        icon = ResLogo.TREBLEKIT_LOGO,
     ),
     MiniProgramItem(
         title = "TrebleKit",
-        icon = ResourcesLogo.TREBLEKIT_LOGO,
+        icon = ResLogo.TREBLEKIT_LOGO,
     ),
     MiniProgramItem(
         title = "TrebleKit",
-        icon = ResourcesLogo.TREBLEKIT_LOGO,
+        icon = ResLogo.TREBLEKIT_LOGO,
     ),
     MiniProgramItem(
         title = "TrebleKit",
-        icon = ResourcesLogo.TREBLEKIT_LOGO,
+        icon = ResLogo.TREBLEKIT_LOGO,
     ),
     MiniProgramItem(
         title = "TrebleKit",
-        icon = ResourcesLogo.TREBLEKIT_LOGO,
+        icon = ResLogo.TREBLEKIT_LOGO,
     ),
 )

@@ -5,7 +5,7 @@ import androidx.annotation.DrawableRes
 /**
  * 应用图标
  */
-object ResourcesLogo {
+object ResLogo {
 
     /** TrebleKit */
     @DrawableRes
