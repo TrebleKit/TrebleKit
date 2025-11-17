@@ -73,6 +73,6 @@ internal class PlatformResources : FlutterPlugin, MethodChannel.MethodCallHandle
     private companion object {
 
         /** 平台资源插件通道名称 */
-        const val PLATFORM_RESOURCES_CHANNEL: String = "platform_resources"
+        private const val PLATFORM_RESOURCES_CHANNEL: String = "platform_resources"
     }
 }

@@ -99,6 +99,6 @@ internal class EcosedBridge : FlutterPlugin, MethodChannel.MethodCallHandler, Ko
     private companion object {
 
         /** 桥接通道名称 */
-        const val ECOSED_BRIDGE_CHANNEL: String = "ecosed_bridge"
+        private const val ECOSED_BRIDGE_CHANNEL: String = "ecosed_bridge"
     }
 }
