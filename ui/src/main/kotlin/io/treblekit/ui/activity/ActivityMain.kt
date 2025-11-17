@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.treblekit.ui.R
 import io.treblekit.ui.components.AppBackground
@@ -38,7 +39,6 @@ import io.treblekit.ui.destination.UnknownDestination
 import io.treblekit.ui.navigation.DashboardDestination
 import io.treblekit.ui.navigation.PlatformDestination
 import io.treblekit.ui.navigation.appDestination
-import io.treblekit.ui.preview.ActivityPreview
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.theme.capsuleEdgePadding
 import io.treblekit.ui.theme.topBarPaddingExcess
@@ -147,7 +147,7 @@ fun ActivityMain() {
     }
 }
 
-@ActivityPreview
+@Preview
 @Composable
 private fun ActivityMainPreview() {
     TrebleKitTheme {

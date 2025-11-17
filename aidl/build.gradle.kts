@@ -16,6 +16,10 @@ android {
         }
     }
 
+    buildFeatures {
+        aidl = true // 启用AIDL编译
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
@@ -25,9 +29,5 @@ android {
         toolchain {
             languageVersion = JavaLanguageVersion.of(21)
         }
-    }
-
-    buildFeatures {
-        aidl = true
     }
 }
