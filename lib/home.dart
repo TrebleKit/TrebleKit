@@ -14,7 +14,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<PluginDetails>? details;
+  List<PluginDetails> details = [];
 
   @override
   void initState() {
@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text("Hello"),
             ),
 
-            ...(details ?? []).map(
+            ...details.map(
               (e) => ListTile(
                 title: Text('${e.title} (${e.description})'),
                 subtitle: Text(e.channel),
