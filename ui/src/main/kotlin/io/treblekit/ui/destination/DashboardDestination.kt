@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -70,17 +71,23 @@ fun DashboardDestination(
             .verticalScroll(state = scrollState),
     ) {
 
+        Text(
+            text = "系统状态",
+            modifier = Modifier.padding(
+                start = 30.dp,
+                top = 16.dp,
+                end = 30.dp,
+                bottom = 8.dp,
+            ),
+            fontSize = 14.sp,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(intrinsicSize = IntrinsicSize.Min)
-                .padding(
-                    start = 16.dp,
-                    top = 16.dp,
-                    end = 16.dp,
-                    bottom = 8.dp,
-                ),
+                .padding(horizontal = 16.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(space = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -124,7 +131,7 @@ fun DashboardDestination(
                     )
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Android",
+                        text = "系统状态",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -160,14 +167,14 @@ fun DashboardDestination(
                     ) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
-                            text = "Android",
+                            text = "平台组件计数",
                             fontWeight = FontWeight.Medium,
                             fontSize = 14.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         Text(
                             modifier = Modifier.fillMaxWidth(),
-                            text = "123",
+                            text = "999+",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onSurface,
@@ -197,17 +204,19 @@ fun DashboardDestination(
                     ) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
-                            text = "Android",
+                            text = "Shizuku版本",
                             fontWeight = FontWeight.Medium,
                             fontSize = 14.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         Text(
                             modifier = Modifier.fillMaxWidth(),
-                            text = "123",
+                            text = "114.514.1919810",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onSurface,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }
@@ -218,16 +227,13 @@ fun DashboardDestination(
         Text(
             text = "核心服务",
             modifier = Modifier.padding(
-                start = 30.dp,
-                top = 8.dp,
-                end = 30.dp,
-                bottom = 15.dp,
+                horizontal = 30.dp, vertical = 8.dp
             ),
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.onBackground,
         )
         MPPlayer(
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
             pageState = pageState,
             backdrop = backdrop,
             popBackStack = popBackStack,
@@ -235,9 +241,9 @@ fun DashboardDestination(
         ControlCard(
             modifier = Modifier.padding(
                 start = 16.dp,
-                top = 15.dp,
+                top = 8.dp,
                 end = 16.dp,
-                bottom = 15.dp,
+                bottom = 8.dp,
             ),
             backdrop = backdrop,
         )
@@ -245,9 +251,9 @@ fun DashboardDestination(
             text = "常用应用",
             modifier = Modifier.padding(
                 start = 30.dp,
-                top = 30.dp,
+                top = 8.dp,
                 end = 30.dp,
-                bottom = 15.dp,
+                bottom = 8.dp,
             ),
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.onBackground,
@@ -257,6 +263,7 @@ fun DashboardDestination(
                 start = 16.dp,
                 end = 16.dp,
                 bottom = 16.dp,
+                top = 8.dp
             ),
             backdrop = backdrop,
             list = miniProgramList,
@@ -315,7 +322,7 @@ fun MPPlayer(
         RecentPlayer(
             modifier = Modifier
                 .weight(weight = 1f)
-                .padding(start = 16.dp)
+                .padding(start = 12.dp)
                 .fillMaxSize(),
             pageState = pageState,
             backdrop = backdrop,
@@ -383,7 +390,7 @@ fun RecentPlayer(
             }
         }
         Text(
-            text = "Treble",
+            text = "Treble平台",
             fontSize = 15.sp,
             color = Color.White,
             textAlign = TextAlign.Center,
