@@ -5,11 +5,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -23,6 +25,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.rounded.CheckCircleOutline
 import androidx.compose.material.icons.twotone.Category
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -65,11 +69,157 @@ fun DashboardDestination(
             .fillMaxSize()
             .verticalScroll(state = scrollState),
     ) {
+
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(intrinsicSize = IntrinsicSize.Min)
+                .padding(
+                    start = 16.dp,
+                    top = 16.dp,
+                    end = 16.dp,
+                    bottom = 8.dp,
+                ),
+            horizontalArrangement = Arrangement.spacedBy(space = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                modifier = Modifier
+                    .weight(weight = 1f)
+                    .fillMaxHeight()
+                    .backdropEffects(
+                        backdrop = backdrop,
+                        shape = RoundedCornerShape(size = 16.dp),
+                        color = Color(color = 0xFF1A3825),
+                        alpha = 0.8f,
+                        bigBlock = true,
+                    )
+                    .clickable {
+                        // 状态卡片点击事件
+                    },
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .size(size = 170.dp)
+                        .align(alignment = Alignment.BottomEnd)
+                        .offset(x = 38.dp, y = 45.dp),
+                    imageVector = Icons.Rounded.CheckCircleOutline,
+                    tint = Color(color = 0xFF36D167),
+                    contentDescription = null
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(all = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(space = 2.dp),
+                    horizontalAlignment = Alignment.Start,
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "工作中",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Android",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+            Column(
+                modifier = Modifier
+                    .weight(weight = 1f)
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.spacedBy(space = 12.dp),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(weight = 1f)
+                        .backdropEffects(
+                            backdrop = backdrop,
+                            shape = RoundedCornerShape(size = 16.dp),
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            alpha = 0.8f,
+                            bigBlock = true,
+                        )
+                        .clickable {
+
+                        },
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(all = 16.dp),
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = "Android",
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 14.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = "123",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(weight = 1f)
+                        .backdropEffects(
+                            backdrop = backdrop,
+                            shape = RoundedCornerShape(size = 16.dp),
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            alpha = 0.8f,
+                            bigBlock = true,
+                        )
+                        .clickable {
+
+                        },
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(all = 16.dp),
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = "Android",
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 14.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = "123",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                    }
+                }
+            }
+        }
+
+
         Text(
             text = "核心服务",
             modifier = Modifier.padding(
                 start = 30.dp,
-                top = 30.dp,
+                top = 8.dp,
                 end = 30.dp,
                 bottom = 15.dp,
             ),

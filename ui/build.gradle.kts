@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.kongzue.dialogx)
     implementation(libs.kyant.capsule)
     implementation(libs.kyant.backdrop)
+
     implementation(platform(libs.insert.koin.bom))
     implementation(libs.insert.koin.compose)
 
