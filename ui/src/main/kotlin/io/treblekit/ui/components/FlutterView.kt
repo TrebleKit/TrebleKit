@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import io.treblekit.ui.factory.ViewFactory
 import io.treblekit.ui.theme.TrebleKitTheme
 
 @Composable

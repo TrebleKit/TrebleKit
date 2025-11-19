@@ -2,14 +2,11 @@ package io.treblekit.ui.view
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.AbstractComposeView
 import io.treblekit.ui.activity.ActivityMain
-import io.treblekit.ui.factory.IViewFactory
-import io.treblekit.ui.factory.LocalViewFactory
+import io.treblekit.ui.factory.ViewFactoryLocalProvider
 import io.treblekit.ui.theme.TrebleKitTheme
 
 /**
@@ -32,25 +29,9 @@ internal class HybridComposeView @JvmOverloads constructor(
         // 必须加此代码否则不符合预期
         // 支持混合开发
         consumeWindowInsets = false
+        // 为此视图进行初步构图
         if (isAttachedToWindow) {
             createComposition()
-        }
-    }
-
-    private val mContext: Context = context
-
-    private val mViewFactory: IViewFactory = object : IViewFactory {
-
-        override val overlayView: View by lazy {
-            return@lazy OverlayView(context = mContext)
-        }
-
-        override val effectView: View by lazy {
-            return@lazy StreamerEffectView(context = mContext)
-        }
-
-        override val wrapperView: View by lazy {
-            return@lazy FlutterWrapperView(context = mContext)
         }
     }
 
@@ -62,9 +43,7 @@ internal class HybridComposeView @JvmOverloads constructor(
      */
     @Composable
     override fun Content() {
-        CompositionLocalProvider(
-            value = LocalViewFactory provides mViewFactory,
-        ) {
+        ViewFactoryLocalProvider {
             TrebleKitTheme {
                 ActivityMain()
             }

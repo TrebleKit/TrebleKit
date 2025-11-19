@@ -1,4 +1,4 @@
-package io.treblekit.ui.components
+package io.treblekit.ui.factory
 
 import android.view.View
 import android.widget.TextView
@@ -9,12 +9,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import io.treblekit.ui.R
-import io.treblekit.ui.factory.IViewFactory
 import io.treblekit.ui.theme.TrebleKitTheme
-import io.treblekit.ui.factory.LocalViewFactory
 
 @Composable
-fun ViewFactory(
+internal fun ViewFactory(
     modifier: Modifier = Modifier,
     view: IViewFactory.() -> View? = { null },
 ) {

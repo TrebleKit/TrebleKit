@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
+import io.treblekit.ui.factory.ViewFactory
 import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.theme.capsuleEdgePadding
 import io.treblekit.ui.theme.capsuleHeight
