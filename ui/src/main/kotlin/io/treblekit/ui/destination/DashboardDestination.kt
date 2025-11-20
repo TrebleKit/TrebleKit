@@ -293,22 +293,19 @@ fun MPPlayer(
             .fillMaxWidth()
             .height(height = 90.dp),
     ) {
+        RecentPlayer(
+            modifier = Modifier
+                .weight(weight = 1f)
+                .padding(end = 12.dp)
+                .fillMaxSize(),
+            pageState = pageState,
+            backdrop = backdrop,
+        )
         Row(
             modifier = Modifier
                 .fillMaxHeight()
                 .weight(weight = 1f),
         ) {
-            AppItem(
-                modifier = Modifier
-                    .weight(weight = 1f)
-                    .fillMaxSize(),
-                backdrop = backdrop,
-                onLaunch = popBackStack,
-                appIcon = painterResource(
-                    id = ResLogo.TREBLEKIT_LOGO,
-                ),
-                appName = "TrebleKit",
-            )
             AppItem(
                 modifier = Modifier
                     .weight(weight = 1f)
@@ -320,15 +317,18 @@ fun MPPlayer(
                 ),
                 appName = "EbKit",
             )
+            AppItem(
+                modifier = Modifier
+                    .weight(weight = 1f)
+                    .fillMaxSize(),
+                backdrop = backdrop,
+                onLaunch = popBackStack,
+                appIcon = painterResource(
+                    id = ResLogo.TREBLEKIT_LOGO,
+                ),
+                appName = "TrebleKit",
+            )
         }
-        RecentPlayer(
-            modifier = Modifier
-                .weight(weight = 1f)
-                .padding(start = 12.dp)
-                .fillMaxSize(),
-            pageState = pageState,
-            backdrop = backdrop,
-        )
     }
 }
 
@@ -346,7 +346,6 @@ fun RecentPlayer(
     pageState: PagerState? = null,
     backdrop: LayerBackdrop = rememberLayerBackdrop(),
 ) {
-    val primaryContainerTint: Color = MaterialTheme.colorScheme.primaryContainer
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     Column(
         modifier = modifier.wrapContentSize(),
@@ -359,7 +358,7 @@ fun RecentPlayer(
                 .backdropEffects(
                     backdrop = backdrop,
                     shape = ContinuousCapsule,
-                    color = primaryContainerTint,
+                    color = MaterialTheme.colorScheme.primaryContainer,
                     alpha = 0.8f,
                     bigBlock = false,
                 )
