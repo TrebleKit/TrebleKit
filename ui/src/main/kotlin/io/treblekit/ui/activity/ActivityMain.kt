@@ -1,10 +1,14 @@
 package io.treblekit.ui.activity
 
 import android.content.Intent
+import android.graphics.RenderEffect
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
@@ -19,12 +23,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kyant.backdrop.drawPlainBackdrop
+import com.kyant.backdrop.effects.blur
+import com.kyant.backdrop.effects.effect
+import io.treblekit.resources.ResGL
 import io.treblekit.ui.R
 import io.treblekit.ui.components.AppBackground
 import io.treblekit.ui.components.CapsuleSearch
@@ -43,6 +55,7 @@ import io.treblekit.ui.theme.TrebleKitTheme
 import io.treblekit.ui.theme.capsuleEdgePadding
 import io.treblekit.ui.theme.topBarPaddingExcess
 import io.treblekit.ui.utils.getIndexWithRoute
+import io.treblekit.utils.loadShader
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,6 +64,7 @@ fun ActivityMain() {
         initialPage = getIndexWithRoute(route = DashboardDestination),
         pageCount = { return@rememberPagerState appDestination.size }
     )
+    val resources = LocalResources.current
     AppBackground { backdrop ->
         OverlayLayer(backdrop = backdrop) {
             Scaffold(
@@ -60,6 +74,31 @@ fun ActivityMain() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentHeight(),
+//                            .drawPlainBackdrop(
+//                                backdrop = backdrop,
+//                                shape = { RectangleShape },
+//                                effects = {
+//                                    blur(radius = 4f.dp.toPx())
+//                                    effect(
+//                                        effect = RenderEffect.createRuntimeShaderEffect(
+//                                            obtainRuntimeShader(
+//                                                key = "AlphaMask",
+//                                                string = loadShader(
+//                                                    resources = resources,
+//                                                    id = ResGL.PROGRESSIVE_BLUR,
+//                                                ) ?: error(
+//                                                    message = "",
+//                                                )
+//                                            ).apply {
+//                                                setFloatUniform("size", size.width, size.height)
+//                                                setColorUniform("tint", Color.Black.toArgb())
+//                                                setFloatUniform("tintIntensity", 0.6f)
+//                                            },
+//                                            "content",
+//                                        )
+//                                    )
+//                                }
+//                            ),
                         title = {
                             Text(
                                 text = stringResource(id = R.string.activity_main_title),

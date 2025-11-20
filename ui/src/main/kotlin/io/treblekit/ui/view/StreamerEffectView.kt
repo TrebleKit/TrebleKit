@@ -12,7 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import io.treblekit.resources.ResGL
-import java.util.Scanner
+import io.treblekit.utils.loadShader
 
 internal class StreamerEffectView @JvmOverloads constructor(
     context: Context,
@@ -194,30 +194,6 @@ internal class StreamerEffectView @JvmOverloads constructor(
 
     private fun setResolution(fArr: FloatArray) {
         uResolution = fArr
-    }
-
-    private fun loadShader(resources: Resources, id: Int): String? {
-        try {
-            val openRawResource = resources.openRawResource(id)
-            try {
-                val scanner = Scanner(openRawResource)
-                try {
-                    val builder = kotlin.text.StringBuilder()
-                    while (scanner.hasNextLine()) {
-                        builder.append(scanner.nextLine())
-                        builder.append("\n")
-                    }
-                    val str = builder.toString()
-                    scanner.close()
-                    openRawResource.close()
-                    return str
-                } finally {
-                }
-            } finally {
-            }
-        } catch (_: Exception) {
-            return null
-        }
     }
 
     private fun showRuntimeShader(context: Context, view: View) {

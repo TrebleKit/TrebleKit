@@ -34,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -110,7 +111,8 @@ fun DashboardDestination(
                     modifier = Modifier
                         .size(size = 170.dp)
                         .align(alignment = Alignment.BottomEnd)
-                        .offset(x = 38.dp, y = 45.dp),
+                        .offset(x = 38.dp, y = 45.dp)
+                        .alpha(alpha = 0.8f),
                     imageVector = Icons.Rounded.CheckCircleOutline,
                     tint = Color(color = 0xFF36D167),
                     contentDescription = null
