@@ -42,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kyant.backdrop.backdrops.LayerBackdrop
@@ -72,8 +73,21 @@ fun DashboardDestination(
             .verticalScroll(state = scrollState),
     ) {
 
+//        Text(
+//            text = "系统状态",
+//            modifier = Modifier.padding(
+//                start = 30.dp,
+//                top = 16.dp,
+//                end = 30.dp,
+//                bottom = 8.dp,
+//            ),
+//            fontSize = 14.sp,
+//            color = MaterialTheme.colorScheme.onBackground,
+//        )
+
+
         Text(
-            text = "系统状态",
+            text = "核心服务",
             modifier = Modifier.padding(
                 start = 30.dp,
                 top = 16.dp,
@@ -81,158 +95,15 @@ fun DashboardDestination(
                 bottom = 8.dp,
             ),
             fontSize = 14.sp,
+            style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onBackground,
         )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(intrinsicSize = IntrinsicSize.Min)
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(space = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(
-                modifier = Modifier
-                    .weight(weight = 1f)
-                    .fillMaxHeight()
-                    .backdropEffects(
-                        backdrop = backdrop,
-                        shape = RoundedCornerShape(size = 16.dp),
-                        color = Color(color = 0xFF1A3825),
-                        alpha = 0.8f,
-                        bigBlock = true,
-                    )
-                    .clickable {
-                        // 状态卡片点击事件
-                    },
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .size(size = 170.dp)
-                        .align(alignment = Alignment.BottomEnd)
-                        .offset(x = 38.dp, y = 45.dp)
-                        .alpha(alpha = 0.8f),
-                    imageVector = Icons.Rounded.CheckCircleOutline,
-                    tint = Color(color = 0xFF36D167),
-                    contentDescription = null
-                )
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(all = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(space = 2.dp),
-                    horizontalAlignment = Alignment.Start,
-                ) {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "工作中",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "系统状态",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            }
-            Column(
-                modifier = Modifier
-                    .weight(weight = 1f)
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.spacedBy(space = 12.dp),
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(weight = 1f)
-                        .backdropEffects(
-                            backdrop = backdrop,
-                            shape = RoundedCornerShape(size = 16.dp),
-                            color = MaterialTheme.colorScheme.primaryContainer,
-                            alpha = 0.8f,
-                            bigBlock = true,
-                        )
-                        .clickable {
-
-                        },
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(all = 16.dp),
-                        horizontalAlignment = Alignment.Start
-                    ) {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = "平台组件计数",
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = "999+",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onSurface,
-                        )
-                    }
-                }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(weight = 1f)
-                        .backdropEffects(
-                            backdrop = backdrop,
-                            shape = RoundedCornerShape(size = 16.dp),
-                            color = MaterialTheme.colorScheme.primaryContainer,
-                            alpha = 0.8f,
-                            bigBlock = true,
-                        )
-                        .clickable {
-
-                        },
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(all = 16.dp),
-                        horizontalAlignment = Alignment.Start
-                    ) {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = "Shizuku版本",
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = "114.514.1919810",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
-                }
-            }
-        }
-
-
-        Text(
-            text = "核心服务",
+        StateCard(
             modifier = Modifier.padding(
-                horizontal = 30.dp, vertical = 8.dp
+                horizontal = 16.dp,
+                vertical = 8.dp,
             ),
-            fontSize = 14.sp,
-            color = MaterialTheme.colorScheme.onBackground,
+            backdrop = backdrop,
         )
         MPPlayer(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
@@ -250,26 +121,49 @@ fun DashboardDestination(
             backdrop = backdrop,
         )
         Text(
-            text = "常用应用",
+            text = "详细信息",
             modifier = Modifier.padding(
                 start = 30.dp,
                 top = 8.dp,
                 end = 30.dp,
                 bottom = 8.dp,
             ),
+            style = MaterialTheme.typography.titleMedium,
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.onBackground,
         )
-        AppsGrid(
+
+        InfoCard(
             modifier = Modifier.padding(
                 start = 16.dp,
+                top = 8.dp,
                 end = 16.dp,
                 bottom = 16.dp,
-                top = 8.dp
             ),
-            backdrop = backdrop,
-            list = miniProgramList,
         )
+
+//        Text(
+//            text = "常用应用",
+//            modifier = Modifier.padding(
+//                start = 30.dp,
+//                top = 8.dp,
+//                end = 30.dp,
+//                bottom = 8.dp,
+//            ),
+//            fontSize = 14.sp,
+//            color = MaterialTheme.colorScheme.onBackground,
+//        )
+//
+//        AppsGrid(
+//            modifier = Modifier.padding(
+//                start = 16.dp,
+//                end = 16.dp,
+//                bottom = 16.dp,
+//                top = 8.dp
+//            ),
+//            backdrop = backdrop,
+//            list = miniProgramList,
+//        )
     }
 }
 
@@ -278,6 +172,223 @@ fun DashboardDestination(
 fun DashboardDestinationPreview() {
     TrebleKitTheme {
         DashboardDestination()
+    }
+}
+
+@Composable
+fun InfoItem(
+    title: String,
+    content: String,
+    bottomPadding: Dp = 24.dp
+) {
+    Text(
+        text = title,
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.Medium,
+        color = MaterialTheme.colorScheme.onSurface
+    )
+    Text(
+        text = content,
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(top = 2.dp, bottom = bottomPadding)
+    )
+}
+
+@Composable
+fun InfoCard(
+    modifier: Modifier = Modifier,
+    backdrop: LayerBackdrop = rememberLayerBackdrop(),
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .backdropEffects(
+                backdrop = backdrop,
+                shape = RoundedCornerShape(size = 16.dp),
+                color = MaterialTheme.colorScheme.surfaceContainer,
+                alpha = 0.8f,
+                bigBlock = true,
+            )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            InfoItem(
+                title = "Android 版本",
+                content = "111"
+            )
+            InfoItem(
+                title = "Shizuku 版本",
+                content = "111"
+            )
+            InfoItem(
+                title = "软件版本",
+                content = "111"
+            )
+            InfoItem(
+                title = "平台组件计数",
+                content = "111",
+                bottomPadding = 0.dp
+            )
+        }
+    }
+}
+
+@Composable
+fun StateCard(
+    modifier: Modifier = Modifier,
+    backdrop: LayerBackdrop = rememberLayerBackdrop(),
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(intrinsicSize = IntrinsicSize.Min),
+        horizontalArrangement = Arrangement.spacedBy(space = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier
+                .weight(weight = 1f)
+                .fillMaxHeight()
+                .backdropEffects(
+                    backdrop = backdrop,
+                    shape = RoundedCornerShape(size = 16.dp),
+                    color = Color(color = 0xFF1A3825),
+                    alpha = 0.8f,
+                    bigBlock = true,
+                )
+                .clickable {
+                    // 状态卡片点击事件
+                },
+        ) {
+            Icon(
+                modifier = Modifier
+                    .size(size = 170.dp)
+                    .align(alignment = Alignment.BottomEnd)
+                    .offset(x = 38.dp, y = 45.dp)
+                    .alpha(alpha = 0.8f),
+                imageVector = Icons.Rounded.CheckCircleOutline,
+                tint = Color(color = 0xFF36D167),
+                contentDescription = null
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(all = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(space = 2.dp),
+                horizontalAlignment = Alignment.Start,
+            ) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "工作中",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "系统状态",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+        Column(
+            modifier = Modifier
+                .weight(weight = 1f)
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.spacedBy(space = 12.dp),
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(weight = 1f)
+                    .backdropEffects(
+                        backdrop = backdrop,
+                        shape = RoundedCornerShape(size = 16.dp),
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        alpha = 0.8f,
+                        bigBlock = true,
+                    )
+                    .clickable {
+
+                    },
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 16.dp),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "平台组件计数",
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "999+",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(weight = 1f)
+                    .backdropEffects(
+                        backdrop = backdrop,
+                        shape = RoundedCornerShape(size = 16.dp),
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        alpha = 0.8f,
+                        bigBlock = true,
+                    )
+                    .clickable {
+
+                    },
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 16.dp),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Shizuku版本",
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "114.514.1919810",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun StateCardPreview() {
+    TrebleKitTheme {
+        StateCard()
     }
 }
 
@@ -292,11 +403,11 @@ fun MPPlayer(
         modifier = modifier
             .fillMaxWidth()
             .height(height = 90.dp),
+        horizontalArrangement = Arrangement.spacedBy(space = 12.dp),
     ) {
         RecentPlayer(
             modifier = Modifier
                 .weight(weight = 1f)
-                .padding(end = 12.dp)
                 .fillMaxSize(),
             pageState = pageState,
             backdrop = backdrop,

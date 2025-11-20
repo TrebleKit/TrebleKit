@@ -65,9 +65,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
 
             ...details.map(
-              (e) => ListTile(
-                title: Text('${e.title} (${e.description})'),
-                subtitle: Text(e.channel),
+              (e) => Card(
+                child: ListTile(
+                  title: Text('${e.title} (${e.description})'),
+                  subtitle: Text(e.channel),
+                ),
               ),
             ),
           ],
