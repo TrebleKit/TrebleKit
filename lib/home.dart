@@ -19,20 +19,27 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+
     const MethodChannel("ecosed_bridge")
-        .invokeListMethod<String>('getPluginList', {
+        .invokeMethod<List<dynamic>>('getPluginList', {
           'channel': 'ebkit_platform',
         })
-        .then((result) {
+        .then((List<dynamic>? result) {
+          // 接收数据并转换类型后转换为非空类型
+          List<String> dataList =
+              result?.cast<String>() ?? List<String>.empty();
+          // 缓存数据
           List<PluginDetails> temp = [];
-          for (var element in result ?? []) {
+          // 遍历数据列表
+          for (var data in dataList) {
             temp.add(
               PluginDetails.formJSON(
-                json: jsonDecode(element),
+                json: jsonDecode(data), // 反序列化数据
                 type: PluginType.normal,
               ),
             );
           }
+          // 更新视图
           setState(() => details = temp);
         }, onError: (error) => debugPrint(error));
   }

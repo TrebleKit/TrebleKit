@@ -34,7 +34,7 @@ class EbKit : TrebleComponent(), MethodHandlerProxy {
             }
 
             "getPluginList" -> result.success(
-                result = execPluginMethod(
+                result = execPluginMethod<ArrayList<String>>(
                     channel = EcosedChannel.ENGINE_CHANNEL_NAME,
                     method = "getPluginList",
                     bundle = null
