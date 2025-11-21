@@ -4,7 +4,7 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.treblekit.common.EbConfig
-import io.treblekit.common.di.injectInstance
+import io.treblekit.utils.injectInstance
 import io.treblekit.common.proxy.MethodCallProxy
 import io.treblekit.common.proxy.MethodHandlerProxy
 import io.treblekit.common.proxy.MethodResultProxy

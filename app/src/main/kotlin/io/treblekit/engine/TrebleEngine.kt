@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import io.treblekit.BuildConfig
 import io.treblekit.common.EbConfig
-import io.treblekit.common.di.injectInstance
+import io.treblekit.utils.injectInstance
 import io.treblekit.engine.Engine.Companion.TAG
 import io.treblekit.plugin.IExecutor
 import io.treblekit.plugin.PluginBinding

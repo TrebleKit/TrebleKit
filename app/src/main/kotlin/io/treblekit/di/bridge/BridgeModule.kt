@@ -2,7 +2,7 @@ package io.treblekit.di.bridge
 
 import io.treblekit.bridge.EbKit
 import io.treblekit.common.EbConfig
-import io.treblekit.common.di.instance
+import io.treblekit.utils.instance
 import io.treblekit.common.proxy.MethodHandlerProxy
 import io.treblekit.plugin.TrebleComponent
 import org.koin.dsl.module
