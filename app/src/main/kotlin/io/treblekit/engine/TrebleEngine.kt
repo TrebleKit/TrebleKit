@@ -3,23 +3,22 @@ package io.treblekit.engine
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import com.kongzue.dialogx.dialogs.PopTip
 import io.treblekit.BuildConfig
 import io.treblekit.common.EbConfig
+import io.treblekit.common.di.injectInstance
 import io.treblekit.engine.Engine.Companion.TAG
 import io.treblekit.plugin.IExecutor
 import io.treblekit.plugin.PluginBinding
 import io.treblekit.plugin.PluginMethodCall
 import io.treblekit.plugin.PluginResult
-import io.treblekit.plugin.TreblePlugin
+import io.treblekit.plugin.TrebleComponent
 import io.treblekit.utils.isNotNull
 import io.treblekit.utils.isNull
 import org.json.JSONObject
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.koin.core.qualifier.named
 
-internal class TrebleEngine : TreblePlugin(), KoinComponent, IExecutor, IEngine {
+internal class TrebleEngine : TrebleComponent(), KoinComponent, IExecutor, IEngine {
 
     /** 供引擎使用的基本调试布尔值 */
     private val mBaseDebug: Boolean = BuildConfig.DEBUG
@@ -28,15 +27,15 @@ internal class TrebleEngine : TreblePlugin(), KoinComponent, IExecutor, IEngine 
     private val mContext: Context by inject<Context>()
 
     /** 通过依赖注入获取到连接器插件 */
-    private val mConnector: TreblePlugin by inject<TreblePlugin>(
-        qualifier = named(name = EbConfig.DI_EBKIT_PLUGIN_NAMED),
+    private val mConnector: TrebleComponent by injectInstance(
+        name = EbConfig.DI_EBKIT_COMPONENT_NAMED,
     )
 
     /** 插件绑定器. */
     private var mBinding: PluginBinding? = null
 
     /** 插件列表. */
-    private var mPluginList: ArrayList<TreblePlugin>? = null
+    private var mPluginList: ArrayList<TrebleComponent>? = null
 
     private var mJSONList: ArrayList<String>? = null
 
@@ -55,22 +54,16 @@ internal class TrebleEngine : TreblePlugin(), KoinComponent, IExecutor, IEngine 
     /**
      * 引擎初始化时执行
      */
-    override fun onEcosedAdded(binding: PluginBinding): Unit = run {
-        super.onEcosedAdded(binding)
+    override fun onComponentAdded(binding: PluginBinding): Unit = run {
+        super.onComponentAdded(binding)
         // 设置来自插件的全局调试布尔值
 //            mFullDebug = this@run.isDebug
     }
 
-    override fun onEcosedMethodCall(call: PluginMethodCall, result: PluginResult) {
-        super.onEcosedMethodCall(call, result)
+    override fun onTrebleMethodCall(call: PluginMethodCall, result: PluginResult) {
+        super.onTrebleMethodCall(call, result)
         when (call.method) {
-            "hello" -> {
-                PopTip.show("hello")
-                result.success(true)
-            }
-
-            "getPluginList" -> result.success(mJSONList)
-
+            "getPluginList" -> result.success(result = mJSONList)
             else -> result.notImplemented()
         }
     }
@@ -80,9 +73,10 @@ internal class TrebleEngine : TreblePlugin(), KoinComponent, IExecutor, IEngine 
      * @param context 上下文 - 此上下文来自FlutterPlugin的ApplicationContext
      */
     override fun onCreateEngine() {
-        if (mPluginList.isNull or mBinding.isNull or mJSONList.isNull) {
+        if (mPluginList.isNull or mJSONList.isNull or mBinding.isNull) {
             // 初始化插件列表.
             mPluginList = arrayListOf()
+            // 初始化组件数据列表
             mJSONList = arrayListOf()
             // 初始化插件绑定
             mBinding = PluginBinding(
@@ -97,7 +91,7 @@ internal class TrebleEngine : TreblePlugin(), KoinComponent, IExecutor, IEngine 
             }.forEach { plugin ->
                 plugin.apply {
                     try {
-                        this@apply.onEcosedAdded(binding = mBinding!!)
+                        this@apply.onComponentAdded(binding = mBinding!!)
                         if (mBaseDebug) {
                             Log.d(
                                 TAG,
@@ -146,7 +140,7 @@ internal class TrebleEngine : TreblePlugin(), KoinComponent, IExecutor, IEngine 
      * 销毁引擎释放资源.
      */
     override fun onDestroyEngine() {
-        if (mPluginList.isNotNull or mBinding.isNotNull or mJSONList.isNotNull) {
+        if (mPluginList.isNotNull or mJSONList.isNotNull or mBinding.isNotNull) {
             // 清空插件列表
             mPluginList = null
         } else if (mBaseDebug) {

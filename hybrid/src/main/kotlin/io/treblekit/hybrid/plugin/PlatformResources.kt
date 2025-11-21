@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
+import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.createBitmap
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -51,8 +52,11 @@ internal class PlatformResources : FlutterPlugin, MethodChannel.MethodCallHandle
 
     /**
      * 绘制Drawable为PNG格式二进制数据
+     *
+     * @param id Drawable资源ID
+     * @return PNG格式二进制数据
      */
-    private fun drawableToByteArray(id: Int): ByteArray {
+    private fun drawableToByteArray(@DrawableRes id: Int): ByteArray {
         val drawable: Drawable? = AppCompatResources.getDrawable(mContext, id)
         if (drawable != null) {
             val bitmap = createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
@@ -73,6 +77,6 @@ internal class PlatformResources : FlutterPlugin, MethodChannel.MethodCallHandle
     private companion object {
 
         /** 平台资源插件通道名称 */
-        private const val PLATFORM_RESOURCES_CHANNEL: String = "platform_resources"
+        const val PLATFORM_RESOURCES_CHANNEL: String = "platform_resources"
     }
 }

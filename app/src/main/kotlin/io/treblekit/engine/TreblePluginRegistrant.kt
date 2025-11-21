@@ -1,7 +1,7 @@
 package io.treblekit.engine
 
 import android.util.Log
-import io.treblekit.plugin.TreblePlugin
+import io.treblekit.plugin.TrebleComponent
 
 internal object TreblePluginRegistrant {
 
@@ -9,14 +9,14 @@ internal object TreblePluginRegistrant {
     private const val TAG: String = "TreblePluginRegistrant"
 
     /** 插件列表 */
-    private val mPlugins: ArrayList<TreblePlugin> by lazy {
+    private val mPlugins: ArrayList<TrebleComponent> by lazy {
         return@lazy arrayListOf()
     }
 
     /**
      * 注册插件
      */
-    internal fun registerWith(plugins: ArrayList<TreblePlugin>) {
+    internal fun registerWith(plugins: ArrayList<TrebleComponent>) {
         mPlugins.forEach { plugin ->
             try {
                 plugins.add(plugin)

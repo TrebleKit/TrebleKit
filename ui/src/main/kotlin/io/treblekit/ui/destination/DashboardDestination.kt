@@ -72,20 +72,6 @@ fun DashboardDestination(
             .fillMaxSize()
             .verticalScroll(state = scrollState),
     ) {
-
-//        Text(
-//            text = "系统状态",
-//            modifier = Modifier.padding(
-//                start = 30.dp,
-//                top = 16.dp,
-//                end = 30.dp,
-//                bottom = 8.dp,
-//            ),
-//            fontSize = 14.sp,
-//            color = MaterialTheme.colorScheme.onBackground,
-//        )
-
-
         Text(
             text = "核心服务",
             modifier = Modifier.padding(

@@ -7,7 +7,7 @@ import android.os.Bundle
 /**
  * 基本插件
  */
-abstract class TreblePlugin : ContextWrapper(null) {
+abstract class TrebleComponent : ContextWrapper(null) {
 
     /** 插件通道 */
     private lateinit var mPluginChannel: PluginChannel
@@ -28,29 +28,29 @@ abstract class TreblePlugin : ContextWrapper(null) {
     /**
      * 插件添加时执行
      */
-    open fun onEcosedAdded(binding: PluginBinding) {
+    open fun onComponentAdded(binding: PluginBinding) {
         // 初始化插件通道
-        this@TreblePlugin.mPluginChannel = PluginChannel(
+        this@TrebleComponent.mPluginChannel = PluginChannel(
             binding = binding,
-            channel = this@TreblePlugin.channel,
+            channel = this@TrebleComponent.channel,
         )
         // 插件附加基本上下文
-        this@TreblePlugin.attachBaseContext(
-            base = this@TreblePlugin.mPluginChannel.getContext()
+        this@TrebleComponent.attachBaseContext(
+            base = this@TrebleComponent.mPluginChannel.getContext()
         )
         // 引擎
-        this@TreblePlugin.mExecutor = this@TreblePlugin.mPluginChannel.getExecutor()
+        this@TrebleComponent.mExecutor = this@TrebleComponent.mPluginChannel.getExecutor()
         // 获取是否调试模式
-        this@TreblePlugin.mDebug = this@TreblePlugin.mPluginChannel.isDebug()
+        this@TrebleComponent.mDebug = this@TrebleComponent.mPluginChannel.isDebug()
         // 设置调用
-        this@TreblePlugin.mPluginChannel.setMethodCallHandler(
-            handler = this@TreblePlugin
+        this@TrebleComponent.mPluginChannel.setMethodCallHandler(
+            handler = this@TrebleComponent
         )
     }
 
     /** 获取插件通道 */
     val getPluginChannel: PluginChannel
-        get() = this@TreblePlugin.mPluginChannel
+        get() = this@TrebleComponent.mPluginChannel
 
     /** 需要子类重写的插件标题 */
     abstract val title: String
@@ -63,7 +63,7 @@ abstract class TreblePlugin : ContextWrapper(null) {
 
     /** 供子类使用的判断调试模式的接口 */
     protected val isDebug: Boolean
-        get() = this@TreblePlugin.mDebug
+        get() = this@TrebleComponent.mDebug
 
     /**
      * 执行方法
@@ -76,7 +76,7 @@ abstract class TreblePlugin : ContextWrapper(null) {
         channel: String,
         method: String,
         bundle: Bundle?,
-    ): T? = this@TreblePlugin.mExecutor.execMethodCall(
+    ): T? = this@TrebleComponent.mExecutor.execMethodCall(
         channel = channel,
         method = method,
         bundle = bundle,
@@ -85,7 +85,7 @@ abstract class TreblePlugin : ContextWrapper(null) {
     /**
      * 插件调用方法
      */
-    open fun onEcosedMethodCall(
+    open fun onTrebleMethodCall(
         call: PluginMethodCall,
         result: PluginResult,
     ) = Unit

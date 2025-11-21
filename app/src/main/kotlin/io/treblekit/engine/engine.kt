@@ -13,7 +13,7 @@ import io.treblekit.app.MainService
 import io.treblekit.plugin.PluginBinding
 import io.treblekit.plugin.PluginMethodCall
 import io.treblekit.plugin.PluginResult
-import io.treblekit.plugin.TreblePlugin
+import io.treblekit.plugin.TrebleComponent
 import io.treblekit.utils.isNotNull
 
 class Engine {
@@ -31,7 +31,7 @@ class Engine {
     private var mIsBind: Boolean = false
 
     /** 负责与服务通信的客户端 */
-    private val mServiceInvoke: TreblePlugin = object : TreblePlugin(), InvokeWrapper {
+    private val mServiceInvoke: TrebleComponent = object : TrebleComponent(), InvokeWrapper {
 
         /** 插件标题 */
         override val title: String
@@ -48,8 +48,8 @@ class Engine {
         /**
          * 插件添加时执行
          */
-        override fun onEcosedAdded(binding: PluginBinding) = run {
-            super.onEcosedAdded(binding)
+        override fun onComponentAdded(binding: PluginBinding) = run {
+            super.onComponentAdded(binding)
             mEcosedServicesIntent = Intent(
                 this@run,
                 MainService::class.java,
@@ -65,8 +65,8 @@ class Engine {
         /**
          * 插件方法调用
          */
-        override fun onEcosedMethodCall(call: PluginMethodCall, result: PluginResult) {
-            super.onEcosedMethodCall(call, result)
+        override fun onTrebleMethodCall(call: PluginMethodCall, result: PluginResult) {
+            super.onTrebleMethodCall(call, result)
             when (call.method) {
 //                EcosedMethod.OPEN_DIALOG_METHOD -> result.success(result = invokeMethod {
 //                    openDialog()
@@ -110,7 +110,7 @@ class Engine {
     }
 
     /** 服务相当于整个服务类部分无法在大类中实现的方法在此实现并调用 */
-    private val mServiceDelegate: TreblePlugin = object : TreblePlugin(), ServiceConnection {
+    private val mServiceDelegate: TrebleComponent = object : TrebleComponent(), ServiceConnection {
 
         /** 插件标题 */
         override val title: String

@@ -1,23 +1,47 @@
 package io.treblekit.bridge
 
+import android.os.Bundle
 import android.util.Log
+import com.kongzue.dialogx.dialogs.PopTip
 import io.treblekit.common.proxy.MethodCallProxy
 import io.treblekit.common.proxy.MethodHandlerProxy
 import io.treblekit.common.proxy.MethodResultProxy
 import io.treblekit.engine.EcosedChannel
-import io.treblekit.plugin.TreblePlugin
-import io.treblekit.utils.isNotNull
+import io.treblekit.plugin.PluginMethodCall
+import io.treblekit.plugin.PluginResult
+import io.treblekit.plugin.TrebleComponent
 
-class EbKit : TreblePlugin(), MethodHandlerProxy {
+class EbKit : TrebleComponent(), MethodHandlerProxy {
 
     override val title: String
         get() = "EbKit"
 
     override val channel: String
-        get() = "ebkit"
+        get() = EBKIT_CHANNEL
 
     override val description: String
         get() = "EbKit"
+
+    override fun onTrebleMethodCall(
+        call: PluginMethodCall,
+        result: PluginResult,
+    ) {
+        super.onTrebleMethodCall(call, result)
+        when (call.method) {
+            "hello" -> {
+                PopTip.show("hello")
+                result.success(true)
+            }
+
+            "getPluginList" -> result.success(
+                result = execPluginMethod(
+                    channel = EcosedChannel.ENGINE_CHANNEL_NAME,
+                    method = "getPluginList",
+                    bundle = null
+                )
+            )
+        }
+    }
 
     override fun onProxyMethodCall(
         call: MethodCallProxy,
@@ -25,21 +49,15 @@ class EbKit : TreblePlugin(), MethodHandlerProxy {
     ) {
         try {
             // 执行代码并获取执行后的返回值
-            execPluginMethod<Any>(
-                channel = call.bundleProxy.getString(
-                    "channel",
-                    EcosedChannel.ENGINE_CHANNEL_NAME,
+            result.success(
+                resultProxy = execPluginMethod<Any>(
+                    channel = call.argumentProxy<String>(
+                        key = COMPONENT_CHANNEL_KEY,
+                    ) ?: EBKIT_CHANNEL,
+                    method = call.methodProxy,
+                    bundle = Bundle(),
                 ),
-                method = call.methodProxy,
-                bundle = call.bundleProxy,
-            ).let { resultProxy ->
-                // 判断是否为空并提交数据
-                if (resultProxy.isNotNull) {
-                    result.success(resultProxy = resultProxy)
-                } else {
-                    result.success(resultProxy = null)
-                }
-            }
+            )
         } catch (e: Exception) {
             // 抛出异常
             result.error(
@@ -50,7 +68,18 @@ class EbKit : TreblePlugin(), MethodHandlerProxy {
         }
     }
 
+    /**
+     * 伴生对象
+     */
     private companion object {
-        const val TAG: String = "BridgePlugin"
+
+        /** 日志打印标签 */
+        const val TAG: String = "EbKit"
+
+        /** Flutter调用时用来获取channel的键值 */
+        const val COMPONENT_CHANNEL_KEY: String = "channel"
+
+        /** EbKit的通道名称 */
+        const val EBKIT_CHANNEL: String = "ebkit_platform"
     }
 }

@@ -20,10 +20,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     const MethodChannel("ecosed_bridge")
-        .invokeListMethod<String>('getPluginList', {'channel': 'ecosed_engine'})
-        .then((value) {
+        .invokeListMethod<String>('getPluginList', {
+          'channel': 'ebkit_platform',
+        })
+        .then((result) {
           List<PluginDetails> temp = [];
-          for (var element in value ?? []) {
+          for (var element in result ?? []) {
             temp.add(
               PluginDetails.formJSON(
                 json: jsonDecode(element),
@@ -32,8 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           }
           setState(() => details = temp);
-        })
-        .catchError((error) => debugPrint(error));
+        }, onError: (error) => debugPrint(error));
   }
 
   @override
@@ -59,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 final MethodChannel channel = MethodChannel('ecosed_bridge');
-                channel.invokeMethod('hello', {'channel': 'ecosed_engine'});
+                channel.invokeMethod('hello', {'channel': 'ebkit_platform'});
               },
               child: Text("Hello"),
             ),
@@ -79,13 +80,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class EcosedBridge {
-  static const MethodChannel _channel = MethodChannel('ecosed_bridge');
+class EbKit {}
 
-  void a() {
-    _channel.setMethodCallHandler((call) async {
-      switch (call.method) {}
-    });
+class EcosedBridge {
+  static const String _channelName = 'ecosed_engine';
+  static const MethodChannel _channel = MethodChannel(_channelName);
+
+  void invokeMethod({required String channel, required String method}) {
+    _channel.invokeMethod(method, {'channel': channel});
   }
 }
 

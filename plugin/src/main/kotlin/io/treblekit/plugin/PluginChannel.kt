@@ -18,7 +18,7 @@ class PluginChannel(
     private var mChannel: String = channel
 
     /** 方法调用处理接口. */
-    private var mPlugin: TreblePlugin? = null
+    private var mPlugin: TrebleComponent? = null
 
     /** 方法名. */
     private var mMethod: String? = null
@@ -34,7 +34,7 @@ class PluginChannel(
      *
      * @param handler 执行方法时调用EcosedMethodCallHandler.
      */
-    fun setMethodCallHandler(handler: TreblePlugin) {
+    fun setMethodCallHandler(handler: TrebleComponent) {
         this@PluginChannel.mPlugin = handler
     }
 
@@ -81,7 +81,7 @@ class PluginChannel(
         this@PluginChannel.mMethod = method
         this@PluginChannel.mBundle = bundle
         if (name == this@PluginChannel.mChannel) {
-            this@PluginChannel.mPlugin?.onEcosedMethodCall(
+            this@PluginChannel.mPlugin?.onTrebleMethodCall(
                 call = this@PluginChannel.call,
                 result = this@PluginChannel.result,
             )
