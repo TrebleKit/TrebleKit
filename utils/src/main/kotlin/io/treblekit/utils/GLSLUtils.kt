@@ -1,11 +1,12 @@
 package io.treblekit.utils
 
 import android.content.res.Resources
+import androidx.annotation.RawRes
 import java.util.Scanner
 
-fun loadShader(resources: Resources, id: Int): String? {
+fun Resources.loadShader(@RawRes id: Int): String? {
     try {
-        val openRawResource = resources.openRawResource(id)
+        val openRawResource = openRawResource(id)
         try {
             val scanner = Scanner(openRawResource)
             try {

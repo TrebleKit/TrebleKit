@@ -57,7 +57,7 @@ internal class StreamerEffectView @JvmOverloads constructor(
     }
 
     private fun initShader() {
-        val shader: String? = loadShader(resources = mResources, id = ResGL.STREAMER_EFFECT)
+        val shader: String? = mResources.loadShader(id = ResGL.STREAMER_EFFECT)
         mBackgroundShader = RuntimeShader(shader!!)
         mBackgroundShader.setFloatUniform("uTranslateY", uTranslateY)
         mBackgroundShader.setFloatUniform("uPoints", uPoints)
