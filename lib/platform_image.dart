@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'global.dart';
+import 'platform_invoker.dart';
 
 enum ImageDrawable {
   treblekit(method: 'treblekit'),
@@ -34,12 +35,10 @@ class _PlatformImageState extends State<_PlatformImage> {
   @override
   void initState() {
     super.initState();
-    if (!Global.kSingleMode) {
-      const MethodChannel("platform_resources")
-          .invokeMethod<Uint8List>(widget.image.method)
-          .then((value) => setState(() => image = value))
-          .catchError((error) => debugPrint(error));
-    }
+    const MethodChannel("platform_resources")
+        .invokePlatform<Uint8List>(widget.image.method)
+        .then((value) => setState(() => image = value))
+        .catchError((error) => debugPrint(error));
   }
 
   @override

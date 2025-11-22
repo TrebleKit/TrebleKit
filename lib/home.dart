@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'capsule_placeholder.dart';
-import 'global.dart';
 import 'platform_image.dart';
+import 'platform_invoker.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -17,34 +17,33 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<PluginDetails> details = [];
 
+  final EcosedBridge _bridge = const EcosedBridge();
+  final EbKit _ebKit = const EbKit();
+
   @override
   void initState() {
     super.initState();
-
-    if (!Global.kSingleMode) {
-      const MethodChannel("ecosed_bridge")
-          .invokeMethod<List<dynamic>>('getPluginList', {
-            'channel': 'ebkit_platform',
-          })
-          .then((List<dynamic>? result) {
-            // 接收数据并转换类型后转换为非空类型
-            final List<String> dataList =
-                result?.cast<String>() ?? List<String>.empty();
-            // 缓存数据
-            final List<PluginDetails> temp = [];
-            // 遍历数据列表
-            for (var data in dataList) {
-              temp.add(
-                PluginDetails.formJSON(
-                  json: jsonDecode(data), // 反序列化数据
-                  type: PluginType.normal,
-                ),
-              );
-            }
-            // 更新视图
-            setState(() => details = temp);
-          }, onError: (error) => debugPrint(error));
-    }
+    _ebKit
+        .getPluginList()
+        .then((result) {
+          // 缓存数据
+          final List<PluginDetails> temp = [];
+          // 遍历数据列表
+          for (var data in result) {
+            temp.add(
+              PluginDetails.formJSON(
+                json: jsonDecode(data), // 反序列化数据
+                type: PluginType.normal,
+              ),
+            );
+          }
+          // 更新视图
+          setState(() => details = temp);
+        })
+        .catchError((error) {
+          // 处理异常
+          debugPrint(error);
+        });
   }
 
   @override
@@ -69,9 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
             ElevatedButton(
               onPressed: () {
-                if (Global.kSingleMode) return;
-                final MethodChannel channel = MethodChannel('ecosed_bridge');
-                channel.invokeMethod('hello', {'channel': 'ebkit_platform'});
+                _bridge.invokeMethod('ebkit_platform', 'hello');
               },
               child: Text("Hello"),
             ),
@@ -79,8 +76,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ...details.map(
               (e) => Card(
                 child: ListTile(
-                  title: Text('${e.title} (${e.description})'),
-                  subtitle: Text(e.channel),
+                  title: Text('${e.title} (${e.channel})'),
+                  subtitle: Text(e.description),
                 ),
               ),
             ),
@@ -91,14 +88,37 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class EbKit {}
+class EbKit {
+  const EbKit();
+
+  static const String _platformChannel = 'ebkit_platform';
+
+  static const EcosedBridge _bridge = EcosedBridge();
+
+  Future<List<String>> getPluginList() async {
+    var result = await _bridge.invokeMethod<List<dynamic>>(
+      _platformChannel,
+      'getPluginList',
+    );
+    return result?.cast<String>() ?? List<String>.empty();
+  }
+}
 
 class EcosedBridge {
-  static const String _channelName = 'ecosed_engine';
+  const EcosedBridge();
+
+  static const String _channelName = 'ecosed_bridge';
   static const MethodChannel _channel = MethodChannel(_channelName);
 
-  void invokeMethod({required String channel, required String method}) {
-    _channel.invokeMethod(method, {'channel': channel});
+  Future<T?> invokeMethod<T>(
+    String channel,
+    String method, [
+    dynamic arguments,
+  ]) async {
+    return await _channel.invokePlatform<T>(method, {
+      'channel': channel,
+      ...?arguments,
+    });
   }
 }
 
