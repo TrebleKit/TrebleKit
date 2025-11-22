@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'capsule_placeholder.dart';
+import 'global.dart';
 import 'platform_image.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -20,28 +21,30 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    const MethodChannel("ecosed_bridge")
-        .invokeMethod<List<dynamic>>('getPluginList', {
-          'channel': 'ebkit_platform',
-        })
-        .then((List<dynamic>? result) {
-          // 接收数据并转换类型后转换为非空类型
-          List<String> dataList =
-              result?.cast<String>() ?? List<String>.empty();
-          // 缓存数据
-          List<PluginDetails> temp = [];
-          // 遍历数据列表
-          for (var data in dataList) {
-            temp.add(
-              PluginDetails.formJSON(
-                json: jsonDecode(data), // 反序列化数据
-                type: PluginType.normal,
-              ),
-            );
-          }
-          // 更新视图
-          setState(() => details = temp);
-        }, onError: (error) => debugPrint(error));
+    if (!Global.kSingleMode) {
+      const MethodChannel("ecosed_bridge")
+          .invokeMethod<List<dynamic>>('getPluginList', {
+            'channel': 'ebkit_platform',
+          })
+          .then((List<dynamic>? result) {
+            // 接收数据并转换类型后转换为非空类型
+            final List<String> dataList =
+                result?.cast<String>() ?? List<String>.empty();
+            // 缓存数据
+            final List<PluginDetails> temp = [];
+            // 遍历数据列表
+            for (var data in dataList) {
+              temp.add(
+                PluginDetails.formJSON(
+                  json: jsonDecode(data), // 反序列化数据
+                  type: PluginType.normal,
+                ),
+              );
+            }
+            // 更新视图
+            setState(() => details = temp);
+          }, onError: (error) => debugPrint(error));
+    }
   }
 
   @override
@@ -66,6 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
             ElevatedButton(
               onPressed: () {
+                if (Global.kSingleMode) return;
                 final MethodChannel channel = MethodChannel('ecosed_bridge');
                 channel.invokeMethod('hello', {'channel': 'ebkit_platform'});
               },

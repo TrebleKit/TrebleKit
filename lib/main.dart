@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 
 import 'app.dart';
+import 'global.dart';
 
-void main() => runApp(const TrebleKitApp());
+void main() {
+  Global.kSingleMode = true;
+  runApp(const TrebleKitApp());
+}
 
 @pragma('vm:entry-point')
-void embedMain() => runApp(const TrebleKitApp(isEmbed: true));
+void embedMain() {
+  Global.kSingleMode = false;
+  runApp(const TrebleKitApp());
+}
